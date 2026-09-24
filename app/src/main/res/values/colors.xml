@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="navy">#0B2A5B</color>
+    <color name="bg_siddur">#0B2A5B</color>
+    <color name="bg_tehillim">#7A1F2B</color>
+    <color name="bg_luach">#1E4E9C</color>
+    <color name="bg_zmanim">#C77D12</color>
+    <color name="bg_notes">#F5A623</color>
+    <color name="bg_assistant">#5B3FD6</color>
+</resources>

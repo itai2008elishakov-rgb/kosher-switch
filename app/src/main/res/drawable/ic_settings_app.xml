@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Round grey settings icon matching the look of other app icons -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <gradient android:startColor="#8E99AB" android:endColor="#5B6678" android:angle="270" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ic_settings_white" android:top="12dp" android:bottom="12dp" android:left="12dp" android:right="12dp" />
+</layer-list>

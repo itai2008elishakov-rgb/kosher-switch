@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kosher Switch</title>
+<meta name="description" content="One button turns an Android phone into a kosher phone, and back. Free.">
+<style>
+  :root {
+    --navy: #0b2a5b; --blue: #1e4e9c; --gold: #e0b64a; --ink: #eef2f8; --sub: #a9b4c7;
+    --glass: rgba(255,255,255,.08); --edge: rgba(255,255,255,.18);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: var(--ink); background: linear-gradient(180deg, #081d40, #1a3f80 60%, #0b2a5b);
+    font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; min-height: 100vh;
+  }
+  main { max-width: 920px; margin: 0 auto; padding: 48px 20px 64px; }
+  header { text-align: center; }
+  .emblem { width: 96px; height: 96px; }
+  h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin: 14px 0 6px; letter-spacing: -.02em; }
+  .tag { color: var(--sub); font-size: 1.15rem; margin: 0 auto 28px; max-width: 560px; }
+  .he { direction: rtl; color: var(--gold); font-size: 1.05rem; margin-top: -18px; margin-bottom: 26px; }
+  .btn {
+    display: inline-block; background: var(--gold); color: var(--navy); font-weight: 700; text-decoration: none;
+    padding: 15px 30px; border-radius: 999px; font-size: 1.05rem; box-shadow: 0 10px 30px rgba(224,182,74,.25);
+  }
+  .btn small { font-weight: 500; opacity: .75; }
+  .note { color: var(--sub); font-size: .9rem; margin-top: 12px; }
+  h2 { font-size: 1.6rem; margin: 56px 0 16px; text-align: center; }
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+  .card {
+    background: var(--glass); border: 1px solid var(--edge); border-radius: 26px; padding: 24px;
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  }
+  .card h3 { margin: 0 0 4px; font-size: 1.2rem; }
+  .card .when { color: var(--gold); font-size: .92rem; margin-bottom: 12px; }
+  ol { padding-inline-start: 22px; margin: 0; }
+  li { margin: 6px 0; }
+  code {
+    display: block; background: rgba(0,0,0,.35); border-radius: 12px; padding: 10px 12px; margin: 8px 0;
+    font-size: .85rem; overflow-x: auto; white-space: nowrap; color: #ffe7a8;
+  }
+  #qr { background: #fff; border-radius: 18px; padding: 14px; width: fit-content; margin: 16px auto 4px; }
+  #qr img, #qr canvas { display: block; width: 220px; height: 220px; }
+  .qrhint { text-align: center; color: var(--sub); font-size: .85rem; }
+  .features { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .feature { background: var(--glass); border: 1px solid var(--edge); border-radius: 20px; padding: 16px 18px; }
+  .feature b { display: block; margin-bottom: 2px; }
+  .feature span { color: var(--sub); font-size: .92rem; }
+  footer { color: var(--sub); font-size: .82rem; text-align: center; margin-top: 56px; }
+  footer a { color: var(--sub); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <svg class="emblem" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="44" fill="none" stroke="#e0b64a" stroke-width="5"/>
+      <circle cx="50" cy="50" r="37" fill="none" stroke="#e0b64a" stroke-width="1.6"/>
+      <text x="50" y="61" text-anchor="middle" font-family="serif" font-weight="700" font-size="30" fill="#e0b64a">כשר</text>
+    </svg>
+    <h1>Kosher Switch</h1>
+    <p class="tag">One button turns an Android phone into a kosher phone, and back. For yourself, or for your child. Free.</p>
+    <p class="he">מכשיר כשר בלחיצת כפתור</p>
+    <a class="btn" href="kosher-switch.apk" download>Download for Android <small>· 33 MB</small></a>
+    <p class="note">Android 10 or newer. Tested on a Samsung Galaxy A32 5G (Android 12).</p>
+  </header>
+
+  <h2>Set it up: two ways</h2>
+  <div class="grid">
+    <section class="card">
+      <h3>A. With this QR code</h3>
+      <div class="when">No computer · the phone is reset</div>
+      <ol>
+        <li>Back up the phone, then factory reset it (or start with a new phone).</li>
+        <li>On the very first <b>Welcome</b> screen, tap the screen <b>6 times</b>.</li>
+        <li>Connect to Wi-Fi if asked, then scan this code:</li>
+      </ol>
+      <div id="qr"></div>
+      <p class="qrhint" id="qrhint">The phone downloads and sets up Kosher Switch by itself.</p>
+    </section>
+    <section class="card">
+      <h3>B. With a computer</h3>
+      <div class="when">Keeps everything on the phone</div>
+      <ol>
+        <li>Install the app from the button above.</li>
+        <li>Settings → About phone → Software information → tap <b>Build number</b> 7 times.</li>
+        <li>Developer options → turn on <b>USB debugging</b>.</li>
+        <li>Settings → Accounts → remove all accounts for a moment.</li>
+        <li>Connect to a computer with <a href="https://developer.android.com/tools/releases/platform-tools" style="color:var(--gold)">Android platform tools</a> and run:
+          <code>adb shell dpm set-device-owner dev.kosherswitch/.KosherAdmin</code></li>
+        <li>Add your accounts back.</li>
+      </ol>
+    </section>
+  </div>
+  <p class="note" style="text-align:center">Then open <b>Kosher Switch</b>: its built-in guide walks you through the code, the apps and switching.</p>
+
+  <h2>What's inside</h2>
+  <div class="features">
+    <div class="feature"><b>One-tap switch</b><span>Swipe down, tap כשר. Leaving needs your secret code, even after a restart.</span></div>
+    <div class="feature"><b>Only the apps you choose</b><span>Everything else disappears. Internet only for the apps you allow.</span></div>
+    <div class="feature"><b>Its own home screen</b><span>Glass design, Hebrew date, widget, dock, dark and light mode, five backgrounds.</span></div>
+    <div class="feature"><b>סידור ותהלים</b><span>Ashkenaz, Sefard and Edot HaMizrach, search, daily Tehillim. Offline.</span></div>
+    <div class="feature"><b>לוח וזמנים</b><span>Hebrew calendar, parsha, holidays and zmanim for your location.</span></div>
+    <div class="feature"><b>Notes</b><span>Checklists, formatting and drawing.</span></div>
+    <div class="feature"><b>Offline assistant</b><span>Calls, messages, alarms, notes, kosher recipes. Runs on the phone; nothing leaves it.</span></div>
+    <div class="feature"><b>For parents</b><span>Set it up, choose the apps, hand over the phone. The assistant can be switched off.</span></div>
+  </div>
+
+  <footer>
+    Prayer texts from <a href="https://www.sefaria.org">Sefaria</a> (including the Metsudah Siddur, CC-BY).
+    Zmanim by KosherJava (LGPL). On-device AI: Google MediaPipe and Qwen 2.5 (Apache 2.0).<br>
+    Kosher Switch is not a kashrut certification. Parents remain responsible for how a phone is used.
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  // Android's standard setup QR code: where to download the app, its signing fingerprint,
+  // and which component becomes the device owner.
+  const apk = new URL("kosher-switch.apk", location.href).href;
+  const payload = {
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "dev.kosherswitch/dev.kosherswitch.KosherAdmin",
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": apk,
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "x5nEyL1XOUm7c7-n0arpDKX90FTjmBypuI-H_BPGCrE",
+    "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true
+  };
+  if (location.protocol !== "https:") {
+    document.getElementById("qrhint").textContent = "The QR code appears once this page is online (https).";
+  } else {
+    new QRCode(document.getElementById("qr"), {
+      text: JSON.stringify(payload), width: 440, height: 440, correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+</script>
+</body>
+</html>

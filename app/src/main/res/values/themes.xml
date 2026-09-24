@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/ZoomTransitions</item>
+    </style>
+    <!-- iOS-style zoom and fade between screens -->
+    <style name="ZoomTransitions" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/close_exit</item>
+        <item name="android:taskOpenEnterAnimation">@anim/open_enter</item>
+        <item name="android:taskOpenExitAnimation">@anim/open_exit</item>
+        <item name="android:taskCloseEnterAnimation">@anim/close_enter</item>
+        <item name="android:taskCloseExitAnimation">@anim/close_exit</item>
+    </style>
+</resources>
