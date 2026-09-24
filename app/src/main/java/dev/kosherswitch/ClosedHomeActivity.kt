@@ -81,7 +81,9 @@ class ClosedHomeActivity : BaseActivity() {
         root.setOnApplyWindowInsetsListener { _, insets ->
             val bars = insets.getInsets(WindowInsets.Type.systemBars())
             home.setPadding(Theme.dp(this, 22), bars.top + Theme.dp(this, 28), Theme.dp(this, 22), bars.bottom + Theme.dp(this, 14))
-            drawerScroll.setPadding(0, 0, 0, bars.bottom + Theme.dp(this, 16))
+            // The list ends above the navigation buttons, so its bottom fade is fully visible.
+            (drawerScroll.layoutParams as LinearLayout.LayoutParams).bottomMargin = bars.bottom
+            drawerScroll.requestLayout()
             (drawer.layoutParams as FrameLayout.LayoutParams).topMargin = bars.top + Theme.dp(this, 12)
             insets
         }
@@ -103,8 +105,9 @@ class ClosedHomeActivity : BaseActivity() {
         askPill.background = Theme.glass(this, 26)
         askPill.visibility = if (Looks.assistantAllowed(this) && Looks.assistantPill(this)) View.VISIBLE else View.GONE
         applyLayout()
-        // Match the navigation bar to the bottom of the background (no dark band).
-        window.navigationBarColor = if (Theme.dark) Theme.blackAlpha(0.35f) else Looks.scene(this).bottom
+        // No strip behind the navigation buttons: the background and drawer continue underneath.
+        window.navigationBarColor = Color.TRANSPARENT
+        window.isNavigationBarContrastEnforced = false
         refreshWidget()
         apps = loadApps()
         // Rebuild icons only when something that affects them changed.
@@ -286,7 +289,8 @@ class ClosedHomeActivity : BaseActivity() {
         drawerGrid = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             val p = Theme.dp(context, 14)
-            setPadding(p, 0, p, 0)
+            // Room at the top and bottom so the first and last rows can scroll clear of the fades.
+            setPadding(p, Theme.dp(context, 8), p, Theme.dp(context, 56))
         }
         drawerScroll = ScrollView(this).apply {
             isVerticalScrollBarEnabled = false
@@ -310,7 +314,7 @@ class ClosedHomeActivity : BaseActivity() {
         }
         // Apps fade out softly at the top and bottom edges while scrolling.
         drawerScroll.isVerticalFadingEdgeEnabled = true
-        drawerScroll.setFadingEdgeLength(Theme.dp(this, 48))
+        drawerScroll.setFadingEdgeLength(Theme.dp(this, 72))
         drawer.translationY = resources.displayMetrics.heightPixels * 2f // off-screen until laid out
         root.addView(drawer, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
     }

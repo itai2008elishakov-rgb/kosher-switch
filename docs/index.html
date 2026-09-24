@@ -126,8 +126,8 @@
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "x5nEyL1XOUm7c7-n0arpDKX90FTjmBypuI-H_BPGCrE",
     "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true
   };
-  if (location.protocol !== "https:") {
-    document.getElementById("qrhint").textContent = "The QR code appears once this page is online (https).";
+  if (!location.protocol.startsWith("http")) {
+    document.getElementById("qrhint").textContent = "The QR code appears once this page is online.";
   } else {
     new QRCode(document.getElementById("qr"), {
       text: JSON.stringify(payload), width: 440, height: 440, correctLevel: QRCode.CorrectLevel.M
