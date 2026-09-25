@@ -17,8 +17,9 @@
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  html, body { overflow-x: hidden; }
   body {
-    margin: 0; background: var(--bg); color: var(--ink); overflow-x: hidden;
+    margin: 0; background: var(--bg); color: var(--ink);
     font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Hebrew", sans-serif;
   }
   a { color: inherit; }
@@ -79,15 +80,16 @@
   .fine { color: var(--sub); font-size: .88rem; margin-top: 14px; }
 
   /* phone mockup that switches between open and kosher */
-  .stage { position: relative; display: grid; place-items: center; min-height: 600px; }
-  .ring { position: absolute; width: 420px; height: 420px; border-radius: 50%; border: 2px solid rgba(224,182,74,.45); animation: ripple 3.5s ease-out infinite; }
+  .stage { position: relative; display: grid; place-items: center; min-height: min(600px, 150vw); }
+  .ring { position: absolute; width: min(420px, 92vw); height: min(420px, 92vw); border-radius: 50%; border: 2px solid rgba(224,182,74,.45); animation: ripple 3.5s ease-out infinite; }
   .ring:nth-child(2) { animation-delay: 1.75s; }
   @keyframes ripple { from { transform: scale(.55); opacity: .9; } to { transform: scale(1.35); opacity: 0; } }
   .phone {
     position: relative; width: 280px; aspect-ratio: 9/20; border-radius: 44px; padding: 10px; background: #0a0d14;
     box-shadow: 0 40px 90px rgba(0,0,0,.55), inset 0 0 0 2px #262c38; animation: float 6s ease-in-out infinite;
   }
-  .phone.sm { width: 230px; animation: none; }
+  .phone.sm { width: min(230px, 42vw); animation: none; border-radius: min(44px, 8vw); padding: min(10px, 2vw); }
+  .phone.sm .screen { border-radius: min(34px, 6vw); }
   @keyframes float { 50% { transform: translateY(-14px) rotate(-1deg); } }
   .screen { position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden; background: #000; }
   .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -118,7 +120,7 @@
   h2 { font-size: clamp(2rem, 4.4vw, 3rem); letter-spacing: -.025em; line-height: 1.1; margin: 10px 0 14px; }
   .head p { color: var(--sub); font-size: 1.1rem; margin: 0; }
 
-  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); }
   .card {
     background: var(--glass); border: 1px solid var(--edge); border-radius: var(--radius); padding: 26px;
     backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: transform .35s var(--ease), border-color .35s, background .35s;
@@ -140,7 +142,8 @@
   .copy li { padding: 5px 0 5px 28px; position: relative; }
   .copy li::before { content: "✓"; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
   @media (max-width: 860px) { .copy li { padding-left: 0; } .copy li::before { position: static; margin-right: 8px; } }
-  .phones { display: flex; gap: 22px; align-items: flex-end; }
+  .phones { display: flex; gap: min(22px, 4vw); align-items: flex-end; min-width: 0; }
+  .row > *, .hero .wrap > *, .parents > * { min-width: 0; }
   .phones .phone:nth-child(2) { transform: translateY(40px); }
 
   /* gallery */
@@ -160,7 +163,7 @@
   }
 
   /* setup */
-  .setup { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .setup { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
   .setup .when { color: var(--gold-2); font-size: .92rem; margin-bottom: 12px; }
   .setup ol { padding-inline-start: 22px; margin: 0; }
   .setup li { margin: 7px 0; color: var(--ink); }
