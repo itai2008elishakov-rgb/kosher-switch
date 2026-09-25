@@ -146,6 +146,35 @@
   .row > *, .hero .wrap > *, .parents > * { min-width: 0; }
   .phones .phone:nth-child(2) { transform: translateY(40px); }
 
+  /* devices: illustrations of Kosher Switch on different kinds of phones */
+  .devices { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 44px 56px; }
+  .device { text-align: center; }
+  .device figcaption { margin-top: 18px; }
+  .device figcaption b { display: block; }
+  .device figcaption span { color: var(--sub); font-size: .9rem; }
+  .dev { position: relative; background: #0a0d14; box-shadow: 0 30px 70px rgba(0,0,0,.5), inset 0 0 0 2px #262c38; transition: transform .4s var(--ease); }
+  .dev:hover { transform: translateY(-8px); }
+  .dev .scr { position: relative; overflow: hidden; background: #000; }
+  .dev .scr img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  /* Samsung Galaxy: waterdrop notch, rounded corners */
+  .galaxy { width: 200px; aspect-ratio: 9/20; border-radius: 34px; padding: 8px; }
+  .galaxy .scr { height: 100%; border-radius: 27px; }
+  .galaxy .scr::before { content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 34px; height: 14px; background: #0a0d14; border-radius: 0 0 18px 18px; z-index: 1; }
+  /* Google Pixel: slim bezel, centered punch-hole, two-tone frame */
+  .pixel { width: 206px; aspect-ratio: 9/19.5; border-radius: 30px; padding: 6px; background: linear-gradient(180deg, #d9dde3, #a9b0bb); }
+  .pixel .scr { height: 100%; border-radius: 25px; }
+  .pixel .scr::before { content: ""; position: absolute; top: 9px; left: 50%; transform: translateX(-50%); width: 11px; height: 11px; background: #05070b; border-radius: 50%; z-index: 1; box-shadow: 0 0 0 2px rgba(255,255,255,.08); }
+  /* Keypad phone like the Qin F21 Pro: small 3:4 screen above physical keys */
+  .keypad { width: 176px; border-radius: 30px; padding: 14px 12px 18px; background: linear-gradient(180deg, #f1f2f4, #cfd3d9); box-shadow: 0 30px 70px rgba(0,0,0,.5), inset 0 0 0 2px #fff; }
+  .keypad .scr { aspect-ratio: 3/4; border-radius: 10px; box-shadow: inset 0 0 0 2px #1c2230; }
+  .keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 14px; }
+  .keys i { font-style: normal; height: 22px; border-radius: 9px; background: #fbfbfc; color: #3b4150; font-size: .72rem; font-weight: 700; display: grid; place-items: center; box-shadow: 0 1px 0 #b9bec7; }
+  .keys .nav { grid-column: span 3; height: 30px; border-radius: 15px; background: #e6e8ec; display: flex; justify-content: space-between; padding: 0 12px; align-items: center; }
+  .keys .nav em { width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 0 #b9bec7; }
+  .brands { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 34px auto 0; max-width: 760px; }
+  .brands span { padding: 8px 16px; border-radius: 999px; background: var(--glass); border: 1px solid var(--edge); color: var(--ink); font-size: .92rem; }
+  .honest { text-align: center; color: var(--sub); font-size: .9rem; margin-top: 18px; }
+
   /* gallery */
   .gallery { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 20px 20px 40px; scrollbar-width: none; }
   .gallery::-webkit-scrollbar { display: none; }
@@ -217,7 +246,7 @@
       Kosher Switch
     </a>
     <div class="links">
-      <a href="#features">Features</a><a href="#tour">Tour</a><a href="#parents">Parents</a><a href="#setup">Setup</a><a href="#faq">FAQ</a>
+      <a href="#features">Features</a><a href="#tour">Tour</a><a href="#phones">Phones</a><a href="#parents">Parents</a><a href="#setup">Setup</a><a href="#faq">FAQ</a>
     </div>
     <a class="btn gold small" href="kosher-switch.apk" download>Download</a>
   </div>
@@ -233,7 +262,7 @@
         <a class="btn gold" href="kosher-switch.apk" download>⬇ Download for Android <small>33 MB</small></a>
         <a class="btn ghost" href="#setup">How to set it up</a>
       </div>
-      <p class="fine reveal d3">Android 10 or newer · tested on Samsung Galaxy A32 5G · stays kosher after a restart</p>
+      <p class="fine reveal d3">Samsung · Pixel · Xiaomi · keypad phones · Android 10 or newer · stays kosher after a restart</p>
     </div>
     <div class="stage reveal d2">
       <div class="ring"></div><div class="ring"></div>
@@ -337,6 +366,41 @@
   </div>
 </section>
 
+<section id="phones">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="kicker">Works on your phone</div>
+      <h2>Samsung, Pixel, Xiaomi, and more</h2>
+      <p>Kosher Switch is a regular Android app. It adapts to big screens and small ones, including keypad phones like the Qin F21 Pro.</p>
+    </div>
+    <div class="devices">
+      <figure class="device reveal">
+        <div class="dev galaxy"><div class="scr"><img src="img/home.jpg" alt="Kosher Switch on a Samsung Galaxy" loading="lazy"></div></div>
+        <figcaption><b>Samsung Galaxy</b><span>Tested on the Galaxy A32 5G</span></figcaption>
+      </figure>
+      <figure class="device reveal d1">
+        <div class="dev pixel"><div class="scr"><img src="img/drawer-glass.jpg" alt="Kosher Switch on a Google Pixel (illustration)" loading="lazy"></div></div>
+        <figcaption><b>Google Pixel</b><span>Android 10 and newer</span></figcaption>
+      </figure>
+      <figure class="device reveal d2">
+        <div class="dev keypad">
+          <div class="scr"><img src="img/siddur.jpg" alt="Kosher Switch on a keypad phone like the Qin F21 Pro (illustration)" loading="lazy"></div>
+          <div class="keys" aria-hidden="true">
+            <span class="nav"><em></em><em></em></span>
+            <i>1</i><i>2 abc</i><i>3 def</i><i>4 ghi</i><i>5 jkl</i><i>6 mno</i><i>7 pqrs</i><i>8 tuv</i><i>9 wxyz</i><i>*</i><i>0</i><i>#</i>
+          </div>
+        </div>
+        <figcaption><b>Keypad phones</b><span>Like the Xiaomi Qin F21 Pro</span></figcaption>
+      </figure>
+    </div>
+    <div class="brands reveal">
+      <span>Samsung</span><span>Google Pixel</span><span>Xiaomi &amp; Redmi</span><span>Qin</span><span>Motorola</span><span>OnePlus</span><span>Nokia</span><span>Any Android 10+</span>
+    </div>
+    <p class="honest reveal">Pixel and keypad-phone pictures are illustrations. Fully tested so far on the Samsung Galaxy A32 5G; more phones are being tested.
+    Needs Android 10 or newer with a 64-bit processor.</p>
+  </div>
+</section>
+
 <section id="gallery" style="padding-top:80px">
   <div class="head reveal wrap">
     <div class="kicker">More screens</div>
@@ -431,7 +495,8 @@
       <details class="reveal"><summary>Why does setup need a QR code or a computer?</summary><p>Android only lets an app lock a phone if it's made the "device owner" in a special, one-time way. That rule protects everyone from malicious apps. Every parental-control and kosher-filter app on Android works like this.</p></details>
       <details class="reveal"><summary>Can someone get around kosher mode?</summary><p>Kosher mode blocks the Settings app, installing and uninstalling, account changes, VPN and DNS changes, factory reset from Settings, safe mode and USB debugging, and it survives restarts. A full factory reset with the hardware buttons can't be blocked by any app, but it erases the whole phone, so it can't happen unnoticed. No phone is 100% bypass-proof; this is a strong lock, not a guarantee.</p></details>
       <details class="reveal"><summary>Does the assistant need internet?</summary><p>No. It runs completely on the phone. Its AI part is an optional 1.6 GB download over Wi-Fi, done once in open mode. Nothing you ask is sent anywhere. It's a small model, so answers are simpler than online AI, and recipes get an automatic kashrut check.</p></details>
-      <details class="reveal"><summary>Which phones does it work on?</summary><p>Android 10 or newer with a 64-bit processor. It's tested on the Samsung Galaxy A32 5G (Android 12). QR setup also needs Google's setup screen.</p></details>
+      <details class="reveal"><summary>Which phones does it work on?</summary><p>Any Android phone with Android 10 or newer and a 64-bit processor: Samsung, Google Pixel, Xiaomi and Redmi, keypad phones like the Qin F21 Pro, Motorola, OnePlus and others. It's fully tested on the Samsung Galaxy A32 5G (Android 12), with more phones being tested. QR setup also needs Google's setup screen.</p></details>
+      <details class="reveal"><summary>Why does it need Developer options, when other apps don't?</summary><p>Most apps only control themselves. Kosher Switch controls the whole phone: it hides other apps, cuts their internet and locks Settings. Android gives that "master key" only through a special one-time setup, so no downloaded app (or virus) can lock a phone on its own. The setup proves the phone's owner really wants it. Every parental-control and kosher-filter app on Android has the same step.</p></details>
       <details class="reveal"><summary>Is this a kashrut certification?</summary><p>No. Kosher Switch is a tool. For a certified kosher phone, speak to your rav or a recognized kashrut organization. Parents remain responsible for how a phone is used.</p></details>
       <details class="reveal"><summary>How do I remove it?</summary><p>Because it protects itself as device owner, removing Kosher Switch requires a factory reset. Back up the phone first.</p></details>
     </div>
