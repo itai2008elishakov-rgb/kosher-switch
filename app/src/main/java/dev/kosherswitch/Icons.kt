@@ -40,17 +40,16 @@ object Icons {
         NOTES(0xFFFFD66B.toInt(), 0xFFF5A623.toInt()),
         ASSISTANT(0xFFA88BFF.toInt(), 0xFF4B2FC9.toInt()),
         WEATHER(0xFF5DB2FF.toInt(), 0xFF1F6FD1.toInt()),
-        DESKTOP(0xFF3E4C6E.toInt(), 0xFF141B2E.toInt()),
     }
 
-    private val OWN = setOf("siddur", "times", "notes", "weather", "desktop", "assistant", "kosher_settings")
+    private val OWN = setOf("siddur", "times", "notes", "weather", "assistant", "kosher_settings")
 
     private val MATCH = listOf(
         "dialer" to Kind.PHONE, "incallui" to Kind.PHONE, "messag" to Kind.MESSAGES, "mms" to Kind.MESSAGES,
         "contacts" to Kind.CONTACTS, "camera" to Kind.CAMERA, "gallery" to Kind.GALLERY, "photos" to Kind.GALLERY,
         "clock" to Kind.CLOCK, "calculator" to Kind.CALCULATOR, "files" to Kind.FILES, "maps" to Kind.MAPS,
         "kosher_settings" to Kind.SETTINGS, "siddur" to Kind.SIDDUR, "times" to Kind.TIMES,
-        "notes" to Kind.NOTES, "memo" to Kind.NOTES, "assistant" to Kind.ASSISTANT, "weather" to Kind.WEATHER, "desktop" to Kind.DESKTOP,
+        "notes" to Kind.NOTES, "memo" to Kind.NOTES, "assistant" to Kind.ASSISTANT, "weather" to Kind.WEATHER,
     )
 
     /** One icon in a given style, for the icon test screen. */
@@ -163,7 +162,6 @@ object Icons {
                 Kind.NOTES -> notes(c, k)
                 Kind.ASSISTANT -> assistant(c, k)
                 Kind.WEATHER -> weather(c)
-                Kind.DESKTOP -> desktop(c)
             }
             p.shader = null
             shadow(false)
@@ -419,28 +417,6 @@ object Icons {
             p.color = 0xFFD9DDE3.toInt()
             for (y in listOf(42f, 52f, 62f, 72f)) c.drawLine(30f, y, if (y == 72f) 56f else 70f, y, p)
             p.style = Paint.Style.FILL
-        }
-
-        /** Desktop: a monitor showing a blue desktop with a taskbar, on a stand. */
-        private fun desktop(c: Canvas) {
-            shadow(true)
-            p.color = 0xFFE9EDF3.toInt()
-            c.drawRoundRect(RectF(14f, 22f, 86f, 70f), 7f, 7f, p)
-            shadow(false)
-            p.shader = LinearGradient(0f, 26f, 0f, 62f, 0xFF3F8CFF.toInt(), 0xFF1B4FC4.toInt(), Shader.TileMode.CLAMP)
-            c.drawRoundRect(RectF(18f, 26f, 82f, 62f), 3f, 3f, p)
-            p.shader = null
-            p.color = 0x40FFFFFF
-            c.drawCircle(64f, 36f, 14f, p)
-            p.color = 0xCC0B1830.toInt()
-            c.drawRect(18f, 56f, 82f, 62f, p)
-            p.color = 0xFFE0B64A.toInt()
-            c.drawCircle(23f, 59f, 2f, p)
-            p.color = Color.WHITE
-            for (x in listOf(30f, 36f, 42f)) c.drawRoundRect(RectF(x, 57.5f, x + 4f, 60.5f), 1f, 1f, p)
-            p.color = 0xFFC9D0DA.toInt()
-            c.drawRect(44f, 70f, 56f, 78f, p)
-            c.drawRoundRect(RectF(34f, 77f, 66f, 82f), 2.5f, 2.5f, p)
         }
 
         /** Weather: the weather app's own sun-behind-a-cloud symbol. */

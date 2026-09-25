@@ -32,7 +32,7 @@ class IconPreviewActivity : Activity() {
         if (intent.hasExtra("export")) {
             val out = getExternalFilesDir("icons")!!
             mapOf("siddur" to Icons.Kind.SIDDUR, "luach" to Icons.Kind.TIMES, "notes" to Icons.Kind.NOTES,
-                "weather" to Icons.Kind.WEATHER, "assistant" to Icons.Kind.ASSISTANT, "desktop" to Icons.Kind.DESKTOP).forEach { (name, kind) ->
+                "weather" to Icons.Kind.WEATHER, "assistant" to Icons.Kind.ASSISTANT).forEach { (name, kind) ->
                 val bmp = android.graphics.Bitmap.createBitmap(432, 432, android.graphics.Bitmap.Config.ARGB_8888)
                 Icons.glyphOnly(kind).apply { setBounds(72, 72, 360, 360) }.draw(android.graphics.Canvas(bmp))
                 java.io.File(out, "fg_$name.png").outputStream().use { bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }

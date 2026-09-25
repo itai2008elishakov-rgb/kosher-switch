@@ -255,14 +255,4 @@
     <string name="w_feels_colder">Wind makes it feel colder</string>
     <string name="w_feels_warmer">Humidity makes it feel warmer</string>
     <string name="w_feels_same">Similar to the actual temperature</string>
-    <string name="desktop">Desktop</string>
-    <string name="desktop_search">Search</string>
-    <string name="desktop_start">Start</string>
-    <string name="desktop_all_apps">All apps</string>
-    <string name="desktop_exit">Exit desktop</string>
-    <string name="desktop_open">Open</string>
-    <string name="desktop_pin">Pin to taskbar</string>
-    <string name="desktop_unpin">Unpin from taskbar</string>
-    <string name="desktop_allow">Show the desktop in kosher mode</string>
-    <string name="desktop_allow_note">The phone as a computer, like Samsung DeX: desktop icons, a taskbar and a start menu. Works with touch or a Bluetooth mouse and keyboard, and shows only the allowed apps.</string>
 </resources>

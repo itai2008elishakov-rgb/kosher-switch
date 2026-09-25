@@ -99,20 +99,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DesktopActivity"
-            android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden|navigation"
-            android:exported="true"
-            android:icon="@mipmap/ic_desktop"
-            android:label="@string/desktop"
-            android:screenOrientation="sensorLandscape"
-            android:taskAffinity="dev.kosherswitch.desktop"
-            android:windowSoftInputMode="adjustNothing">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".NoteEditActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
