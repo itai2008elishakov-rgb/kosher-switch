@@ -52,6 +52,7 @@ class SetupActivity : BaseActivity() {
             addView(turnOnCard())
             addView(assistantCard())
             addView(weatherCard())
+            addView(desktopCard())
         }
         setContentView(ScrollView(this).apply {
             setBackgroundColor(Theme.PAGE)
@@ -291,6 +292,22 @@ class SetupActivity : BaseActivity() {
             })
         },
         Theme.text(this, getString(R.string.weather_allow_note), 13f, Theme.SUB),
+    )
+
+    /** The desktop can be added to or removed from the kosher apps. */
+    private fun desktopCard() = Theme.card(this,
+        stepTitle(R.string.desktop, Looks.desktopAllowed(this)),
+        LinearLayout(this).apply {
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, Theme.dp(context, 8), 0, Theme.dp(context, 4))
+            addView(Theme.text(context, getString(R.string.desktop_allow), 16f).apply {
+                textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+            }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+            addView(toggle(Looks.desktopAllowed(context)).apply {
+                setOnCheckedChangeListener { v, on -> Theme.haptic(v); Looks.setDesktopAllowed(context, on) }
+            })
+        },
+        Theme.text(this, getString(R.string.desktop_allow_note), 13f, Theme.SUB),
     )
 
     private fun columnTitles() = LinearLayout(this).apply {

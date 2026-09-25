@@ -40,8 +40,8 @@ import kotlin.math.abs
  */
 class ClosedHomeActivity : BaseActivity() {
     override val glides = false
-    private companion object {
-        const val COLUMNS = 3
+    companion object {
+        private const val COLUMNS = 3
         val DEFAULT_DOCK = listOf("dialer", "messag", "siddur")
     }
 
@@ -115,7 +115,7 @@ class ClosedHomeActivity : BaseActivity() {
         refreshWidget()
         apps = loadApps()
         // Rebuild icons only when something that affects them changed.
-        val state = apps.joinToString { it.key } + Looks.icons(this) + Looks.glass(this) + Looks.dock(this) + Looks.assistantAllowed(this) + Looks.weatherAllowed(this) +
+        val state = apps.joinToString { it.key } + Looks.icons(this) + Looks.glass(this) + Looks.dock(this) + Looks.assistantAllowed(this) + Looks.weatherAllowed(this) + Looks.desktopAllowed(this) +
             Theme.dark + LocalDate.now() // the calendar icon shows today's date
         if (state != shownState) {
             shownState = state
@@ -466,6 +466,7 @@ class ClosedHomeActivity : BaseActivity() {
                 startActivity(ownApp(KosherSettingsActivity::class.java))
             },
         ) + (if (Looks.weatherAllowed(this)) listOf(own(getString(R.string.weather), WeatherActivity::class.java, "weather")) else emptyList()) +
+            (if (Looks.desktopAllowed(this)) listOf(own(getString(R.string.desktop), DesktopActivity::class.java, "desktop")) else emptyList()) +
             if (Looks.assistantAllowed(this)) listOf(own(getString(R.string.assistant), AssistantActivity::class.java, "assistant")) else emptyList()
         val order = Looks.order(this)
         return all.sortedBy { order.indexOf(it.key).let { i -> if (i < 0) Int.MAX_VALUE else i } }

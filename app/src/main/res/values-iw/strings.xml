@@ -252,4 +252,14 @@
     <string name="w_feels_colder">הרוח גורמת להרגיש קר יותר</string>
     <string name="w_feels_warmer">הלחות גורמת להרגיש חם יותר</string>
     <string name="w_feels_same">דומה לטמפרטורה בפועל</string>
+    <string name="desktop">שולחן עבודה</string>
+    <string name="desktop_search">חיפוש</string>
+    <string name="desktop_start">התחל</string>
+    <string name="desktop_all_apps">כל האפליקציות</string>
+    <string name="desktop_exit">יציאה משולחן העבודה</string>
+    <string name="desktop_open">פתיחה</string>
+    <string name="desktop_pin">הצמדה לשורת המשימות</string>
+    <string name="desktop_unpin">ביטול הצמדה</string>
+    <string name="desktop_allow">להציג את שולחן העבודה במצב כשר</string>
+    <string name="desktop_allow_note">הטלפון כמחשב, כמו Samsung DeX: סמלים על שולחן העבודה, שורת משימות ותפריט התחל. עובד במגע או עם עכבר ומקלדת Bluetooth, ומציג רק את האפליקציות המותרות.</string>
 </resources>

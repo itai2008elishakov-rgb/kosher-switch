@@ -68,6 +68,10 @@ object Looks {
     fun weatherAllowed(ctx: Context) = p(ctx).getBoolean("weather_allowed", true)
     fun setWeatherAllowed(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("weather_allowed", on).apply()
 
+    /** Whether the desktop (the phone as a computer) is in the kosher apps. */
+    fun desktopAllowed(ctx: Context) = p(ctx).getBoolean("desktop_allowed", true)
+    fun setDesktopAllowed(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("desktop_allowed", on).apply()
+
     fun assistantPill(ctx: Context) = p(ctx).getBoolean("look_assistant_pill", true)
     fun setAssistantPill(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("look_assistant_pill", on).apply()
 
