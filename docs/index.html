@@ -3,120 +3,475 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kosher Switch</title>
-<meta name="description" content="One button turns an Android phone into a kosher phone, and back. Free.">
+<title>Kosher Switch · A kosher phone, one tap away</title>
+<meta name="description" content="One button turns an Android phone into a kosher phone, and back. Siddur, zmanim, notes and an offline assistant built in. Free.">
+<meta property="og:title" content="Kosher Switch">
+<meta property="og:description" content="One button turns an Android phone into a kosher phone, and back. Free.">
+<meta property="og:image" content="img/home.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%230b2a5b'/%3E%3Ccircle cx='50' cy='50' r='36' fill='none' stroke='%23e0b64a' stroke-width='6'/%3E%3Cpath d='M36 51l10 10 19-21' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
   :root {
-    --navy: #0b2a5b; --blue: #1e4e9c; --gold: #e0b64a; --ink: #eef2f8; --sub: #a9b4c7;
-    --glass: rgba(255,255,255,.08); --edge: rgba(255,255,255,.18);
+    --bg: #060f22; --navy: #0b2a5b; --blue: #1e4e9c; --sky: #5b8fe6; --gold: #e0b64a; --gold-2: #f3d27e;
+    --ink: #eef2f8; --sub: #a7b3c8; --glass: rgba(255,255,255,.06); --edge: rgba(255,255,255,.14);
+    --radius: 26px; --ease: cubic-bezier(.2,.9,.1,1);
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    margin: 0; color: var(--ink); background: linear-gradient(180deg, #081d40, #1a3f80 60%, #0b2a5b);
-    font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; min-height: 100vh;
+    margin: 0; background: var(--bg); color: var(--ink); overflow-x: hidden;
+    font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Hebrew", sans-serif;
   }
-  main { max-width: 920px; margin: 0 auto; padding: 48px 20px 64px; }
-  header { text-align: center; }
-  .emblem { width: 96px; height: 96px; }
-  h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin: 14px 0 6px; letter-spacing: -.02em; }
-  .tag { color: var(--sub); font-size: 1.15rem; margin: 0 auto 28px; max-width: 560px; }
-  .he { direction: rtl; color: var(--gold); font-size: 1.05rem; margin-top: -18px; margin-bottom: 26px; }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+  .wrap { width: min(1120px, 100% - 40px); margin: 0 auto; }
+  .he { font-family: "Noto Serif Hebrew", "David", serif; }
+
+  /* ---------- animated background ---------- */
+  .orbs { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+  .orbs span { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .55; animation: drift 26s var(--ease) infinite alternate; }
+  .orbs span:nth-child(1) { width: 560px; height: 560px; background: #1e4e9c; top: -160px; left: -120px; }
+  .orbs span:nth-child(2) { width: 460px; height: 460px; background: #5a3fd6; top: 30%; right: -160px; animation-duration: 32s; opacity: .35; }
+  .orbs span:nth-child(3) { width: 420px; height: 420px; background: #b5861f; bottom: -180px; left: 30%; animation-duration: 38s; opacity: .28; }
+  @keyframes drift { to { transform: translate(90px, 70px) scale(1.15); } }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10; transition: background .3s, border-color .3s;
+    border-bottom: 1px solid transparent; padding-top: env(safe-area-inset-top, 0px);
+  }
+  nav.scrolled { background: rgba(6,15,34,.72); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-color: var(--edge); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 66px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; }
+  .brand svg { width: 34px; height: 34px; }
+  .links { display: flex; gap: 26px; font-size: .95rem; color: var(--sub); }
+  .links a { text-decoration: none; transition: color .2s; }
+  .links a:hover { color: var(--ink); }
+  @media (max-width: 760px) { .links { display: none; } }
+
   .btn {
-    display: inline-block; background: var(--gold); color: var(--navy); font-weight: 700; text-decoration: none;
-    padding: 15px 30px; border-radius: 999px; font-size: 1.05rem; box-shadow: 0 10px 30px rgba(224,182,74,.25);
+    display: inline-flex; align-items: center; gap: 10px; border: 0; cursor: pointer; text-decoration: none;
+    font: inherit; font-weight: 700; border-radius: 999px; padding: 14px 26px; transition: transform .25s var(--ease), box-shadow .25s;
   }
-  .btn small { font-weight: 500; opacity: .75; }
-  .note { color: var(--sub); font-size: .9rem; margin-top: 12px; }
-  h2 { font-size: 1.6rem; margin: 56px 0 16px; text-align: center; }
-  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.gold { background: linear-gradient(180deg, var(--gold-2), var(--gold)); color: #0b2a5b; box-shadow: 0 12px 34px rgba(224,182,74,.28); }
+  .btn.ghost { background: var(--glass); border: 1px solid var(--edge); color: var(--ink); }
+  .btn.small { padding: 9px 18px; font-size: .92rem; }
+  .btn small { font-weight: 500; opacity: .7; }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 140px 0 60px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+  @media (max-width: 900px) { .hero .wrap { grid-template-columns: 1fr; text-align: center; } .hero .cta { justify-content: center; } }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; font-size: .88rem;
+    background: rgba(224,182,74,.1); border: 1px solid rgba(224,182,74,.35); color: var(--gold-2);
+  }
+  h1 { font-size: clamp(2.6rem, 6.4vw, 4.6rem); line-height: 1.02; letter-spacing: -.035em; margin: 18px 0 18px; }
+  h1 .shine {
+    background: linear-gradient(90deg, var(--gold-2), #fff 45%, var(--gold) 70%, var(--gold-2));
+    background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shine 6s linear infinite;
+  }
+  @keyframes shine { to { background-position: -220% 0; } }
+  .lead { color: var(--sub); font-size: 1.2rem; max-width: 560px; margin: 0 0 30px; }
+  @media (max-width: 900px) { .lead { margin-inline: auto; } }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .fine { color: var(--sub); font-size: .88rem; margin-top: 14px; }
+
+  /* phone mockup that switches between open and kosher */
+  .stage { position: relative; display: grid; place-items: center; min-height: 600px; }
+  .ring { position: absolute; width: 420px; height: 420px; border-radius: 50%; border: 2px solid rgba(224,182,74,.45); animation: ripple 3.5s ease-out infinite; }
+  .ring:nth-child(2) { animation-delay: 1.75s; }
+  @keyframes ripple { from { transform: scale(.55); opacity: .9; } to { transform: scale(1.35); opacity: 0; } }
+  .phone {
+    position: relative; width: 280px; aspect-ratio: 9/20; border-radius: 44px; padding: 10px; background: #0a0d14;
+    box-shadow: 0 40px 90px rgba(0,0,0,.55), inset 0 0 0 2px #262c38; animation: float 6s ease-in-out infinite;
+  }
+  .phone.sm { width: 230px; animation: none; }
+  @keyframes float { 50% { transform: translateY(-14px) rotate(-1deg); } }
+  .screen { position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden; background: #000; }
+  .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .screen .kosher { animation: swap 7s var(--ease) infinite; }
+  @keyframes swap { 0%, 42% { opacity: 0; transform: scale(1.06); } 50%, 92% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.06); } }
+  .toggle {
+    position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px;
+    background: rgba(6,15,34,.8); border: 1px solid var(--edge); backdrop-filter: blur(12px); border-radius: 999px; padding: 8px 16px;
+    font-size: .92rem; white-space: nowrap;
+  }
+  .switch { width: 46px; height: 26px; border-radius: 99px; background: #3a4558; position: relative; animation: track 7s var(--ease) infinite; }
+  .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; animation: knob 7s var(--ease) infinite; }
+  @keyframes track { 0%, 42% { background: #3a4558; } 50%, 92% { background: var(--gold); } 100% { background: #3a4558; } }
+  @keyframes knob { 0%, 42% { transform: none; } 50%, 92% { transform: translateX(20px); } 100% { transform: none; } }
+  .toggle .lbl-open { animation: dim 7s infinite; } .toggle .lbl-kosher { animation: dim 7s infinite reverse; color: var(--gold-2); }
+  @keyframes dim { 0%, 42% { opacity: 1; } 50%, 92% { opacity: .35; } 100% { opacity: 1; } }
+
+  /* ---------- marquee ---------- */
+  .marquee { border-block: 1px solid var(--edge); background: rgba(255,255,255,.025); overflow: hidden; padding: 16px 0; margin-top: 30px; }
+  .track { display: flex; gap: 48px; width: max-content; animation: slide 40s linear infinite; color: var(--sub); white-space: nowrap; }
+  .track b { color: var(--gold-2); font-weight: 600; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  /* ---------- sections ---------- */
+  section { padding: 100px 0 20px; }
+  .head { text-align: center; max-width: 720px; margin: 0 auto 48px; }
+  .head .kicker { color: var(--gold); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; }
+  h2 { font-size: clamp(2rem, 4.4vw, 3rem); letter-spacing: -.025em; line-height: 1.1; margin: 10px 0 14px; }
+  .head p { color: var(--sub); font-size: 1.1rem; margin: 0; }
+
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
   .card {
-    background: var(--glass); border: 1px solid var(--edge); border-radius: 26px; padding: 24px;
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    background: var(--glass); border: 1px solid var(--edge); border-radius: var(--radius); padding: 26px;
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: transform .35s var(--ease), border-color .35s, background .35s;
   }
-  .card h3 { margin: 0 0 4px; font-size: 1.2rem; }
-  .card .when { color: var(--gold); font-size: .92rem; margin-bottom: 12px; }
-  ol { padding-inline-start: 22px; margin: 0; }
-  li { margin: 6px 0; }
+  .card:hover { transform: translateY(-6px); border-color: rgba(224,182,74,.45); background: rgba(255,255,255,.08); }
+  .card .ic { width: 50px; height: 50px; border-radius: 15px; display: grid; place-items: center; font-size: 24px; margin-bottom: 14px; }
+  .card h3 { margin: 0 0 6px; font-size: 1.15rem; }
+  .card p { margin: 0; color: var(--sub); font-size: .97rem; }
+
+  /* tour: alternating text + phone */
+  .tour { display: grid; gap: 90px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .row:nth-child(even) .copy { order: 2; }
+  @media (max-width: 860px) { .row { grid-template-columns: 1fr; text-align: center; } .row:nth-child(even) .copy { order: 0; } .row .phones { justify-content: center; } }
+  .copy .tag { color: var(--gold); font-weight: 700; font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; }
+  .copy h3 { font-size: clamp(1.7rem, 3.2vw, 2.3rem); margin: 8px 0 12px; letter-spacing: -.02em; line-height: 1.15; }
+  .copy p { color: var(--sub); font-size: 1.08rem; margin: 0 0 14px; }
+  .copy ul { list-style: none; padding: 0; margin: 0; color: var(--ink); }
+  .copy li { padding: 5px 0 5px 28px; position: relative; }
+  .copy li::before { content: "✓"; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+  @media (max-width: 860px) { .copy li { padding-left: 0; } .copy li::before { position: static; margin-right: 8px; } }
+  .phones { display: flex; gap: 22px; align-items: flex-end; }
+  .phones .phone:nth-child(2) { transform: translateY(40px); }
+
+  /* gallery */
+  .gallery { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 20px 20px 40px; scrollbar-width: none; }
+  .gallery::-webkit-scrollbar { display: none; }
+  .gallery figure { margin: 0; scroll-snap-align: center; flex: 0 0 auto; text-align: center; }
+  .gallery figcaption { color: var(--sub); font-size: .92rem; margin-top: 14px; }
+  .gallery .phone { width: 220px; animation: none; transition: transform .4s var(--ease); }
+  .gallery .phone:hover { transform: translateY(-10px) rotate(-1.5deg); }
+
+  /* steps */
+  .steps { counter-reset: s; display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .step { position: relative; padding-top: 70px; }
+  .step::before {
+    counter-increment: s; content: counter(s); position: absolute; top: 22px; left: 26px; width: 38px; height: 38px;
+    border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: #0b2a5b; background: linear-gradient(180deg, var(--gold-2), var(--gold));
+  }
+
+  /* setup */
+  .setup { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .setup .when { color: var(--gold-2); font-size: .92rem; margin-bottom: 12px; }
+  .setup ol { padding-inline-start: 22px; margin: 0; }
+  .setup li { margin: 7px 0; color: var(--ink); }
   code {
-    display: block; background: rgba(0,0,0,.35); border-radius: 12px; padding: 10px 12px; margin: 8px 0;
-    font-size: .85rem; overflow-x: auto; white-space: nowrap; color: #ffe7a8;
+    display: block; background: rgba(0,0,0,.4); border-radius: 12px; padding: 10px 12px; margin: 8px 0; font-size: .84rem;
+    overflow-x: auto; white-space: nowrap; color: #ffe7a8; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   }
-  #qr { background: #fff; border-radius: 18px; padding: 14px; width: fit-content; margin: 16px auto 4px; }
-  #qr img, #qr canvas { display: block; width: 220px; height: 220px; }
-  .qrhint { text-align: center; color: var(--sub); font-size: .85rem; }
-  .features { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-  .feature { background: var(--glass); border: 1px solid var(--edge); border-radius: 20px; padding: 16px 18px; }
-  .feature b { display: block; margin-bottom: 2px; }
-  .feature span { color: var(--sub); font-size: .92rem; }
-  footer { color: var(--sub); font-size: .82rem; text-align: center; margin-top: 56px; }
+  #qr { background: #fff; border-radius: 20px; padding: 14px; width: fit-content; margin: 18px auto 6px; box-shadow: 0 0 0 6px rgba(224,182,74,.25); }
+  #qr img, #qr canvas { width: 210px; height: 210px; }
+  .qrhint { text-align: center; color: var(--sub); font-size: .86rem; margin: 0; }
+
+  /* parents */
+  .parents { display: grid; grid-template-columns: .9fr 1.1fr; gap: 50px; align-items: center; }
+  @media (max-width: 860px) { .parents { grid-template-columns: 1fr; } .parents .phones { justify-content: center; } }
+
+  /* faq */
+  .faq { max-width: 820px; margin: 0 auto; display: grid; gap: 12px; }
+  details { background: var(--glass); border: 1px solid var(--edge); border-radius: 20px; padding: 4px 22px; transition: background .3s; }
+  details[open] { background: rgba(255,255,255,.08); }
+  summary { cursor: pointer; list-style: none; padding: 16px 0; font-weight: 600; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--gold); font-size: 1.4rem; line-height: 1; transition: transform .3s var(--ease); }
+  details[open] summary::after { transform: rotate(45deg); }
+  details p { color: var(--sub); margin: 0 0 18px; }
+
+  /* final */
+  .final { text-align: center; padding: 110px 0 60px; }
+  .final .emblem { width: 110px; margin: 0 auto 10px; animation: float 6s ease-in-out infinite; }
+  footer { border-top: 1px solid var(--edge); color: var(--sub); font-size: .85rem; padding: 34px 0 50px; text-align: center; }
   footer a { color: var(--sub); }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.d1 { transition-delay: .08s; } .reveal.d2 { transition-delay: .16s; } .reveal.d3 { transition-delay: .24s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+    .screen .kosher { opacity: 1; }
+  }
 </style>
 </head>
 <body>
-<main>
-  <header>
+<div class="orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<nav id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#0b2a5b"/><circle cx="50" cy="50" r="36" fill="none" stroke="#e0b64a" stroke-width="6"/><path d="M36 51l10 10 19-21" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Kosher Switch
+    </a>
+    <div class="links">
+      <a href="#features">Features</a><a href="#tour">Tour</a><a href="#parents">Parents</a><a href="#setup">Setup</a><a href="#faq">FAQ</a>
+    </div>
+    <a class="btn gold small" href="kosher-switch.apk" download>Download</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow reveal">✦ Free for Android · Version 1.1</span>
+      <h1 class="reveal d1">A kosher phone.<br><span class="shine">One tap away.</span></h1>
+      <p class="lead reveal d2">Swipe down, tap <span class="he">כשר</span>, and your phone becomes a kosher phone: only the apps you choose, no open internet, its own calm home screen. Tap again and enter your code to get your full phone back.</p>
+      <div class="cta reveal d3">
+        <a class="btn gold" href="kosher-switch.apk" download>⬇ Download for Android <small>33 MB</small></a>
+        <a class="btn ghost" href="#setup">How to set it up</a>
+      </div>
+      <p class="fine reveal d3">Android 10 or newer · tested on Samsung Galaxy A32 5G · stays kosher after a restart</p>
+    </div>
+    <div class="stage reveal d2">
+      <div class="ring"></div><div class="ring"></div>
+      <div class="phone">
+        <div class="screen">
+          <img src="img/open.jpg" alt="The phone in open mode">
+          <img class="kosher" src="img/home.jpg" alt="The kosher home screen with the Hebrew date and a glass widget">
+        </div>
+        <div class="toggle"><span class="lbl-open">Open</span><span class="switch" aria-hidden="true"></span><span class="lbl-kosher he">כשר</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="marquee" aria-hidden="true">
+    <div class="track">
+      <span><b>3</b> nusachim</span><span><b>150</b> chapters of Tehillim</span><span><b>1 tap</b> to go kosher</span><span>Zmanim for your location</span><span><b>0</b> data sent by the assistant</span><span>Survives restarts</span><span>Dark &amp; light mode</span><span>Glass design</span><span>Hebrew &amp; English</span>
+      <span><b>3</b> nusachim</span><span><b>150</b> chapters of Tehillim</span><span><b>1 tap</b> to go kosher</span><span>Zmanim for your location</span><span><b>0</b> data sent by the assistant</span><span>Survives restarts</span><span>Dark &amp; light mode</span><span>Glass design</span><span>Hebrew &amp; English</span>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="kicker">Two phones in one</div>
+      <h2>Everything a kosher phone needs</h2>
+      <p>Kosher mode isn't a filter you can click past. The phone itself changes, and it stays that way until the code is entered.</p>
+    </div>
+    <div class="grid">
+      <div class="card reveal"><div class="ic" style="background:rgba(224,182,74,.15)">🔒</div><h3>Only the apps you choose</h3><p>Everything else disappears: browsers, stores, social media. Settings are locked, installing is blocked, safe mode is off.</p></div>
+      <div class="card reveal d1"><div class="ic" style="background:rgba(91,143,230,.18)">🌐</div><h3>Internet only where allowed</h3><p>Every app is cut off from Wi-Fi and data, except the ones you pick, like Waze. Notifications from blocked apps are hidden too.</p></div>
+      <div class="card reveal d2"><div class="ic" style="background:rgba(90,63,214,.2)">✨</div><h3>Its own home screen</h3><p>A big clock, the Hebrew date, a glass widget with the parsha and zmanim, a dock, and a swipe-up drawer you arrange yourself.</p></div>
+      <div class="card reveal"><div class="ic" style="background:rgba(31,157,85,.18)">📖</div><h3>Siddur &amp; Tehillim</h3><p>Ashkenaz, Sefard and Edot HaMizrach. Every prayer as one text, a parts menu, search, and daily Tehillim. Fully offline.</p></div>
+      <div class="card reveal d1"><div class="ic" style="background:rgba(224,182,74,.15)">🗓</div><h3>Luach &amp; zmanim</h3><p>Hebrew calendar, parsha, holidays, candle lighting and the day's zmanim, calculated for where you are.</p></div>
+      <div class="card reveal d2"><div class="ic" style="background:rgba(255,166,64,.18)">📝</div><h3>Notes that do more</h3><p>Bold, headings, lists, tap-to-tick checklists and drawings in seven colors. Pin and search your notes.</p></div>
+      <div class="card reveal"><div class="ic" style="background:rgba(168,139,255,.2)">✦</div><h3>An offline assistant</h3><p>"Wake me up at 7", "call Mom", "write a note with a recipe". It runs on the phone itself; nothing is sent anywhere.</p></div>
+      <div class="card reveal d1"><div class="ic" style="background:rgba(91,143,230,.18)">🎨</div><h3>Made to feel good</h3><p>Liquid-glass design, smooth animations, haptics, dark and light mode, five backgrounds, three icon styles.</p></div>
+      <div class="card reveal d2"><div class="ic" style="background:rgba(224,182,74,.15)">🔁</div><h3>Back in one code</h3><p>Leaving takes your secret code. A restart doesn't turn it off, and five wrong codes lock the keypad for a minute.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="tour">
+  <div class="wrap tour">
+    <div class="head reveal" style="margin-bottom:0">
+      <div class="kicker">A tour</div>
+      <h2>See it on a real phone</h2>
+      <p>All screenshots are from a Samsung Galaxy A32 5G running Kosher Switch.</p>
+    </div>
+
+    <div class="row">
+      <div class="copy reveal">
+        <div class="tag">The switch</div>
+        <h3>One tap in. One code out.</h3>
+        <p>Tap <span class="he">כשר</span> in the swipe-down panel. The emblem spins in, the phone reshapes itself, and the kosher home screen builds in piece by piece.</p>
+        <ul><li>Works from the swipe-down panel, anywhere</li><li>Glass keypad to leave, with haptics</li><li>Stays kosher after a restart</li></ul>
+      </div>
+      <div class="phones reveal d1">
+        <div class="phone sm"><div class="screen"><img src="img/switch.jpg" alt="Switching animation" loading="lazy"></div></div>
+        <div class="phone sm"><div class="screen"><img src="img/keypad.jpg" alt="Glass keypad to leave kosher mode" loading="lazy"></div></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="copy reveal">
+        <div class="tag">The home screen</div>
+        <h3>Calm, clear, and yours</h3>
+        <p>Swipe up for your apps on frosted glass. Hold any app to move it; hold a dock icon to swap it. Choose Kosher, Glass or Original icons.</p>
+        <ul><li>Detailed custom icons for built-in apps</li><li>Fading edges and a blurred background</li><li>Clock size, style and widgets are all adjustable</li></ul>
+      </div>
+      <div class="phones reveal d1">
+        <div class="phone sm"><div class="screen"><img src="img/drawer.jpg" alt="App drawer with kosher icons" loading="lazy"></div></div>
+        <div class="phone sm"><div class="screen"><img src="img/drawer-glass.jpg" alt="App drawer with glass icons" loading="lazy"></div></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="copy reveal">
+        <div class="tag">Siddur</div>
+        <h3>The whole siddur, in your pocket</h3>
+        <p>The right prayer for the time of day is waiting at the top. Every prayer opens as one continuous text, with a menu to jump to any part.</p>
+        <ul><li>Ashkenaz, Sefard, Edot HaMizrach</li><li>Search that ignores nikud</li><li>Daily and weekly Tehillim</li></ul>
+      </div>
+      <div class="phones reveal d1">
+        <div class="phone sm"><div class="screen"><img src="img/siddur.jpg" alt="Siddur home with tabs" loading="lazy"></div></div>
+        <div class="phone sm"><div class="screen"><img src="img/reader.jpg" alt="Reading Mincha as one text" loading="lazy"></div></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="copy reveal">
+        <div class="tag">Assistant</div>
+        <h3>Help that never goes online</h3>
+        <p>A small AI runs right on the phone. It makes calls, sets alarms, writes notes and answers questions. Food answers get an automatic kashrut check.</p>
+        <ul><li>Nothing leaves the phone</li><li>Parents can switch it off completely</li><li>English and Hebrew commands</li></ul>
+      </div>
+      <div class="phones reveal d1">
+        <div class="phone sm"><div class="screen"><img src="img/assistant.jpg" alt="Assistant welcome screen" loading="lazy"></div></div>
+        <div class="phone sm"><div class="screen"><img src="img/recipe.jpg" alt="A recipe with a kashrut check" loading="lazy"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" style="padding-top:80px">
+  <div class="head reveal wrap">
+    <div class="kicker">More screens</div>
+    <h2>Swipe through</h2>
+  </div>
+  <div class="gallery reveal">
+    <figure><div class="phone"><div class="screen"><img src="img/home.jpg" alt="" loading="lazy"></div></div><figcaption>Kosher home</figcaption></figure>
+    <figure><div class="phone"><div class="screen"><img src="img/times.jpg" alt="" loading="lazy"></div></div><figcaption>Luach &amp; zmanim</figcaption></figure>
+    <figure><div class="phone"><div class="screen"><img src="img/settings.jpg" alt="" loading="lazy"></div></div><figcaption>Kosher settings</figcaption></figure>
+    <figure><div class="phone"><div class="screen"><img src="img/guide.jpg" alt="" loading="lazy"></div></div><figcaption>Step-by-step guide</figcaption></figure>
+    <figure><div class="phone"><div class="screen"><img src="img/setup.jpg" alt="" loading="lazy"></div></div><figcaption>Three-step setup</figcaption></figure>
+    <figure><div class="phone"><div class="screen"><img src="img/reader.jpg" alt="" loading="lazy"></div></div><figcaption>Prayer reader</figcaption></figure>
+  </div>
+</section>
+
+<section id="parents">
+  <div class="wrap parents">
+    <div class="phones reveal">
+      <div class="phone sm"><div class="screen"><img src="img/setup.jpg" alt="Kosher Switch setup: code, apps, turn on" loading="lazy"></div></div>
+    </div>
+    <div class="copy reveal d1">
+      <div class="tag">For parents</div>
+      <h3>Set it up. Hand it over.</h3>
+      <p>Choose a code only you know, pick the apps your child may use and which of them may go online, then turn it on. Without the code it stays kosher, even after a restart.</p>
+      <ul>
+        <li>The assistant can be switched off completely</li>
+        <li>The phone's Settings app stays locked</li>
+        <li>No accounts, app stores or browsers unless you allow them</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="kicker">How it works</div>
+      <h2>Three steps</h2>
+    </div>
+    <div class="steps">
+      <div class="card step reveal"><h3>Set it up once</h3><p>With the QR code on a freshly reset phone, or one command from a computer. Android requires this for any app that locks a phone.</p></div>
+      <div class="card step reveal d1"><h3>Choose code &amp; apps</h3><p>The app's built-in guide walks you through it. Everything is included: siddur, calendar, notes, assistant.</p></div>
+      <div class="card step reveal d2"><h3>Tap <span class="he">כשר</span></h3><p>Swipe down from the top and tap the <span class="he">כשר</span> button. To leave, tap it again and enter the code.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="setup">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="kicker">Setup</div>
+      <h2>Two ways to set it up</h2>
+      <p>Kosher Switch has to be the phone's "device owner". Android allows that only through one of these.</p>
+    </div>
+    <div class="setup">
+      <div class="card reveal">
+        <h3>A. With this QR code</h3>
+        <div class="when">No computer · the phone is reset</div>
+        <ol>
+          <li>Back up the phone, then factory reset it (or start with a new phone).</li>
+          <li>On the very first <b>Welcome</b> screen, tap the screen <b>6 times</b>.</li>
+          <li>Connect to Wi-Fi if asked, then scan this code:</li>
+        </ol>
+        <div id="qr"></div>
+        <p class="qrhint" id="qrhint">The phone downloads and sets up Kosher Switch by itself. Needs a phone with Google's setup screen.</p>
+      </div>
+      <div class="card reveal d1">
+        <h3>B. With a computer</h3>
+        <div class="when">Keeps everything on the phone</div>
+        <ol>
+          <li>Install the app with the <b>Download</b> button.</li>
+          <li>Settings → About phone → Software information → tap <b>Build number</b> 7 times.</li>
+          <li>Developer options → turn on <b>USB debugging</b>.</li>
+          <li>Settings → Accounts → remove all accounts for a moment.</li>
+          <li>Connect to a computer with <a href="https://developer.android.com/tools/releases/platform-tools" style="color:var(--gold)">Android platform tools</a> and run:
+            <code>adb shell dpm set-device-owner dev.kosherswitch/.KosherAdmin</code></li>
+          <li>Add your accounts back.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="kicker">Questions</div>
+      <h2>Good to know</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal"><summary>Is it really free?</summary><p>Yes. No ads, no accounts, no subscription. The code is public on GitHub.</p></details>
+      <details class="reveal"><summary>Why does setup need a QR code or a computer?</summary><p>Android only lets an app lock a phone if it's made the "device owner" in a special, one-time way. That rule protects everyone from malicious apps. Every parental-control and kosher-filter app on Android works like this.</p></details>
+      <details class="reveal"><summary>Can someone get around kosher mode?</summary><p>Kosher mode blocks the Settings app, installing and uninstalling, account changes, VPN and DNS changes, factory reset from Settings, safe mode and USB debugging, and it survives restarts. A full factory reset with the hardware buttons can't be blocked by any app, but it erases the whole phone, so it can't happen unnoticed. No phone is 100% bypass-proof; this is a strong lock, not a guarantee.</p></details>
+      <details class="reveal"><summary>Does the assistant need internet?</summary><p>No. It runs completely on the phone. Its AI part is an optional 1.6 GB download over Wi-Fi, done once in open mode. Nothing you ask is sent anywhere. It's a small model, so answers are simpler than online AI, and recipes get an automatic kashrut check.</p></details>
+      <details class="reveal"><summary>Which phones does it work on?</summary><p>Android 10 or newer with a 64-bit processor. It's tested on the Samsung Galaxy A32 5G (Android 12). QR setup also needs Google's setup screen.</p></details>
+      <details class="reveal"><summary>Is this a kashrut certification?</summary><p>No. Kosher Switch is a tool. For a certified kosher phone, speak to your rav or a recognized kashrut organization. Parents remain responsible for how a phone is used.</p></details>
+      <details class="reveal"><summary>How do I remove it?</summary><p>Because it protects itself as device owner, removing Kosher Switch requires a factory reset. Back up the phone first.</p></details>
+    </div>
+  </div>
+</section>
+
+<div class="final">
+  <div class="wrap">
     <svg class="emblem" viewBox="0 0 100 100" aria-hidden="true">
       <circle cx="50" cy="50" r="44" fill="none" stroke="#e0b64a" stroke-width="5"/>
       <circle cx="50" cy="50" r="37" fill="none" stroke="#e0b64a" stroke-width="1.6"/>
       <text x="50" y="61" text-anchor="middle" font-family="serif" font-weight="700" font-size="30" fill="#e0b64a">כשר</text>
     </svg>
-    <h1>Kosher Switch</h1>
-    <p class="tag">One button turns an Android phone into a kosher phone, and back. For yourself, or for your child. Free.</p>
-    <p class="he">מכשיר כשר בלחיצת כפתור</p>
-    <a class="btn" href="kosher-switch.apk" download>Download for Android <small>· 33 MB</small></a>
-    <p class="note">Android 10 or newer. Tested on a Samsung Galaxy A32 5G (Android 12).</p>
-  </header>
-
-  <h2>Set it up: two ways</h2>
-  <div class="grid">
-    <section class="card">
-      <h3>A. With this QR code</h3>
-      <div class="when">No computer · the phone is reset</div>
-      <ol>
-        <li>Back up the phone, then factory reset it (or start with a new phone).</li>
-        <li>On the very first <b>Welcome</b> screen, tap the screen <b>6 times</b>.</li>
-        <li>Connect to Wi-Fi if asked, then scan this code:</li>
-      </ol>
-      <div id="qr"></div>
-      <p class="qrhint" id="qrhint">The phone downloads and sets up Kosher Switch by itself.</p>
-    </section>
-    <section class="card">
-      <h3>B. With a computer</h3>
-      <div class="when">Keeps everything on the phone</div>
-      <ol>
-        <li>Install the app from the button above.</li>
-        <li>Settings → About phone → Software information → tap <b>Build number</b> 7 times.</li>
-        <li>Developer options → turn on <b>USB debugging</b>.</li>
-        <li>Settings → Accounts → remove all accounts for a moment.</li>
-        <li>Connect to a computer with <a href="https://developer.android.com/tools/releases/platform-tools" style="color:var(--gold)">Android platform tools</a> and run:
-          <code>adb shell dpm set-device-owner dev.kosherswitch/.KosherAdmin</code></li>
-        <li>Add your accounts back.</li>
-      </ol>
-    </section>
+    <h2 class="reveal">Ready when you are.</h2>
+    <p class="lead reveal d1" style="margin:0 auto 26px">Download Kosher Switch, set it up once, and your phone is kosher with a single tap.</p>
+    <div class="cta reveal d2" style="justify-content:center">
+      <a class="btn gold" href="kosher-switch.apk" download>⬇ Download for Android <small>33 MB</small></a>
+      <a class="btn ghost" href="https://github.com/itai2008elishakov-rgb/kosher-switch">View on GitHub</a>
+    </div>
   </div>
-  <p class="note" style="text-align:center">Then open <b>Kosher Switch</b>: its built-in guide walks you through the code, the apps and switching.</p>
+</div>
 
-  <h2>What's inside</h2>
-  <div class="features">
-    <div class="feature"><b>One-tap switch</b><span>Swipe down, tap כשר. Leaving needs your secret code, even after a restart.</span></div>
-    <div class="feature"><b>Only the apps you choose</b><span>Everything else disappears. Internet only for the apps you allow.</span></div>
-    <div class="feature"><b>Its own home screen</b><span>Glass design, Hebrew date, widget, dock, dark and light mode, five backgrounds.</span></div>
-    <div class="feature"><b>סידור ותהלים</b><span>Ashkenaz, Sefard and Edot HaMizrach, search, daily Tehillim. Offline.</span></div>
-    <div class="feature"><b>לוח וזמנים</b><span>Hebrew calendar, parsha, holidays and zmanim for your location.</span></div>
-    <div class="feature"><b>Notes</b><span>Checklists, formatting and drawing.</span></div>
-    <div class="feature"><b>Offline assistant</b><span>Calls, messages, alarms, notes, kosher recipes. Runs on the phone; nothing leaves it.</span></div>
-    <div class="feature"><b>For parents</b><span>Set it up, choose the apps, hand over the phone. The assistant can be switched off.</span></div>
-  </div>
-
-  <footer>
-    Prayer texts from <a href="https://www.sefaria.org">Sefaria</a> (including the Metsudah Siddur, CC-BY).
-    Zmanim by KosherJava (LGPL). On-device AI: Google MediaPipe and Qwen 2.5 (Apache 2.0).<br>
+<footer>
+  <div class="wrap">
+    Prayer texts from <a href="https://www.sefaria.org">Sefaria</a> (including the Metsudah Siddur, CC-BY). Zmanim by KosherJava (LGPL).
+    On-device AI: Google MediaPipe and Qwen 2.5 (Apache 2.0).<br>
     Kosher Switch is not a kashrut certification. Parents remain responsible for how a phone is used.
-  </footer>
-</main>
+  </div>
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+  // Nav gets a glass background once you scroll.
+  const nav = document.getElementById("nav");
+  const onScroll = () => nav.classList.toggle("scrolled", scrollY > 20);
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  // Sections fade up as they come into view.
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }), { threshold: 0.15 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
   // Android's standard setup QR code: where to download the app, its signing fingerprint,
   // and which component becomes the device owner.
   const apk = new URL("kosher-switch.apk", location.href).href;
@@ -126,12 +481,10 @@
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "x5nEyL1XOUm7c7-n0arpDKX90FTjmBypuI-H_BPGCrE",
     "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true
   };
-  if (!location.protocol.startsWith("http")) {
+  if (!location.protocol.startsWith("http") || typeof QRCode === "undefined") {
     document.getElementById("qrhint").textContent = "The QR code appears once this page is online.";
   } else {
-    new QRCode(document.getElementById("qr"), {
-      text: JSON.stringify(payload), width: 440, height: 440, correctLevel: QRCode.CorrectLevel.M
-    });
+    new QRCode(document.getElementById("qr"), { text: JSON.stringify(payload), width: 420, height: 420, correctLevel: QRCode.CorrectLevel.M });
   }
 </script>
 </body>
