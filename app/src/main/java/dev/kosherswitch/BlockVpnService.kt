@@ -6,7 +6,8 @@ import android.os.ParcelFileDescriptor
 
 /**
  * A "VPN" that goes nowhere: all traffic is routed into it and never read, so it is dropped.
- * Apps in the network allowlist (Waze) are excluded and use the real connection.
+ * Apps in the network allowlist (Waze) and, for the weather app, this app itself are excluded and
+ * use the real connection.
  */
 class BlockVpnService : VpnService() {
     private var tun: ParcelFileDescriptor? = null
@@ -24,7 +25,9 @@ class BlockVpnService : VpnService() {
                 .addAddress("fd00:6b6f:7368::1", 128)
                 .addRoute("::", 0)
             val networkApps = Allowlist.networkApps(this)
-            val bypass = if (networkApps.isEmpty()) networkApps else networkApps + Allowlist.SUPPORT_SERVICES
+            var bypass = if (networkApps.isEmpty()) networkApps else networkApps + Allowlist.SUPPORT_SERVICES
+            // This app's own traffic is only the weather forecast (it has no browser or web views).
+            if (Looks.weatherAllowed(this)) bypass = bypass + packageName
             bypass.forEach { runCatching { builder.addDisallowedApplication(it) } }
             tun = builder.establish()
         }

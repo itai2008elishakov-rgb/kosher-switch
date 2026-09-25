@@ -11,6 +11,8 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.DragEvent
+import android.view.KeyEvent
+import android.view.ViewGroup
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -37,6 +39,7 @@ import kotlin.math.abs
  * it to a new spot. Hold a dock icon to choose a different app for that spot.
  */
 class ClosedHomeActivity : BaseActivity() {
+    override val glides = false
     private companion object {
         const val COLUMNS = 3
         val DEFAULT_DOCK = listOf("dialer", "messag", "siddur")
@@ -67,6 +70,7 @@ class ClosedHomeActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ModeManager.inBackground({ ModeManager.applyOrganization(this) })
         window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = Color.TRANSPARENT
         window.setDecorFitsSystemWindows(false)
@@ -111,7 +115,7 @@ class ClosedHomeActivity : BaseActivity() {
         refreshWidget()
         apps = loadApps()
         // Rebuild icons only when something that affects them changed.
-        val state = apps.joinToString { it.key } + Looks.icons(this) + Looks.glass(this) + Looks.dock(this) + Looks.assistantAllowed(this) +
+        val state = apps.joinToString { it.key } + Looks.icons(this) + Looks.glass(this) + Looks.dock(this) + Looks.assistantAllowed(this) + Looks.weatherAllowed(this) +
             Theme.dark + LocalDate.now() // the calendar icon shows today's date
         if (state != shownState) {
             shownState = state
@@ -120,6 +124,51 @@ class ClosedHomeActivity : BaseActivity() {
             fillDock()
             fillDrawer()
         }
+    }
+
+    /**
+     * Keypad phones. Handled before the views see the key, because the scrolling top part would
+     * otherwise swallow the arrows. Home: a number starts a call, left/right/down pick a dock app,
+     * up goes to the assistant pill and then opens the apps, OK opens what's selected.
+     */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action != KeyEvent.ACTION_DOWN || progress() > 0.5f) return super.dispatchKeyEvent(event)
+        val focused = currentFocus
+        val dockIndex = (0 until dock.childCount).firstOrNull { dock.getChildAt(it) == focused }
+        val pillShown = askPill.visibility == View.VISIBLE && askPill.parent != null
+        when (event.keyCode) {
+            in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
+                val digit = (event.keyCode - KeyEvent.KEYCODE_0).toString()
+                startActivity(Intent(Intent.ACTION_DIAL, android.net.Uri.parse("tel:$digit")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
+            KeyEvent.KEYCODE_STAR, KeyEvent.KEYCODE_POUND -> {
+                val c = if (event.keyCode == KeyEvent.KEYCODE_STAR) "*" else "#"
+                startActivity(Intent(Intent.ACTION_DIAL, android.net.Uri.parse("tel:" + android.net.Uri.encode(c))).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
+            // The green key opens the phone app, like on any keypad phone.
+            KeyEvent.KEYCODE_CALL -> startActivity(Intent(Intent.ACTION_DIAL).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            KeyEvent.KEYCODE_MENU -> openDrawerWithKeys()
+            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                if (dock.childCount == 0) return true
+                val rtl = dock.layoutDirection == View.LAYOUT_DIRECTION_RTL
+                val step = if ((event.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) != rtl) 1 else -1
+                val next = if (dockIndex == null) dock.childCount / 2 else (dockIndex + step).coerceIn(0, dock.childCount - 1)
+                dock.getChildAt(next).requestFocus()
+            }
+            KeyEvent.KEYCODE_DPAD_DOWN -> dock.getChildAt(dockIndex ?: (dock.childCount / 2))?.requestFocus()
+            KeyEvent.KEYCODE_DPAD_UP ->
+                if (dockIndex != null && pillShown) askPill.requestFocus() else openDrawerWithKeys()
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER ->
+                if (focused != null && (dockIndex != null || focused == askPill)) focused.performClick() else openDrawerWithKeys()
+            else -> return super.dispatchKeyEvent(event)
+        }
+        return true
+    }
+
+    private fun openDrawerWithKeys() {
+        currentFocus?.clearFocus()
+        animateDrawer(open = true)
+        drawerGrid.postDelayed({ drawerGrid.getChildAt(0)?.let { (it as? ViewGroup)?.getChildAt(0)?.requestFocus() } }, 400)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -187,17 +236,26 @@ class ClosedHomeActivity : BaseActivity() {
             val p = Theme.dp(context, 12)
             setPadding(p, p, p, p)
         }
-        home = LinearLayout(this).apply {
+        val top = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
             addView(clock)
             addView(date)
             addView(hebrew)
             addView(badge, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                .apply { topMargin = Theme.dp(context, 10) })
+                .apply { topMargin = Theme.dp(context, if (compact) 6 else 10) })
             addView(widget, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                .apply { topMargin = Theme.dp(context, 26) })
-            addView(View(context), LinearLayout.LayoutParams(1, 0, 1f))
+                .apply { topMargin = Theme.dp(context, if (compact) 12 else 26) })
+        }
+        home = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+            // On small screens (keypad phones) the top part scrolls instead of pushing the dock away.
+            addView(ScrollView(context).apply {
+                isVerticalScrollBarEnabled = false
+                isFillViewport = false
+                addView(top)
+            }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
             addView(hint)
             addView(askPill, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 .apply { topMargin = Theme.dp(context, 10) })
@@ -255,9 +313,14 @@ class ClosedHomeActivity : BaseActivity() {
 
     private fun fillDock() {
         dock.removeAllViews()
-        val keys = Looks.dock(this) ?: DEFAULT_DOCK
-        keys.take(3).forEachIndexed { slot, k ->
-            val app = apps.firstOrNull { it.key == k } ?: apps.firstOrNull { it.key.contains(k) } ?: return@forEachIndexed
+        val wanted = (Looks.dock(this) ?: DEFAULT_DOCK).take(3)
+        val picked = mutableListOf<App>()
+        wanted.forEach { k ->
+            (apps.firstOrNull { it.key == k } ?: apps.firstOrNull { it.key.contains(k) })?.takeIf { it !in picked }?.let(picked::add)
+        }
+        // If a chosen app isn't allowed on this phone, fill its spot with another allowed app.
+        apps.filterNot { it in picked }.take(3 - picked.size).forEach(picked::add)
+        picked.forEachIndexed { slot, app ->
             dock.addView(ImageView(this).apply {
                 setImageDrawable(app.icon)
                 contentDescription = app.label
@@ -402,7 +465,8 @@ class ClosedHomeActivity : BaseActivity() {
             app(getString(R.string.settings), "kosher_settings", getDrawable(R.drawable.ic_settings_app)!!) {
                 startActivity(ownApp(KosherSettingsActivity::class.java))
             },
-        ) + if (Looks.assistantAllowed(this)) listOf(own(getString(R.string.assistant), AssistantActivity::class.java, "assistant")) else emptyList()
+        ) + (if (Looks.weatherAllowed(this)) listOf(own(getString(R.string.weather), WeatherActivity::class.java, "weather")) else emptyList()) +
+            if (Looks.assistantAllowed(this)) listOf(own(getString(R.string.assistant), AssistantActivity::class.java, "assistant")) else emptyList()
         val order = Looks.order(this)
         return all.sortedBy { order.indexOf(it.key).let { i -> if (i < 0) Int.MAX_VALUE else i } }
     }
@@ -416,8 +480,16 @@ class ClosedHomeActivity : BaseActivity() {
     // ---- Layout and motion ----
 
     /** Clock size/style and which lines show, from Settings → Home & lock screen. */
+    /** Small screens, like the Qin F21 Pro: tighter spacing and a smaller clock. */
+    private val compact by lazy {
+        val dm = resources.displayMetrics
+        dm.heightPixels / dm.density < 700
+    }
+
     private fun applyLayout() {
-        clock.textSize = floatArrayOf(92f, 68f, 50f)[Looks.clockSize(this)]
+        val sizes = if (compact) floatArrayOf(58f, 48f, 38f) else floatArrayOf(92f, 68f, 50f)
+        clock.textSize = sizes[Looks.clockSize(this)]
+        hint.text = if (compact) "︿" else "︿\n" + getString(R.string.swipe_up_hint)
         clock.typeface = when (Looks.clockFont(this)) {
             1 -> android.graphics.Typeface.create("sans-serif", android.graphics.Typeface.BOLD)
             2 -> android.graphics.Typeface.create(android.graphics.Typeface.SERIF, android.graphics.Typeface.NORMAL)
@@ -482,7 +554,10 @@ class ClosedHomeActivity : BaseActivity() {
             addUpdateListener { setProgress(it.animatedValue as Float) }
             start()
         }
-        if (!open) drawerScroll.smoothScrollTo(0, 0)
+        if (!open) {
+            drawerScroll.smoothScrollTo(0, 0)
+            currentFocus?.clearFocus()
+        }
     }
 
     /** Follows the finger: up on the home screen opens, down at the top of the drawer closes. */

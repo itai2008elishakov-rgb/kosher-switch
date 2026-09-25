@@ -64,6 +64,10 @@ object Looks {
     fun assistantAllowed(ctx: Context) = p(ctx).getBoolean("assistant_allowed", true)
     fun setAssistantAllowed(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("assistant_allowed", on).apply()
 
+    /** Whether the weather app (the only part of this app that uses the internet) exists in kosher mode. */
+    fun weatherAllowed(ctx: Context) = p(ctx).getBoolean("weather_allowed", true)
+    fun setWeatherAllowed(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("weather_allowed", on).apply()
+
     fun assistantPill(ctx: Context) = p(ctx).getBoolean("look_assistant_pill", true)
     fun setAssistantPill(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("look_assistant_pill", on).apply()
 

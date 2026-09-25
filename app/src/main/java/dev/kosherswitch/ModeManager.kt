@@ -22,6 +22,8 @@ import java.util.concurrent.Executors
 object ModeManager {
     private const val TAG = "KosherSwitch"
     private const val KEY_CLOSED = "closed"
+    private const val KEY_SUSPENDED = "suspended_packages"
+    private const val KEY_HIDDEN = "hidden_packages"
 
     /** Always hidden in kosher mode, whatever the allowlist says. */
     val ALWAYS_BLOCKED = setOf("com.android.settings")
@@ -79,7 +81,10 @@ object ModeManager {
     }
 
     /** Undoes any leftovers from closed mode, if the phone is in open mode. */
-    fun repairIfOpen(ctx: Context) = inBackground({ if (!isClosed(ctx)) restoreOpen(ctx) })
+    fun repairIfOpen(ctx: Context) = inBackground({
+        applyOrganization(ctx)
+        if (!isClosed(ctx)) restoreOpen(ctx)
+    })
 
     fun enterClosed(ctx: Context) {
         check(isDeviceOwner(ctx)) { "Kosher Switch is not the device owner" }
@@ -98,8 +103,10 @@ object ModeManager {
         // A few system apps can't be suspended; those get hidden instead.
         val installed = ctx.packageManager.getInstalledPackages(0).map { it.packageName }.toSet()
         val blocked = launchableApps(ctx).map { it.pkg }.filterNot { it in keep } + SYSTEM_POPUPS.filter { it in installed }
-        dpm.setPackagesSuspended(admin, blocked.toTypedArray(), true)
-            .forEach { dpm.setApplicationHidden(admin, it, true) }
+        val notSuspendable = dpm.setPackagesSuspended(admin, blocked.toTypedArray(), true)
+        notSuspendable.forEach { dpm.setApplicationHidden(admin, it, true) }
+        // Remember exactly what was blocked, so leaving kosher mode can undo it in one step.
+        prefs(ctx).edit().putStringSet(KEY_SUSPENDED, blocked.toSet()).putStringSet(KEY_HIDDEN, notSuspendable.toSet()).apply()
 
         ACTIVE_RESTRICTIONS.forEach { dpm.addUserRestriction(admin, it) }
 
@@ -109,6 +116,7 @@ object ModeManager {
         attempt("network block") { dpm.setAlwaysOnVpnPackage(admin, ctx.packageName, true, networkApps) }
 
         applyLockMessage(ctx)
+        applyOrganization(ctx)
         dpm.setShortSupportMessage(admin, ctx.getString(R.string.blocked_app))
         NotificationFilterService.sweep()
         attempt("wallpaper") {
@@ -122,6 +130,12 @@ object ModeManager {
         }
     }
 
+    /** Android then says "This device belongs to Kosher Switch" instead of "your organization". */
+    fun applyOrganization(ctx: Context) {
+        if (!isDeviceOwner(ctx)) return
+        runCatching { dpm(ctx).setOrganizationName(KosherAdmin.component(ctx), "Kosher Switch") }
+    }
+
     /** Shows or clears the "מכשיר כשר" line on the lock screen. */
     fun applyLockMessage(ctx: Context) {
         if (!isDeviceOwner(ctx)) return
@@ -130,26 +144,34 @@ object ModeManager {
     }
 
     fun exitClosed(ctx: Context) {
-        restoreOpen(ctx)
+        restoreOpen(ctx, thorough = false)
         prefs(ctx).edit().putBoolean(KEY_CLOSED, false).commit()
+        // The full check of every app is slow on small phones, so it runs after the switch.
+        inBackground({ if (!isClosed(ctx)) restoreOpen(ctx, thorough = true) })
     }
 
     /**
-     * Undoes everything closed mode does. It doesn't rely on remembered state,
-     * so apps can never stay hidden by mistake.
+     * Undoes everything closed mode does. The quick pass restores what was remembered in one step;
+     * the thorough pass checks every installed app, so nothing can stay blocked by mistake.
      */
-    private fun restoreOpen(ctx: Context) {
+    private fun restoreOpen(ctx: Context, thorough: Boolean = true) {
         if (!isDeviceOwner(ctx)) return
         val dpm = dpm(ctx)
         val admin = KosherAdmin.component(ctx)
         attempt("network unblock") { dpm.setAlwaysOnVpnPackage(admin, null, false) }
         ALL_RESTRICTIONS.forEach { dpm.clearUserRestriction(admin, it) }
-        val installed = ctx.packageManager.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES)
-            .map { it.packageName }
-        installed.filter { dpm.isApplicationHidden(admin, it) }
-            .forEach { dpm.setApplicationHidden(admin, it, false) }
-        val suspended = installed.filter { runCatching { dpm.isPackageSuspended(admin, it) }.getOrDefault(false) }
-        if (suspended.isNotEmpty()) dpm.setPackagesSuspended(admin, suspended.toTypedArray(), false)
+        val remembered = prefs(ctx).getStringSet(KEY_SUSPENDED, emptySet())!!
+        if (remembered.isNotEmpty()) attempt("unsuspend") { dpm.setPackagesSuspended(admin, remembered.toTypedArray(), false) }
+        prefs(ctx).getStringSet(KEY_HIDDEN, emptySet())!!.forEach { attempt("unhide") { dpm.setApplicationHidden(admin, it, false) } }
+        if (thorough) {
+            val installed = ctx.packageManager.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES)
+                .map { it.packageName }
+            installed.filter { dpm.isApplicationHidden(admin, it) }
+                .forEach { dpm.setApplicationHidden(admin, it, false) }
+            val suspended = installed.filter { runCatching { dpm.isPackageSuspended(admin, it) }.getOrDefault(false) }
+            if (suspended.isNotEmpty()) dpm.setPackagesSuspended(admin, suspended.toTypedArray(), false)
+            prefs(ctx).edit().remove(KEY_SUSPENDED).remove(KEY_HIDDEN).apply()
+        }
         dpm.clearPackagePersistentPreferredActivities(admin, ctx.packageName)
         setClosedHomeEnabled(ctx, false)
         dpm.setDeviceOwnerLockScreenInfo(admin, null)

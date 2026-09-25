@@ -163,6 +163,18 @@ object Theme {
 
     /** Small shrink on touch and a springy release; clicks still go through. */
     fun pressable(view: View) {
+        // Keypad phones: the navigation pad can select this view, shown with a gold ring.
+        view.isFocusable = true
+        // Only our gold ring (no grey system box), and no growing, so the ring is never cut off.
+        if (android.os.Build.VERSION.SDK_INT >= 26) view.defaultFocusHighlightEnabled = false
+        view.setOnFocusChangeListener { v, focused ->
+            v.foreground = if (focused) GradientDrawable().apply {
+                cornerRadius = dp(v.context, 18).toFloat()
+                setColor(whiteAlpha(0.10f))
+                setStroke(dp(v.context, 3), GOLD)
+            } else null
+            if (focused) haptic(v)
+        }
         view.setOnTouchListener { v, e ->
             when (e.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {

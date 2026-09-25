@@ -51,6 +51,7 @@ class SetupActivity : BaseActivity() {
             addView(appsCard())
             addView(turnOnCard())
             addView(assistantCard())
+            addView(weatherCard())
         }
         setContentView(ScrollView(this).apply {
             setBackgroundColor(Theme.PAGE)
@@ -275,6 +276,22 @@ class SetupActivity : BaseActivity() {
         })
         return card
     }
+
+    /** Weather is on by default; a parent can hide it (and its internet) in kosher mode. */
+    private fun weatherCard() = Theme.card(this,
+        stepTitle(R.string.weather, Looks.weatherAllowed(this)),
+        LinearLayout(this).apply {
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, Theme.dp(context, 8), 0, Theme.dp(context, 4))
+            addView(Theme.text(context, getString(R.string.weather_allow), 16f).apply {
+                textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+            }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+            addView(toggle(Looks.weatherAllowed(context)).apply {
+                setOnCheckedChangeListener { v, on -> Theme.haptic(v); Looks.setWeatherAllowed(context, on) }
+            })
+        },
+        Theme.text(this, getString(R.string.weather_allow_note), 13f, Theme.SUB),
+    )
 
     private fun columnTitles() = LinearLayout(this).apply {
         setPadding(0, Theme.dp(context, 14), 0, Theme.dp(context, 4))

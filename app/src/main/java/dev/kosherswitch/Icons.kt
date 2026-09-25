@@ -39,21 +39,28 @@ object Icons {
         TIMES(0xFF2B63B5.toInt(), 0xFF0B2A5B.toInt()),
         NOTES(0xFFFFD66B.toInt(), 0xFFF5A623.toInt()),
         ASSISTANT(0xFFA88BFF.toInt(), 0xFF4B2FC9.toInt()),
+        WEATHER(0xFF5DB2FF.toInt(), 0xFF1F6FD1.toInt()),
     }
+
+    private val OWN = setOf("siddur", "times", "notes", "weather", "assistant", "kosher_settings")
 
     private val MATCH = listOf(
         "dialer" to Kind.PHONE, "incallui" to Kind.PHONE, "messag" to Kind.MESSAGES, "mms" to Kind.MESSAGES,
         "contacts" to Kind.CONTACTS, "camera" to Kind.CAMERA, "gallery" to Kind.GALLERY, "photos" to Kind.GALLERY,
         "clock" to Kind.CLOCK, "calculator" to Kind.CALCULATOR, "files" to Kind.FILES, "maps" to Kind.MAPS,
         "kosher_settings" to Kind.SETTINGS, "siddur" to Kind.SIDDUR, "times" to Kind.TIMES,
-        "notes" to Kind.NOTES, "memo" to Kind.NOTES, "assistant" to Kind.ASSISTANT,
+        "notes" to Kind.NOTES, "memo" to Kind.NOTES, "assistant" to Kind.ASSISTANT, "weather" to Kind.WEATHER,
     )
+
+    /** One icon in a given style, for the icon test screen. */
+    internal fun sample(kind: Kind, glass: Boolean, dark: Boolean): Drawable = Tile(kind, null, glass, dark, 0.6f)
 
     /** The icon to show for an app [key] (package name or built-in key). */
     fun forApp(ctx: Context, key: String, original: Drawable): Drawable {
         val style = Looks.icons(ctx)
-        if (style == Looks.Icons.ORIGINAL) return original
         val kind = MATCH.firstOrNull { key.contains(it.first) }?.second
+        // Kosher Switch's own apps: their designed icon *is* the original.
+        if (style == Looks.Icons.ORIGINAL) return if (key in OWN && kind != null) Tile(kind, null, false, Theme.dark, Theme.glass) else original
         val glass = style == Looks.Icons.GLASS
         return when {
             kind != null -> Tile(kind, null, glass, Theme.dark, Theme.glass)
@@ -63,8 +70,12 @@ object Icons {
     }
 
     /** One app tile, drawn on a 100×100 grid and scaled to any size. */
+    /** Just the symbol, without the tile (for the launcher icons' foreground layer). */
+    internal fun glyphOnly(kind: Kind): Drawable = Tile(kind, null, false, false, 0.6f, plate = false)
+
     private class Tile(
         val kind: Kind?, val inner: Drawable?, val glass: Boolean, val dark: Boolean, val strength: Float,
+        val plate: Boolean = true,
     ) : Drawable() {
         private val p = Paint(Paint.ANTI_ALIAS_FLAG)
 
@@ -76,7 +87,7 @@ object Icons {
             c.save()
             c.translate(bounds.centerX() - side / 2, bounds.centerY() - side / 2)
             c.scale(side / 100f, side / 100f)
-            drawTile(c)
+            if (plate) drawTile(c)
             when {
                 kind != null -> drawGlyph(c, kind)
                 inner != null -> {
@@ -150,6 +161,7 @@ object Icons {
                 Kind.TIMES -> times(c)
                 Kind.NOTES -> notes(c, k)
                 Kind.ASSISTANT -> assistant(c, k)
+                Kind.WEATHER -> weather(c)
             }
             p.shader = null
             shadow(false)
@@ -294,37 +306,48 @@ object Icons {
             c.drawPath(SvgPath.parse("M18,47 Q18,42 23,42 H77 Q82,42 82,47 V70 Q82,77 75,77 H25 Q18,77 18,70 Z"), p)
         }
 
+        /** A whole map filling the tile (inset on glass): land, park, water, streets, a highway and a pin. */
         private fun maps(c: Canvas) {
-            val area = RectF(16f, 16f, 84f, 84f)
+            val area = if (glass || !plate) RectF(16f, 16f, 84f, 84f) else RectF(0f, 0f, 100f, 100f)
             c.save()
-            c.clipPath(Path().apply { addRoundRect(area, 11f, 11f, Path.Direction.CW) })
-            p.color = 0xFFEAF4E7.toInt()
-            c.drawRect(area, p)
-            p.color = 0xFFC9E8C0.toInt()
-            c.drawCircle(28f, 74f, 16f, p)
+            c.clipPath(Path().apply { addRoundRect(area, if (glass || !plate) 12f else 23f, if (glass || !plate) 12f else 23f, Path.Direction.CW) })
+            c.translate(area.left, area.top)
+            c.scale(area.width() / 100f, area.height() / 100f)
+            p.shader = LinearGradient(0f, 0f, 0f, 100f, 0xFFF8F5EE.toInt(), 0xFFECE6D8.toInt(), Shader.TileMode.CLAMP)
+            c.drawRect(0f, 0f, 100f, 100f, p)
+            p.shader = null
+            p.color = 0xFFBFE4A6.toInt()
+            c.drawPath(SvgPath.parse("M0,56 C12,52 24,58 32,70 C38,80 36,100 36,100 L0,100 Z"), p)
+            p.shader = LinearGradient(60f, 0f, 100f, 36f, 0xFF9AD8FF.toInt(), 0xFF5BB6F4.toInt(), Shader.TileMode.CLAMP)
+            c.drawPath(SvgPath.parse("M56,0 C60,14 76,25 100,27 L100,0 Z"), p)
+            p.shader = null
             p.style = Paint.Style.STROKE
             p.strokeCap = Paint.Cap.ROUND
-            p.color = 0xFF74C6FF.toInt()
-            p.strokeWidth = 6f
-            c.drawPath(SvgPath.parse("M14,30 C36,38 48,22 86,30"), p)
-            p.color = Color.WHITE
-            p.strokeWidth = 5f
-            c.drawLine(14f, 62f, 86f, 46f, p)
-            c.drawLine(44f, 14f, 58f, 86f, p)
-            p.color = 0xFFFFD34E.toInt()
-            p.strokeWidth = 2f
-            c.drawLine(14f, 62f, 86f, 46f, p)
+            fun road(d: String, edge: Int, fill: Int, w: Float) {
+                val path = SvgPath.parse(d)
+                p.color = edge; p.strokeWidth = w + 2.2f; c.drawPath(path, p)
+                p.color = fill; p.strokeWidth = w; c.drawPath(path, p)
+            }
+            road("M0,40 C30,45 58,34 100,50", 0xFFDAD3C3.toInt(), Color.WHITE, 6.5f)
+            road("M30,0 C38,30 46,62 72,100", 0xFFDAD3C3.toInt(), Color.WHITE, 6.5f)
+            road("M52,100 C62,82 80,72 100,70", 0xFFDAD3C3.toInt(), Color.WHITE, 4.5f)
+            road("M0,86 C36,72 66,80 100,62", 0xFFE9A100.toInt(), 0xFFFFD04A.toInt(), 8f)
             p.style = Paint.Style.FILL
             c.restore()
+            // The pin, with a soft shadow on the map.
+            p.color = 0x33000000
+            c.drawOval(RectF(54f, 60f, 66f, 64f), p)
+            p.color = Color.WHITE // opaque, so the gradient pin is solid
             shadow(true)
-            p.color = 0xFFFF3B30.toInt()
+            p.shader = LinearGradient(0f, 24f, 0f, 62f, 0xFFFF6259.toInt(), 0xFFE0261B.toInt(), Shader.TileMode.CLAMP)
             c.drawPath(Path().apply {
-                addCircle(58f, 40f, 11f, Path.Direction.CW)
-                moveTo(48.5f, 45f); lineTo(58f, 63f); lineTo(67.5f, 45f); close()
+                addCircle(60f, 36f, 12f, Path.Direction.CW)
+                moveTo(49.6f, 42f); quadTo(56f, 52f, 60f, 62f); quadTo(64f, 52f, 70.4f, 42f); close()
             }, p)
+            p.shader = null
             shadow(false)
             p.color = Color.WHITE
-            c.drawCircle(58f, 40f, 4.5f, p)
+            c.drawCircle(60f, 36f, 4.8f, p)
         }
 
         private fun settings(c: Canvas, k: Kind) {
@@ -394,6 +417,11 @@ object Icons {
             p.color = 0xFFD9DDE3.toInt()
             for (y in listOf(42f, 52f, 62f, 72f)) c.drawLine(30f, y, if (y == 72f) 56f else 70f, y, p)
             p.style = Paint.Style.FILL
+        }
+
+        /** Weather: the weather app's own sun-behind-a-cloud symbol. */
+        private fun weather(c: Canvas) {
+            WeatherGlyph(Sky.PARTLY, true).apply { setBounds(8, 10, 92, 94) }.draw(c)
         }
 
         /** The assistant: a large and a small sparkle. */

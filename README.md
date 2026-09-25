@@ -1,4 +1,4 @@
-# Kosher Switch 1.1
+# Kosher Switch 1.2
 
 One phone, two modes. A swipe-down tile (**כשר**) switches between **open mode** (a normal
 phone) and **kosher mode** (a kosher phone with its own home screen, apps and look).
@@ -22,6 +22,10 @@ child's phone.
 - **לוח וזמנים**: Hebrew date, parsha, holidays, month view, and zmanim from the phone's location.
 - **פתקים**: notes with bold/italic/underline, headings, bullet lists, tap-to-tick checklists,
   drawings (colors, pen sizes, eraser, undo), pinning and search.
+- **מזג אוויר (Weather)**: live weather for the phone's location and saved cities: now, hourly,
+  10 days, feels-like, humidity, wind, UV, sunrise/sunset. Data from Open-Meteo. It is the only part
+  of Kosher Switch that uses the internet (no browsing is possible), and a parent can turn it off in
+  open mode. Without a location fix it uses the rough location of the connection.
 - **עוזר (Assistant)**: understands Hebrew and English commands: calls, messages (opens
   Messages with the text ready), alarms, timers, notes, opening apps, changing the dock, order,
   icons, background and dark/light mode. Anything else is answered by an offline AI model
@@ -30,6 +34,13 @@ child's phone.
 ## Look
 Light / dark / auto, five backgrounds, adjustable glass effect, three icon styles (Kosher,
 Glass, Original), drag-to-arrange drawer, haptics, Hebrew or English.
+
+## Keypad phones (Xiaomi Qin F21 Pro and similar)
+Small screens get a tighter home screen (the top part scrolls; the dock always stays on screen).
+Keys: on the home screen a number, * or # opens the dialer with it, the green key opens the phone,
+Menu or Up opens the apps, Left/Right/Down pick a dock app, OK opens it. On the code screen the
+number keys type, Back erases a digit (it only leaves when the code is empty), OK unlocks. The arrows
+move a gold ring around every screen.
 
 ## Setup (once; the app's built-in guide explains it step by step)
 Kosher Switch must be the phone's *device owner*. Two ways:

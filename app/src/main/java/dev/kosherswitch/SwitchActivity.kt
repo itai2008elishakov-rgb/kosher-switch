@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 
 /** Full-screen "switching" screen: shows up instantly while the switch runs in the background. */
 class SwitchActivity : BaseActivity() {
+    override val glides = false
     companion object {
         private const val EXTRA_TO_CLOSED = "to_closed"
 

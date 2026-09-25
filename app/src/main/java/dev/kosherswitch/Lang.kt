@@ -29,8 +29,27 @@ open class BaseActivity : Activity() {
         super.attachBaseContext(Lang.wrap(newBase))
     }
 
+    private var leaving = false
+
+    /** Screens with their own entrance animation turn the shared glide off. */
+    protected open val glides = true
+
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
+        Motion.enable()
         Theme.load(this)
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onPostCreate(savedInstanceState: android.os.Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        if (glides && !isFinishing && Motion.systemTransitionsOff(this)) findViewById<android.view.View>(android.R.id.content)?.let(Motion::enter)
+    }
+
+    /** Glides the screen away first when the phone draws no transitions of its own. */
+    override fun finish() {
+        val content = findViewById<android.view.View>(android.R.id.content)
+        if (!glides || leaving || content == null || !hasWindowFocus() || !Motion.systemTransitionsOff(this)) return super.finish()
+        leaving = true
+        Motion.exit(content) { super.finish() }
     }
 }

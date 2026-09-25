@@ -13,6 +13,7 @@ import android.widget.TextView
 
 /** Glass keypad over the home background; asks for the code before switching back to open mode. */
 class UnlockActivity : BaseActivity() {
+    override val glides = false
     private companion object {
         const val MAX_TRIES = 5
         const val LOCKOUT_MS = 60_000L
@@ -48,62 +49,119 @@ class UnlockActivity : BaseActivity() {
             Theme.pressable(this)
             setOnClickListener { attempt() }
         }
-        val size = Theme.dp(this, 64)
+        val small = resources.displayMetrics.let { it.heightPixels / it.density < 700 }
+        val emblem = Theme.dp(this, if (small) 46 else 64)
+        // The keypad takes all the room between the header and the unlock button.
         val column = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
-            addView(EmblemView(context), LinearLayout.LayoutParams(size, size))
+            val side = Theme.dp(context, 20)
+            setPadding(side, 0, side, 0)
+            addView(EmblemView(context), LinearLayout.LayoutParams(emblem, emblem))
             addView(status, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                .apply { topMargin = Theme.dp(context, 18) })
-            addView(dots, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Theme.dp(context, 36))
-                .apply { topMargin = Theme.dp(context, 12) })
-            addView(keypad())
-            addView(unlock, LinearLayout.LayoutParams(keyWidth() * 3 + Theme.dp(context, 48), Theme.dp(context, 52))
-                .apply { topMargin = Theme.dp(context, 16) })
+                .apply { topMargin = Theme.dp(context, if (small) 8 else 16) })
+            addView(dots, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Theme.dp(context, if (small) 28 else 36))
+                .apply { topMargin = Theme.dp(context, if (small) 4 else 10) })
+            addView(keypad(), LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f).apply {
+                width = minOf(resources.displayMetrics.widthPixels, Theme.dp(context, 380))
+            })
+            addView(unlock, LinearLayout.LayoutParams(minOf(resources.displayMetrics.widthPixels - 2 * side, Theme.dp(context, 340)),
+                Theme.dp(context, if (small) 46 else 54)).apply { topMargin = Theme.dp(context, 8) })
+        }
+        column.setOnApplyWindowInsetsListener { v, insets ->
+            val bars = insets.getInsets(android.view.WindowInsets.Type.systemBars())
+            v.setPadding(v.paddingLeft, bars.top + Theme.dp(this, if (small) 10 else 28), v.paddingRight, bars.bottom + Theme.dp(this, if (small) 10 else 24))
+            insets
         }
         val (_, blurred) = Backdrop.homeLayers(this)
         setContentView(FrameLayout(this).apply {
             addView(ImageView(context).apply { setImageBitmap(blurred); scaleType = ImageView.ScaleType.CENTER_CROP })
-            addView(column, FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER
-            ))
+            addView(View(context).apply { setBackgroundColor(0x33000000) }) // a little darker, so the keys stand out
+            addView(column, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
         })
+        // Header drops in, then the keys ripple in row by row.
         column.alpha = 0f
-        column.translationY = Theme.dp(this, 30).toFloat()
-        column.animate().alpha(1f).translationY(0f).setDuration(320).start()
+        column.animate().alpha(1f).setDuration(260).start()
+        for (i in 0 until column.childCount) {
+            val v = column.getChildAt(i)
+            v.translationY = Theme.dp(this, 24).toFloat()
+            v.animate().translationY(0f).setStartDelay(i * 45L).setDuration(420).setInterpolator(Motion.EASE).start()
+        }
     }
 
-    /** Key size that fits four rows plus the header on small or zoomed screens. */
-    private fun keyWidth(): Int {
-        val dm = resources.displayMetrics
-        return minOf(Theme.dp(this, 78), (dm.heightPixels - Theme.dp(this, 360)) / 4 - Theme.dp(this, 16))
+    /** Set while the user moves around the on-screen keypad with the arrows. */
+    private var navigating = false
+
+    /**
+     * Keypad phones: number keys type the code, back (or delete) erases a digit, OK or Enter unlocks.
+     * Handled before the buttons see the key: typing selects the "1" button by itself, and OK must
+     * not type an extra 1. OK presses a button only after the arrows were used to pick it.
+     */
+    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
+        val k = event.keyCode
+        val handled = when {
+            k in android.view.KeyEvent.KEYCODE_0..android.view.KeyEvent.KEYCODE_9 -> true
+            k == android.view.KeyEvent.KEYCODE_DEL -> true
+            k == android.view.KeyEvent.KEYCODE_BACK -> code.isNotEmpty()
+            k == android.view.KeyEvent.KEYCODE_ENTER || k == android.view.KeyEvent.KEYCODE_NUMPAD_ENTER -> true
+            k == android.view.KeyEvent.KEYCODE_DPAD_CENTER -> !navigating || currentFocus == null || currentFocus == unlock
+            else -> false
+        }
+        if (k in listOf(android.view.KeyEvent.KEYCODE_DPAD_UP, android.view.KeyEvent.KEYCODE_DPAD_DOWN,
+                android.view.KeyEvent.KEYCODE_DPAD_LEFT, android.view.KeyEvent.KEYCODE_DPAD_RIGHT)) navigating = true
+        if (!handled) return super.dispatchKeyEvent(event)
+        if (event.action != android.view.KeyEvent.ACTION_DOWN) return true
+        when (k) {
+            in android.view.KeyEvent.KEYCODE_0..android.view.KeyEvent.KEYCODE_9 -> {
+                navigating = false
+                if (code.length < MAX_DIGITS) code.append(k - android.view.KeyEvent.KEYCODE_0)
+                Theme.haptic(dots)
+            }
+            android.view.KeyEvent.KEYCODE_DEL, android.view.KeyEvent.KEYCODE_BACK ->
+                if (code.isNotEmpty()) code.deleteCharAt(code.length - 1)
+            else -> { attempt(); return true }
+        }
+        showDots()
+        return true
     }
 
     private fun keypad() = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
-        gravity = Gravity.CENTER_HORIZONTAL
-        setPadding(0, Theme.dp(context, 8), 0, 0)
         listOf(
             listOf("1", "2", "3"), listOf("4", "5", "6"),
             listOf("7", "8", "9"), listOf("✕", "0", "⌫"),
         ).forEach { row ->
             addView(LinearLayout(context).apply {
-                gravity = Gravity.CENTER
-                row.forEach { addView(key(it)) }
-            })
+                row.forEach { label ->
+                    addView(FrameLayout(context).apply {
+                        addView(KeyView(label), FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT, Gravity.CENTER))
+                    }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f))
+                }
+            }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
         }
     }
 
-    private fun key(label: String): TextView {
-        val size = keyWidth()
-        val digit = label.first().isDigit()
-        return Theme.text(this, label, if (digit) 32f else 22f, Color.WHITE, Theme.LIGHT).apply {
+    private val LETTERS = mapOf("2" to "ABC", "3" to "DEF", "4" to "GHI", "5" to "JKL", "6" to "MNO",
+        "7" to "PQRS", "8" to "TUV", "9" to "WXYZ", "0" to "+")
+
+    /** A round key as big as its cell allows (up to a limit), with the letters under the digit. */
+    private inner class KeyView(val label: String) : TextView(this@UnlockActivity) {
+        private val digit = label.first().isDigit()
+
+        init {
             gravity = Gravity.CENTER
-            if (digit) background = Theme.glass(context, 60, 1.2f)
-            layoutParams = LinearLayout.LayoutParams(size, size).apply {
-                val m = Theme.dp(context, 8)
-                setMargins(m, m, m, m)
-            }
+            setTextColor(Color.WHITE)
+            typeface = Theme.LIGHT
+            includeFontPadding = false
+            if (digit) background = Theme.glass(context, 200, 1.2f)
+            val letters = LETTERS[label]
+            text = if (digit && letters != null) android.text.SpannableString("$label\n$letters").apply {
+                setSpan(android.text.style.RelativeSizeSpan(0.3f), label.length + 1, length, 0)
+                setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), label.length + 1, length, 0)
+            } else label
+            setLineSpacing(0f, 0.9f)
+            contentDescription = label
             Theme.pressable(this)
             setOnClickListener {
                 when (label) {
@@ -114,18 +172,35 @@ class UnlockActivity : BaseActivity() {
                 showDots()
             }
         }
+
+        override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+            val gap = Theme.dp(context, 6)
+            val side = minOf(MeasureSpec.getSize(widthSpec), MeasureSpec.getSize(heightSpec), Theme.dp(context, 92)) - 2 * gap
+            val exact = MeasureSpec.makeMeasureSpec(side.coerceAtLeast(0), MeasureSpec.EXACTLY)
+            setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, side * if (digit) 0.4f else 0.3f)
+            super.onMeasure(exact, exact)
+        }
     }
+
+    private var shownDots = 0
 
     private fun showDots() {
         dots.removeAllViews()
-        repeat(code.length) {
-            dots.addView(View(this).apply { background = Theme.rounded(context, Color.WHITE, 7) },
+        repeat(code.length) { i ->
+            dots.addView(View(this).apply {
+                background = Theme.rounded(context, Color.WHITE, 7)
+                if (i == code.length - 1 && i >= shownDots) { // the newest dot pops in
+                    scaleX = 0.2f; scaleY = 0.2f
+                    animate().scaleX(1f).scaleY(1f).setDuration(260).setInterpolator(android.view.animation.OvershootInterpolator(3f)).start()
+                }
+            },
                 LinearLayout.LayoutParams(Theme.dp(this, 14), Theme.dp(this, 14)).apply {
                     val m = Theme.dp(this@UnlockActivity, 7)
                     setMargins(m, 0, m, 0)
                 })
         }
-        unlock.alpha = if (code.length >= PinStore.MIN_LENGTH) 1f else 0.4f
+        shownDots = code.length
+        unlock.animate().alpha(if (code.length >= PinStore.MIN_LENGTH) 1f else 0.4f).setDuration(200).start()
     }
 
     private fun attempt() {
