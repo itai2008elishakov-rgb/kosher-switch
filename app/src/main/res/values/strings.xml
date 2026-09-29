@@ -255,4 +255,8 @@
     <string name="w_feels_colder">Wind makes it feel colder</string>
     <string name="w_feels_warmer">Humidity makes it feel warmer</string>
     <string name="w_feels_same">Similar to the actual temperature</string>
+    <string name="web_filter">Web filter</string>
+    <string name="web_filter_note">Apps you allow online still go through a kosher filter: pornography and adult sites, mixed-content sites and ways around the filter are blocked, and SafeSearch is always on for Google, Bing and YouTube. In Chrome, incognito is off and YouTube is in its strictest mode.</string>
+    <string name="web_pictures">Show pictures on websites</string>
+    <string name="web_pictures_note">Off by default: filters can\'t judge pictures, so Chrome shows websites without them. Turn on only if you trust the sites that will be used.</string>
 </resources>

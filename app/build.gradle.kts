@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
     // Jewish calendar, parsha, holidays and zmanim (LGPL 2.1)
     implementation("com.kosherjava:zmanim:2.5.0")
     // On-device AI (runs offline on the phone; Apache 2.0)

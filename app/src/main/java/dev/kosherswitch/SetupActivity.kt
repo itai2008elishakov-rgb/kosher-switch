@@ -52,6 +52,7 @@ class SetupActivity : BaseActivity() {
             addView(turnOnCard())
             addView(assistantCard())
             addView(weatherCard())
+            addView(webFilterCard())
         }
         setContentView(ScrollView(this).apply {
             setBackgroundColor(Theme.PAGE)
@@ -276,6 +277,23 @@ class SetupActivity : BaseActivity() {
         })
         return card
     }
+
+    /** The filter for apps allowed online. Always on; a parent can only choose to allow pictures. */
+    private fun webFilterCard() = Theme.card(this,
+        stepTitle(R.string.web_filter, true),
+        Theme.text(this, getString(R.string.web_filter_note), 13f, Theme.SUB),
+        LinearLayout(this).apply {
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, Theme.dp(context, 8), 0, Theme.dp(context, 4))
+            addView(Theme.text(context, getString(R.string.web_pictures), 16f).apply {
+                textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+            }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+            addView(toggle(Looks.webPictures(context)).apply {
+                setOnCheckedChangeListener { v, on -> Theme.haptic(v); Looks.setWebPictures(context, on) }
+            })
+        },
+        Theme.text(this, getString(R.string.web_pictures_note), 13f, Theme.SUB),
+    )
 
     /** Weather is on by default; a parent can hide it (and its internet) in kosher mode. */
     private fun weatherCard() = Theme.card(this,

@@ -110,6 +110,9 @@ object ModeManager {
 
         ACTIVE_RESTRICTIONS.forEach { dpm.addUserRestriction(admin, it) }
 
+        // Apps allowed online still go through a family filter, and Chrome is locked to safe settings.
+        WebFilter.apply(ctx)
+
         // Always-on VPN in lockdown: every app is cut off except the network allowlist.
         // Only installed apps: Android rejects the whole block if the list names a missing app.
         var networkApps = Allowlist.networkApps(ctx).filter { it in keep && it in installed }.toSet()
@@ -160,6 +163,7 @@ object ModeManager {
         val dpm = dpm(ctx)
         val admin = KosherAdmin.component(ctx)
         attempt("network unblock") { dpm.setAlwaysOnVpnPackage(admin, null, false) }
+        WebFilter.clear(ctx)
         ALL_RESTRICTIONS.forEach { dpm.clearUserRestriction(admin, it) }
         val remembered = prefs(ctx).getStringSet(KEY_SUSPENDED, emptySet())!!
         if (remembered.isNotEmpty()) attempt("unsuspend") { dpm.setPackagesSuspended(admin, remembered.toTypedArray(), false) }

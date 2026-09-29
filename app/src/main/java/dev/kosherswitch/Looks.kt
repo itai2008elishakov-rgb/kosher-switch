@@ -65,6 +65,10 @@ object Looks {
     fun setAssistantAllowed(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("assistant_allowed", on).apply()
 
     /** Whether the weather app (the only part of this app that uses the internet) exists in kosher mode. */
+    /** Pictures on websites in kosher mode (in Chrome). Off by default: DNS filters can't judge images. */
+    fun webPictures(ctx: Context) = p(ctx).getBoolean("web_pictures", false)
+    fun setWebPictures(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("web_pictures", on).apply()
+
     fun weatherAllowed(ctx: Context) = p(ctx).getBoolean("weather_allowed", true)
     fun setWeatherAllowed(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("weather_allowed", on).apply()
 

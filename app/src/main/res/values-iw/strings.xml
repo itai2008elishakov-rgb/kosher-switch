@@ -252,4 +252,8 @@
     <string name="w_feels_colder">הרוח גורמת להרגיש קר יותר</string>
     <string name="w_feels_warmer">הלחות גורמת להרגיש חם יותר</string>
     <string name="w_feels_same">דומה לטמפרטורה בפועל</string>
+    <string name="web_filter">סינון אינטרנט</string>
+    <string name="web_filter_note">גם אפליקציות שמותר להן אינטרנט עוברות סינון כשר: אתרים למבוגרים, תוכן לא צנוע ודרכים לעקוף את הסינון חסומים, והחיפוש הבטוח תמיד פעיל ב-Google, Bing ו-YouTube. ב-Chrome הגלישה בסתר כבויה ו-YouTube במצב המחמיר ביותר.</string>
+    <string name="web_pictures">להציג תמונות באתרים</string>
+    <string name="web_pictures_note">כבוי כברירת מחדל: סינון לא יכול לשפוט תמונות, ולכן Chrome מציג אתרים בלי תמונות. להפעיל רק אם סומכים על האתרים שבהם ישתמשו.</string>
 </resources>

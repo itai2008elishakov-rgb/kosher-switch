@@ -196,6 +196,11 @@ class AssistantActivity : BaseActivity() {
 
     /** Streams an AI answer into a new bubble; [then] runs with the finished text. */
     private fun think(question: String, then: (String) -> Unit) {
+        // The guard answers first: unsuitable questions never reach the AI.
+        if (Guard.blocked(question)) {
+            reply(Guard.refusal(Kashrut.isHebrew(question)))
+            return
+        }
         if (!Ai.installed(this)) {
             reply(getString(R.string.assistant_no_brain))
             return
@@ -211,14 +216,19 @@ class AssistantActivity : BaseActivity() {
                 return@load
             }
             var started = false
+            var stopped = false
             val hebrew = Kashrut.isHebrew(question)
             val prompt = if (Kashrut.isFood(question)) question + Kashrut.reminder(hebrew) else question
             Ai.ask(history, prompt, onText = { partial ->
+                if (stopped) return@ask
+                // Checked while it's written: if the answer drifts somewhere unsuitable, it's replaced.
+                if (Guard.blocked(partial)) { stopped = true; dots.cancel(); view.text = Guard.refusal(hebrew); return@ask }
                 if (!started && partial.isNotEmpty()) { started = true; dots.cancel() }
                 if (started) { view.text = Ai.styled(partial); scrollDown() }
             }, onDone = { answer ->
                 dots.cancel()
                 busy = false
+                if (stopped || Guard.blocked(answer)) { view.text = Guard.refusal(hebrew); return@ask }
                 if (answer.isBlank()) { view.text = getString(R.string.assistant_failed); return@ask }
                 val checked = Kashrut.warning(answer, hebrew)?.let { "$answer\n\n$it" } ?: answer
                 view.text = Ai.styled(checked)
