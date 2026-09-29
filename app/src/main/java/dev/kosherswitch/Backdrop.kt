@@ -26,7 +26,7 @@ object Backdrop {
         glow(c, p, w * 0.95f, h * 0.18f, w * 0.75f, scene.glows[0])
         glow(c, p, w * 0.05f, h * 0.55f, w * 0.8f, scene.glows[1])
         glow(c, p, w * 0.7f, h * 0.95f, w * 0.7f, scene.glows[2])
-        if (emblem) EmblemView.drawEmblem(c, w / 2f, h * 0.72f, w * 0.13f)
+        if (emblem) EmblemView.drawEmblem(ctx, c, w / 2f, h * 0.72f, w * 0.15f)
         return bmp
     }
 
