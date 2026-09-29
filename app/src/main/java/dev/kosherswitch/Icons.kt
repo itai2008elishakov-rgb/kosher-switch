@@ -40,9 +40,10 @@ object Icons {
         NOTES(0xFFFFD66B.toInt(), 0xFFF5A623.toInt()),
         ASSISTANT(0xFFA88BFF.toInt(), 0xFF4B2FC9.toInt()),
         WEATHER(0xFF5DB2FF.toInt(), 0xFF1F6FD1.toInt()),
+        BROWSER(0xFF3E7BE0.toInt(), 0xFF0B2A5B.toInt()),
     }
 
-    private val OWN = setOf("siddur", "times", "notes", "weather", "assistant", "kosher_settings")
+    private val OWN = setOf("siddur", "times", "notes", "weather", "assistant", "kosher_settings", "browser")
 
     private val MATCH = listOf(
         "dialer" to Kind.PHONE, "incallui" to Kind.PHONE, "messag" to Kind.MESSAGES, "mms" to Kind.MESSAGES,
@@ -50,6 +51,7 @@ object Icons {
         "clock" to Kind.CLOCK, "calculator" to Kind.CALCULATOR, "files" to Kind.FILES, "maps" to Kind.MAPS,
         "kosher_settings" to Kind.SETTINGS, "siddur" to Kind.SIDDUR, "times" to Kind.TIMES,
         "notes" to Kind.NOTES, "memo" to Kind.NOTES, "assistant" to Kind.ASSISTANT, "weather" to Kind.WEATHER,
+        "browser" to Kind.BROWSER,
     )
 
     /** One icon in a given style, for the icon test screen. */
@@ -162,6 +164,7 @@ object Icons {
                 Kind.NOTES -> notes(c, k)
                 Kind.ASSISTANT -> assistant(c, k)
                 Kind.WEATHER -> weather(c)
+                Kind.BROWSER -> browser(c, k)
             }
             p.shader = null
             shadow(false)
@@ -422,6 +425,27 @@ object Icons {
         /** Weather: the weather app's own sun-behind-a-cloud symbol. */
         private fun weather(c: Canvas) {
             WeatherGlyph(Sky.PARTLY, true).apply { setBounds(8, 10, 92, 94) }.draw(c)
+        }
+
+        /** The Kosher Browser: a globe with a small gold shield. */
+        private fun browser(c: Canvas, k: Kind) {
+            shadow(true)
+            val s = p.style
+            p.style = Paint.Style.STROKE
+            p.strokeWidth = 5f
+            p.color = fg(k)
+            c.drawCircle(46f, 48f, 26f, p)
+            c.drawOval(RectF(34f, 22f, 58f, 74f), p)
+            c.drawLine(20f, 48f, 72f, 48f, p)
+            c.drawLine(24f, 35f, 68f, 35f, p)
+            c.drawLine(24f, 61f, 68f, 61f, p)
+            p.style = s
+            shadow(false)
+            p.color = if (glass) 0xFFFFC94D.toInt() else 0xFFFFE08A.toInt()
+            c.drawPath(Path().apply {
+                moveTo(71f, 56f); lineTo(86f, 61f); lineTo(86f, 72f)
+                cubicTo(86f, 81f, 79f, 86f, 71f, 90f); cubicTo(63f, 86f, 56f, 81f, 56f, 72f); lineTo(56f, 61f); close()
+            }, p)
         }
 
         /** The assistant: a large and a small sparkle. */

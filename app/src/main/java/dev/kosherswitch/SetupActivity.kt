@@ -293,6 +293,17 @@ class SetupActivity : BaseActivity() {
             })
         },
         Theme.text(this, getString(R.string.web_pictures_note), 13f, Theme.SUB),
+        LinearLayout(this).apply {
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, Theme.dp(context, 14), 0, Theme.dp(context, 4))
+            addView(Theme.text(context, getString(R.string.browser_allow), 16f).apply {
+                textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+            }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+            addView(toggle(Looks.browserAllowed(context)).apply {
+                setOnCheckedChangeListener { v, on -> Theme.haptic(v); Looks.setBrowserAllowed(context, on) }
+            })
+        },
+        Theme.text(this, getString(R.string.browser_allow_note), 13f, Theme.SUB),
     )
 
     /** Weather is on by default; a parent can hide it (and its internet) in kosher mode. */

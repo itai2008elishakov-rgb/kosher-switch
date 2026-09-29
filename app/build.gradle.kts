@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    androidResources { noCompress += "tflite" }
     namespace = "dev.kosherswitch"
     compileSdk = 34
 
@@ -11,8 +12,8 @@ android {
         applicationId = "dev.kosherswitch"
         minSdk = 29
         targetSdk = 34
-        versionCode = 13
-        versionName = "1.3"
+        versionCode = 14
+        versionName = "1.3.2"
         // Only the phone's own chip type; keeps the app small.
         ndk { abiFilters += "arm64-v8a" }
     }
@@ -51,4 +52,7 @@ dependencies {
     implementation("com.kosherjava:zmanim:2.5.0")
     // On-device AI (runs offline on the phone; Apache 2.0)
     implementation("com.google.mediapipe:tasks-genai:0.10.35")
+    // On-device picture check for the Kosher Browser (spots people; Apache 2.0)
+    implementation("com.google.mediapipe:tasks-vision:0.10.35")
+    implementation("androidx.webkit:webkit:1.8.0")
 }

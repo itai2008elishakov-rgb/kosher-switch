@@ -69,6 +69,10 @@ object Looks {
     fun webPictures(ctx: Context) = p(ctx).getBoolean("web_pictures", false)
     fun setWebPictures(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("web_pictures", on).apply()
 
+    /** The Kosher Browser in kosher mode (pictures with people covered). A parent turns it on. */
+    fun browserAllowed(ctx: Context) = p(ctx).getBoolean("browser_allowed", false)
+    fun setBrowserAllowed(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("browser_allowed", on).apply()
+
     fun weatherAllowed(ctx: Context) = p(ctx).getBoolean("weather_allowed", true)
     fun setWeatherAllowed(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("weather_allowed", on).apply()
 

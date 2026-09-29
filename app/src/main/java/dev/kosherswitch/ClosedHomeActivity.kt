@@ -466,6 +466,7 @@ class ClosedHomeActivity : BaseActivity() {
                 startActivity(ownApp(KosherSettingsActivity::class.java))
             },
         ) + (if (Looks.weatherAllowed(this)) listOf(own(getString(R.string.weather), WeatherActivity::class.java, "weather")) else emptyList()) +
+            (if (Looks.browserAllowed(this)) listOf(own(getString(R.string.browser), BrowserActivity::class.java, "browser")) else emptyList()) +
             if (Looks.assistantAllowed(this)) listOf(own(getString(R.string.assistant), AssistantActivity::class.java, "assistant")) else emptyList()
         val order = Looks.order(this)
         return all.sortedBy { order.indexOf(it.key).let { i -> if (i < 0) Int.MAX_VALUE else i } }

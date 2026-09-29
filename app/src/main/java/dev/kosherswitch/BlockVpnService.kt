@@ -24,10 +24,11 @@ class BlockVpnService : VpnService() {
                 .addRoute("0.0.0.0", 0)
                 .addAddress("fd00:6b6f:7368::1", 128)
                 .addRoute("::", 0)
-            val networkApps = Allowlist.networkApps(this)
+            val networkApps = Allowlist.onlineApps(this)
             var bypass = if (networkApps.isEmpty()) networkApps else networkApps + Allowlist.SUPPORT_SERVICES
-            // This app's own traffic is only the weather forecast (it has no browser or web views).
-            if (Looks.weatherAllowed(this)) bypass = bypass + packageName
+            // This app's own traffic: the weather forecast, and the Kosher Browser if a parent allowed it
+            // (its pictures are checked on the phone, and it still goes through the family filter).
+            if (Looks.weatherAllowed(this) || Looks.browserAllowed(this)) bypass = bypass + packageName
             bypass.forEach { runCatching { builder.addDisallowedApplication(it) } }
             tun = builder.establish()
         }

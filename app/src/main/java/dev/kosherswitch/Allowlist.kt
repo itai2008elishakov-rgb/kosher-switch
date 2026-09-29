@@ -40,6 +40,23 @@ object Allowlist {
     fun networkApps(ctx: Context): Set<String> =
         prefs(ctx).getStringSet(KEY_NETWORK, null)?.toSet() ?: setOf(WAZE)
 
+    /**
+     * Apps that show pictures from the web and can't be told to hide them (the Google app and every
+     * browser except Chrome, which Kosher Switch can control). While "Show pictures on websites" is off,
+     * these stay offline in kosher mode even if they're allowed online.
+     */
+    val PICTURE_APPS = setOf(
+        "com.google.android.googlequicksearchbox", "com.google.android.apps.searchlite",
+        "com.sec.android.app.sbrowser", "com.sec.android.app.sbrowser.beta", "org.mozilla.firefox", "org.mozilla.focus",
+        "com.opera.browser", "com.opera.mini.native", "com.brave.browser", "com.microsoft.emmx", "com.duckduckgo.mobile.android",
+        "com.UCMobile.intl", "com.mi.globalbrowser", "com.huawei.browser", "com.vivaldi.browser", "com.kiwibrowser.browser",
+        "com.google.android.apps.photos", "com.pinterest", "com.instagram.android",
+    )
+
+    /** What really gets internet in kosher mode. */
+    fun onlineApps(ctx: Context): Set<String> =
+        if (Looks.webPictures(ctx)) networkApps(ctx) else networkApps(ctx) - PICTURE_APPS
+
     fun setNetworkApps(ctx: Context, apps: Set<String>) =
         prefs(ctx).edit().putStringSet(KEY_NETWORK, apps).apply()
 

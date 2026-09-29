@@ -115,7 +115,7 @@ object ModeManager {
 
         // Always-on VPN in lockdown: every app is cut off except the network allowlist.
         // Only installed apps: Android rejects the whole block if the list names a missing app.
-        var networkApps = Allowlist.networkApps(ctx).filter { it in keep && it in installed }.toSet()
+        var networkApps = Allowlist.onlineApps(ctx).filter { it in keep && it in installed }.toSet()
         if (networkApps.isNotEmpty()) networkApps = networkApps + Allowlist.SUPPORT_SERVICES.filter { it in installed }
         attempt("network block") { dpm.setAlwaysOnVpnPackage(admin, ctx.packageName, true, networkApps) }
 

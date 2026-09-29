@@ -88,6 +88,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".BrowserActivity"
+            android:exported="false"
+            android:label="@string/browser"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:taskAffinity="dev.kosherswitch.browser" />
+        <activity
             android:name=".WeatherActivity"
             android:exported="true"
             android:icon="@mipmap/ic_weather"

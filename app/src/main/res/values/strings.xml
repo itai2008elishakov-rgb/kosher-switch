@@ -259,4 +259,8 @@
     <string name="web_filter_note">Apps you allow online still go through a kosher filter: adult and immodest sites, mixed-content sites and ways around the filter are blocked, and SafeSearch is always on for Google, Bing and YouTube. In Chrome, incognito is off and YouTube is in its strictest mode.</string>
     <string name="web_pictures">Show pictures on websites</string>
     <string name="web_pictures_note">Off by default: filters can\'t judge pictures, so Chrome shows websites without them. Turn on only if you trust the sites that will be used.</string>
+    <string name="browser">Kosher Browser</string>
+    <string name="browser_hint">Search or type a website</string>
+    <string name="browser_allow">Allow the Kosher Browser in kosher mode</string>
+    <string name="browser_allow_note">A browser where every picture is checked on the phone and any picture with a person in it stays covered, like kosher computer filters. SafeSearch is always on and videos don\'t play. While pictures are off, the Google app and other browsers stay offline: search here instead.</string>
 </resources>
