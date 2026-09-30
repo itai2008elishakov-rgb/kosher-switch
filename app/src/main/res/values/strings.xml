@@ -263,4 +263,19 @@
     <string name="browser_hint">Search or type a website</string>
     <string name="browser_allow">Allow the Kosher Browser in kosher mode</string>
     <string name="browser_allow_note">A browser where every picture is checked on the phone and any picture with a person in it stays covered, like kosher computer filters. SafeSearch is always on and videos don\'t play. While pictures are off, the Google app and other browsers stay offline: search here instead.</string>
+    <string name="advice_title">Our advice: no browser</string>
+    <string name="advice_text">We believe a kosher phone shouldn\'t have a web browser at all, not even a filtered or “kosher” one. No filter catches everything, and the open web is exactly what a kosher phone is meant to keep out.\n\nThat\'s why Kosher Switch has no browser by default. Apps like Waze or WhatsApp can still use the internet if you allow them.</string>
+    <string name="advice_choice">This is what we recommend. The choice is always yours.</string>
+    <string name="advice_keep_off">Keep it off</string>
+    <string name="advice_turn_on">Turn on anyway</string>
+    <string name="advice_browser_title">We don\'t recommend a browser</string>
+    <string name="advice_browser_text">A kosher phone is safest with no browser at all. The Kosher Browser covers pictures of people and filters sites, but no filter is perfect.\n\nTurn it on only if it\'s really needed.</string>
+    <string name="advice_browser_short">Our advice: keep this off. A kosher phone is safest with no browser at all.</string>
+    <string name="advice_browser_label">Not recommended</string>
+    <string name="advice_browser_app_title">Allow %1$s online?</string>
+    <string name="advice_browser_app_text">This app is a browser. We don\'t recommend any browser on a kosher phone, even with the kosher filter.\n\nThe filter still stays on if you allow it.</string>
+    <string name="advice_assistant_title">Allow the assistant?</string>
+    <string name="advice_assistant">The assistant works offline and has its own guard rails, so the risk is much smaller than a browser. Still, we suggest keeping it off unless it\'s really useful.</string>
+    <string name="g_advice_title">Our advice</string>
+    <string name="g_advice_text">A kosher phone is safest with no web browser at all, not even a filtered one. So Kosher Switch has no browser by default.\n\nThe assistant is off by default too. It works offline and is much less of a risk, so you can turn it on if it helps.\n\nThis is what we recommend. The choice is yours.</string>
 </resources>

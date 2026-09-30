@@ -260,4 +260,19 @@
     <string name="browser_hint">חיפוש או כתובת אתר</string>
     <string name="browser_allow">לאפשר את הדפדפן הכשר במצב כשר</string>
     <string name="browser_allow_note">דפדפן שבו כל תמונה נבדקת בטלפון, וכל תמונה שיש בה אדם נשארת מכוסה, כמו בסינון למחשבים כשרים. החיפוש הבטוח תמיד פעיל ווידאו לא מתנגן. כשהתמונות כבויות, אפליקציית Google ודפדפנים אחרים נשארים בלי אינטרנט: מחפשים כאן במקום.</string>
+    <string name="advice_title">ההמלצה שלנו: בלי דפדפן</string>
+    <string name="advice_text">אנחנו מאמינים שבטלפון כשר לא צריך להיות דפדפן בכלל, גם לא דפדפן מסונן או \"כשר\". אין סינון שתופס הכול, והאינטרנט הפתוח הוא בדיוק מה שטלפון כשר נועד להשאיר בחוץ.\n\nלכן ב-Kosher Switch אין דפדפן כברירת מחדל. אפליקציות כמו Waze או WhatsApp עדיין יכולות להשתמש באינטרנט אם תאשרו להן.</string>
+    <string name="advice_choice">זו ההמלצה שלנו. הבחירה תמיד שלכם.</string>
+    <string name="advice_keep_off">להשאיר כבוי</string>
+    <string name="advice_turn_on">להפעיל בכל זאת</string>
+    <string name="advice_browser_title">אנחנו לא ממליצים על דפדפן</string>
+    <string name="advice_browser_text">טלפון כשר בטוח ביותר בלי דפדפן בכלל. הדפדפן הכשר מכסה תמונות של אנשים ומסנן אתרים, אבל אין סינון מושלם.\n\nהפעילו רק אם באמת צריך.</string>
+    <string name="advice_browser_short">ההמלצה שלנו: להשאיר כבוי. טלפון כשר בטוח ביותר בלי דפדפן בכלל.</string>
+    <string name="advice_browser_label">לא מומלץ</string>
+    <string name="advice_browser_app_title">לאפשר ל-%1$s אינטרנט?</string>
+    <string name="advice_browser_app_text">האפליקציה הזאת היא דפדפן. אנחנו לא ממליצים על שום דפדפן בטלפון כשר, גם עם הסינון הכשר.\n\nאם תאשרו, הסינון עדיין נשאר פעיל.</string>
+    <string name="advice_assistant_title">לאפשר את העוזר?</string>
+    <string name="advice_assistant">העוזר עובד בלי אינטרנט ויש לו הגנות משלו, כך שהסיכון קטן בהרבה מדפדפן. ובכל זאת, אנחנו ממליצים להשאיר אותו כבוי אלא אם הוא באמת מועיל.</string>
+    <string name="g_advice_title">ההמלצה שלנו</string>
+    <string name="g_advice_text">טלפון כשר בטוח ביותר בלי דפדפן בכלל, גם לא מסונן. לכן ב-Kosher Switch אין דפדפן כברירת מחדל.\n\nגם העוזר כבוי כברירת מחדל. הוא עובד בלי אינטרנט והסיכון בו קטן בהרבה, אז אפשר להפעיל אותו אם הוא עוזר.\n\nזו ההמלצה שלנו. הבחירה שלכם.</string>
 </resources>

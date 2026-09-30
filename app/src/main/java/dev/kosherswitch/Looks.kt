@@ -60,8 +60,8 @@ object Looks {
     fun lockMessage(ctx: Context) = p(ctx).getBoolean("lock_message", true)
     fun setLockMessage(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("lock_message", on).apply()
 
-    /** Whether the assistant exists in kosher mode at all. Only changeable in open mode. */
-    fun assistantAllowed(ctx: Context) = p(ctx).getBoolean("assistant_allowed", true)
+    /** Whether the assistant exists in kosher mode at all. Off by default (our advice), except on phones that already downloaded it. Only changeable in open mode. */
+    fun assistantAllowed(ctx: Context) = p(ctx).getBoolean("assistant_allowed", Ai.installed(ctx))
     fun setAssistantAllowed(ctx: Context, on: Boolean) = p(ctx).edit().putBoolean("assistant_allowed", on).apply()
 
     /** Whether the weather app (the only part of this app that uses the internet) exists in kosher mode. */

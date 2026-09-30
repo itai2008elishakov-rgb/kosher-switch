@@ -23,6 +23,7 @@ import android.widget.Toast
  */
 class SetupActivity : BaseActivity() {
     private var appsOpen = false
+    private var animated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +38,13 @@ class SetupActivity : BaseActivity() {
         }
         ModeManager.repairIfOpen(this)
         render()
-        if (!GuideActivity.seen(this)) startActivity(GuideActivity.intent(this))
+        if (!GuideActivity.seen(this)) openGuide()
+    }
+
+    private fun openGuide() {
+        startActivity(GuideActivity.intent(this))
+        @Suppress("DEPRECATION")
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     private fun render() {
@@ -50,6 +57,7 @@ class SetupActivity : BaseActivity() {
             addView(codeCard())
             addView(appsCard())
             addView(turnOnCard())
+            addView(adviceCard())
             addView(assistantCard())
             addView(weatherCard())
             addView(webFilterCard())
@@ -58,6 +66,46 @@ class SetupActivity : BaseActivity() {
             setBackgroundColor(Theme.PAGE)
             addView(content)
         })
+        // Only the first time the screen opens; after a change the page stays put.
+        if (!animated) {
+            animated = true
+            Motion.stagger((0 until content.childCount).map(content::getChildAt))
+        }
+    }
+
+    /**
+     * Our advice, said plainly: a kosher phone shouldn't have a browser, not even a filtered one.
+     * That's why the Kosher Browser is off by default. It's advice; the choice stays with the family.
+     */
+    private fun adviceCard() = Theme.card(this,
+        LinearLayout(this).apply {
+            gravity = Gravity.CENTER_VERTICAL
+            addView(Theme.text(context, "🌐", 22f), LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                .apply { marginEnd = Theme.dp(context, 10) })
+            addView(Theme.text(context, getString(R.string.advice_title), 18f, Theme.INK, Theme.MEDIUM),
+                LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        },
+        Theme.text(this, getString(R.string.advice_text), 14f, Theme.SUB).apply {
+            setPadding(0, Theme.dp(context, 8), 0, 0)
+            setLineSpacing(0f, 1.25f)
+        },
+        Theme.text(this, getString(R.string.advice_choice), 13f, Theme.GOLD, Theme.MEDIUM).apply {
+            setPadding(0, Theme.dp(context, 10), 0, 0)
+        },
+    ).apply {
+        background = Theme.rounded(context, Theme.CARD, 22, Theme.GOLD)
+    }
+
+    /** Asks once more before turning on something we advise against. [onAnswer] gets true for "turn on anyway". */
+    private fun confirmAgainstAdvice(title: String, text: String, onAnswer: (Boolean) -> Unit) {
+        android.app.AlertDialog.Builder(this, if (Theme.dark) android.R.style.Theme_DeviceDefault_Dialog_Alert
+            else android.R.style.Theme_DeviceDefault_Light_Dialog_Alert)
+            .setTitle(title)
+            .setMessage(text)
+            .setPositiveButton(R.string.advice_keep_off) { _, _ -> onAnswer(false) }
+            .setNegativeButton(R.string.advice_turn_on) { _, _ -> onAnswer(true) }
+            .setOnCancelListener { onAnswer(false) }
+            .show()
     }
 
     private fun header() = LinearLayout(this).apply {
@@ -83,7 +131,7 @@ class SetupActivity : BaseActivity() {
             layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 .apply { topMargin = Theme.dp(context, 14) }
             Theme.pressable(this)
-            setOnClickListener { startActivity(GuideActivity.intent(context)) }
+            setOnClickListener { openGuide() }
         })
         val (status, detail) = when {
             !ModeManager.isDeviceOwner(context) -> getString(R.string.setup_not_finished) to getString(R.string.setup_connect)
@@ -153,9 +201,20 @@ class SetupActivity : BaseActivity() {
         form.addView(error)
         if (hasCode) {
             form.visibility = View.GONE
-            card.addView(Theme.button(this, getString(R.string.change_code), outline = true) {
-                form.visibility = if (form.visibility == View.GONE) View.VISIBLE else View.GONE
-            })
+            var button: android.widget.Button? = null
+            button = Theme.button(this, getString(R.string.change_code), outline = true) {
+                val b = button ?: return@button
+                if (form.visibility == View.GONE) {
+                    b.text = getString(R.string.cancel)
+                    Motion.expand(form) { current?.requestFocus() }
+                } else {
+                    b.text = getString(R.string.change_code)
+                    error.text = ""
+                    listOfNotNull(current, new1, new2).forEach { it.text = null }
+                    Motion.collapse(form)
+                }
+            }
+            card.addView(button)
         }
         card.addView(form)
         return card
@@ -170,21 +229,61 @@ class SetupActivity : BaseActivity() {
         }
         updateSummary()
         val card = Theme.card(this, stepTitle(R.string.step_apps, allowed.isNotEmpty()), summary)
-        val list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        val toggle = Theme.button(this, getString(if (appsOpen) R.string.hide_apps else R.string.show_apps), outline = !appsOpen) {
-            appsOpen = !appsOpen
-            render()
+        val panel = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; visibility = View.GONE }
+        var built = false
+        var toggle: android.widget.Button? = null
+        toggle = Theme.button(this, getString(R.string.show_apps), outline = true) {
+            val b = toggle ?: return@button
+            if (panel.visibility == View.GONE) {
+                if (!built) { buildAppsPanel(panel, allowed, network, ::updateSummary); built = true }
+                appsOpen = true
+                b.text = getString(R.string.hide_apps)
+                b.setTextColor(android.graphics.Color.WHITE)
+                b.background = Theme.rounded(this, Theme.BLUE, 28)
+                Motion.expand(panel)
+            } else {
+                appsOpen = false
+                b.text = getString(R.string.show_apps)
+                b.setTextColor(Theme.LINK)
+                b.background = Theme.rounded(this, android.graphics.Color.TRANSPARENT, 28, Theme.LINK)
+                // Bring the card's top back into view as the list folds away.
+                (card.parent?.parent as? ScrollView)?.let { sv -> if (sv.scrollY > card.top) sv.smoothScrollTo(0, card.top) }
+                Motion.collapse(panel) { findViewById<android.widget.EditText>(R.id.apps_search)?.setText("") }
+            }
         }
         card.addView(toggle)
-        if (!appsOpen) return card
+        card.addView(panel)
+        // Build the list quietly right after the screen appears, so "Choose apps" opens at once.
+        if (!appsOpen) card.postDelayed({
+            if (!built && !isFinishing) { buildAppsPanel(panel, allowed, network, ::updateSummary); built = true }
+        }, 900)
+        if (appsOpen) {
+            buildAppsPanel(panel, allowed, network, ::updateSummary); built = true
+            panel.visibility = View.VISIBLE
+            toggle.text = getString(R.string.hide_apps)
+            toggle.setTextColor(android.graphics.Color.WHITE)
+            toggle.background = Theme.rounded(this, Theme.BLUE, 28)
+        }
+        return card
+    }
 
-        card.addView(Theme.text(this, getString(R.string.apps_explain), 13f, Theme.SUB).apply {
+    /** Browsers get a "not recommended" note, and allowing one online asks once more. */
+    private fun browserPackages(): Set<String> {
+        val web = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://example.com"))
+        return packageManager.queryIntentActivities(web, android.content.pm.PackageManager.MATCH_ALL)
+            .map { it.activityInfo.packageName }.toSet() + setOf("com.google.android.googlequicksearchbox")
+    }
+
+    private fun buildAppsPanel(panel: LinearLayout, allowed: MutableSet<String>, network: MutableSet<String>, updateSummary: () -> Unit) {
+        val list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        panel.addView(Theme.text(this, getString(R.string.apps_explain), 13f, Theme.SUB).apply {
             setPadding(0, Theme.dp(context, 12), 0, 0)
         })
-        card.addView(Theme.text(this, getString(R.string.settings_locked_note), 13f, Theme.SUB).apply {
+        panel.addView(Theme.text(this, getString(R.string.settings_locked_note), 13f, Theme.SUB).apply {
             setPadding(0, Theme.dp(context, 6), 0, 0)
         })
         val search = EditText(this).apply {
+            id = R.id.apps_search
             hint = getString(R.string.search_apps)
             setSingleLine()
             textSize = 15f
@@ -195,15 +294,17 @@ class SetupActivity : BaseActivity() {
             setPadding(p, Theme.dp(context, 10), p, Theme.dp(context, 10))
             setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_menu_search, 0, 0, 0)
         }
-        card.addView(search, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        panel.addView(search, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             .apply { topMargin = Theme.dp(this@SetupActivity, 12) })
-        card.addView(columnTitles())
-        card.addView(list)
+        panel.addView(columnTitles())
+        panel.addView(list)
 
+        val browsers = browserPackages()
         val rows = launchableApps(this)
             .filterNot { it.pkg in ModeManager.ALWAYS_BLOCKED }
             .sortedWith(compareByDescending<AppEntry> { it.pkg in allowed }.thenBy { it.label.lowercase() })
             .map { app ->
+                val isBrowser = app.pkg in browsers
                 val show = toggle(app.pkg in allowed)
                 val net = toggle(app.pkg in network).apply { isEnabled = show.isChecked }
                 show.setOnCheckedChangeListener { v, on ->
@@ -218,13 +319,22 @@ class SetupActivity : BaseActivity() {
                     Allowlist.setNetworkApps(this, network)
                     updateSummary()
                 }
+                var asking = false
                 net.setOnCheckedChangeListener { v, on ->
+                    if (asking) return@setOnCheckedChangeListener
                     Theme.haptic(v)
-                    if (on) network += app.pkg else network -= app.pkg
-                    Allowlist.setNetworkApps(this, network)
-                    updateSummary()
+                    fun apply(value: Boolean) {
+                        if (value) network += app.pkg else network -= app.pkg
+                        Allowlist.setNetworkApps(this, network)
+                        updateSummary()
+                    }
+                    if (on && isBrowser) {
+                        confirmAgainstAdvice(getString(R.string.advice_browser_app_title, app.label), getString(R.string.advice_browser_app_text)) { yes ->
+                            if (yes) apply(true) else { asking = true; net.isChecked = false; asking = false }
+                        }
+                    } else apply(on)
                 }
-                app to appRow(app, show, net).also(list::addView)
+                app to appRow(app, show, net, isBrowser).also(list::addView)
             }
         search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
@@ -234,7 +344,6 @@ class SetupActivity : BaseActivity() {
             override fun beforeTextChanged(s: CharSequence, a: Int, b: Int, c: Int) = Unit
             override fun onTextChanged(s: CharSequence, a: Int, b: Int, c: Int) = Unit
         })
-        return card
     }
 
     private fun turnOnCard(): LinearLayout {
@@ -263,10 +372,21 @@ class SetupActivity : BaseActivity() {
                     textAlignment = View.TEXT_ALIGNMENT_VIEW_START
                 }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
                 addView(toggle(Looks.assistantAllowed(context)).apply {
-                    setOnCheckedChangeListener { v, on -> Theme.haptic(v); Looks.setAssistantAllowed(context, on) }
+                    var asking = false
+                    setOnCheckedChangeListener { v, on ->
+                        if (asking) return@setOnCheckedChangeListener
+                        Theme.haptic(v)
+                        if (!on) { Looks.setAssistantAllowed(context, false); return@setOnCheckedChangeListener }
+                        confirmAgainstAdvice(getString(R.string.advice_assistant_title), getString(R.string.advice_assistant)) { yes ->
+                            if (yes) Looks.setAssistantAllowed(context, true) else { asking = true; isChecked = false; asking = false }
+                        }
+                    }
                 })
             },
             Theme.text(this, getString(R.string.assistant_allow_note), 13f, Theme.SUB),
+            Theme.text(this, getString(R.string.advice_assistant), 13f, Theme.GOLD).apply {
+                setPadding(0, Theme.dp(context, 6), 0, 0)
+            },
             Theme.text(this, getString(if (installed) R.string.assistant_installed else R.string.assistant_not_installed), 14f, Theme.SUB).apply {
                 setPadding(0, Theme.dp(context, 8), 0, 0)
             },
@@ -300,10 +420,21 @@ class SetupActivity : BaseActivity() {
                 textAlignment = View.TEXT_ALIGNMENT_VIEW_START
             }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
             addView(toggle(Looks.browserAllowed(context)).apply {
-                setOnCheckedChangeListener { v, on -> Theme.haptic(v); Looks.setBrowserAllowed(context, on) }
+                var asking = false
+                setOnCheckedChangeListener { v, on ->
+                    if (asking) return@setOnCheckedChangeListener
+                    Theme.haptic(v)
+                    if (!on) { Looks.setBrowserAllowed(context, false); return@setOnCheckedChangeListener }
+                    confirmAgainstAdvice(getString(R.string.advice_browser_title), getString(R.string.advice_browser_text)) { yes ->
+                        if (yes) Looks.setBrowserAllowed(context, true) else { asking = true; isChecked = false; asking = false }
+                    }
+                }
             })
         },
         Theme.text(this, getString(R.string.browser_allow_note), 13f, Theme.SUB),
+        Theme.text(this, getString(R.string.advice_browser_short), 13f, Theme.GOLD).apply {
+            setPadding(0, Theme.dp(context, 6), 0, 0)
+        },
     )
 
     /** Weather is on by default; a parent can hide it (and its internet) in kosher mode. */
@@ -331,18 +462,24 @@ class SetupActivity : BaseActivity() {
         }
     }
 
-    private fun appRow(app: AppEntry, show: Switch, net: Switch) = LinearLayout(this).apply {
+    private fun appRow(app: AppEntry, show: Switch, net: Switch, browser: Boolean) = LinearLayout(this).apply {
         gravity = Gravity.CENTER_VERTICAL
         setPadding(0, Theme.dp(context, 8), 0, Theme.dp(context, 8))
         val size = Theme.dp(context, 36)
         addView(ImageView(context).apply {
             setImageDrawable(packageManager.getApplicationIcon(app.pkg))
         }, LinearLayout.LayoutParams(size, size))
-        addView(Theme.text(context, app.label, 15f).apply {
-            maxLines = 1
-            ellipsize = TextUtils.TruncateAt.END
-            textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+        addView(LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
             setPadding(Theme.dp(context, 12), 0, Theme.dp(context, 8), 0)
+            addView(Theme.text(context, app.label, 15f).apply {
+                maxLines = 1
+                ellipsize = TextUtils.TruncateAt.END
+                textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+            })
+            if (browser) addView(Theme.text(context, getString(R.string.advice_browser_label), 12f, Theme.GOLD).apply {
+                textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+            })
         }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         listOf(show, net).forEach {
             addView(it, LinearLayout.LayoutParams(Theme.dp(context, 64), LinearLayout.LayoutParams.WRAP_CONTENT))
@@ -362,6 +499,12 @@ class SetupActivity : BaseActivity() {
         typeface = Theme.REGULAR
         setTextColor(Theme.INK)
         setHintTextColor(Theme.SUB)
-        backgroundTintList = Theme.BLUE_TINT
+        textSize = 16f
+        background = Theme.rounded(context, Theme.CHIP, 16)
+        val p = Theme.dp(context, 14)
+        setPadding(p, Theme.dp(context, 12), p, Theme.dp(context, 12))
+        layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            .apply { topMargin = Theme.dp(context, 10) }
+        textAlignment = View.TEXT_ALIGNMENT_VIEW_START
     }
 }

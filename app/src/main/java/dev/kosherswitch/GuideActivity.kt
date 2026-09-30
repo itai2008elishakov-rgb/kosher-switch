@@ -34,6 +34,7 @@ class GuideActivity : BaseActivity() {
         Page("💻", R.string.g3_title, R.string.g3_text),
         Page("🔒", R.string.g4_title, R.string.g4_text),
         Page("📱", R.string.g5_title, R.string.g5_text),
+        Page("🌐", R.string.g_advice_title, R.string.g_advice_text),
         Page("⬇️", R.string.g6_title, R.string.g6_text),
         Page("📦", R.string.g7_title, R.string.g7_text),
         Page("✅", R.string.g8_title, R.string.g8_text),
@@ -96,6 +97,19 @@ class GuideActivity : BaseActivity() {
         card.setOnTouchListener { _, e -> swipe.onTouchEvent(e); true }
         setContentView(root)
         show(0, 0)
+        // The glass card and buttons settle in gently over the backdrop.
+        column.alpha = 0f
+        column.scaleX = 0.96f
+        column.scaleY = 0.96f
+        column.animate().alpha(1f).scaleX(1f).scaleY(1f).setStartDelay(60).setDuration(420).setInterpolator(Motion.EASE).start()
+    }
+
+    override val glides = false
+
+    override fun finish() {
+        super.finish()
+        @Suppress("DEPRECATION")
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     private fun go(to: Int) {
