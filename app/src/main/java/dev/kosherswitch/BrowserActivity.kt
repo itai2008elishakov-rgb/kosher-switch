@@ -253,8 +253,22 @@ class BrowserActivity : Activity() {
         private val COVER_SCRIPT = """
             (function(){
               if (window.__ksObs) return;
-              var css = 'img:not([data-ks=ok]),input[type=image],svg image{visibility:hidden!important}' +
-                'img[data-ks=no]{visibility:visible!important;opacity:1!important;object-position:-9999px -9999px!important;background:linear-gradient(135deg,#e7ebf2,#cfd6e3)!important;border-radius:10px!important}' +
+              // Covered pictures show the Kosher Switch seal on navy instead of a blank box; pictures still
+              // being checked show a faint seal. The picture itself is pushed out of its own frame.
+              function seal(label, a){
+                var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 170"><g opacity="' + a + '">' +
+                  '<circle cx="80" cy="70" r="54" fill="#0b2a5b" stroke="#e0b64a" stroke-width="6"/>' +
+                  '<circle cx="80" cy="70" r="42" fill="none" stroke="#e0b64a" stroke-width="1.5" stroke-dasharray="2 4"/>' +
+                  '<text x="80" y="82" text-anchor="middle" font-family="serif" font-weight="700" font-size="34" fill="#f3d27e">כשר</text></g>' +
+                  (label ? '<text x="80" y="158" text-anchor="middle" font-family="sans-serif" font-weight="600" font-size="15" fill="#f3d27e">' + label + '</text>' : '') +
+                  '</svg>';
+                return 'url("data:image/svg+xml;charset=utf-8,' + encodeURIComponent(s) + '")';
+              }
+              var tile = 'visibility:visible!important;opacity:1!important;color:transparent!important;font-size:0!important;object-position:-9999px -9999px!important;border-radius:10px!important;' +
+                'background-color:#0e2350!important;background-repeat:no-repeat!important;background-position:center!important;background-size:min(70%,150px) auto!important;';
+              var css = 'input[type=image],svg image{visibility:hidden!important}' +
+                'img:not([data-ks=ok]):not([data-ks=no]){' + tile + 'background-image:' + seal('', 0.25) + '!important}' +
+                'img[data-ks=no]{' + tile + 'background-image:' + seal(/^(he|iw)/i.test(navigator.language || '') ? '\u05ea\u05de\u05d5\u05e0\u05d4 \u05de\u05d5\u05e1\u05ea\u05e8\u05ea' : 'Picture covered', 1) + '!important}' +
                 '*,*::before,*::after{background-image:none!important}' +
                 'video,audio,embed,object,iframe[src*="youtube"],iframe[src*="vimeo"],iframe[src*="tiktok"]{display:none!important}';
               var style;
