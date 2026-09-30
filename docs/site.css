@@ -501,3 +501,28 @@
   .seal-hero.small { width: min(190px, 46vw); }
   .landing-hero .fan { margin-top: 40px; }
   @media (max-width: 640px) { .status-pill { font-size: .88rem; padding: 9px 14px; } .status-pill .long { display: none; } }
+
+  /* ---------- platform icons ---------- */
+  .ico { width: 1.15em; height: 1.15em; flex: none; vertical-align: -0.18em; }
+  .btn .ico { margin-inline-end: 2px; }
+  .platform .big { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 18px; }
+  .platform .big .ico { width: 34px; height: 34px; }
+  .big.android, .get-icon.android { color: #3ddc84; background: rgba(61,220,132,.12); border: 1px solid rgba(61,220,132,.35); }
+  .big.apple, .get-icon.apple { color: #f5f7fa; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.22); }
+
+  /* ---------- download / get-it card ---------- */
+  #download, #get { scroll-margin-top: 90px; }
+  .get { display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: start; padding: 44px; border-radius: 34px;
+    background: linear-gradient(145deg, rgba(224,182,74,.12), rgba(11,42,91,.5)); border: 1px solid rgba(224,182,74,.4); box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+  .get-icon { width: 96px; height: 96px; border-radius: 26px; display: grid; place-items: center; }
+  .get-icon .ico { width: 54px; height: 54px; }
+  .get-copy h2 { margin: 6px 0 10px; }
+  .get-copy > p { color: var(--sub); margin: 0 0 22px; }
+  .get .kicker { color: var(--gold); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .85rem; }
+  .get-steps { color: var(--sub); margin: 22px 0 0; padding-inline-start: 20px; }
+  .get-steps li { margin: 6px 0; }
+  @media (max-width: 640px) { .get { grid-template-columns: 1fr; padding: 28px 22px; gap: 18px; } .get-icon { width: 72px; height: 72px; } }
+
+  /* ---------- Android phones get a punch-hole camera ---------- */
+  .phone .screen::after { content: ""; position: absolute; z-index: 3; top: 1.6%; left: 50%; translate: -50% 0;
+    width: 3.6%; aspect-ratio: 1; border-radius: 50%; background: #05070b; box-shadow: 0 0 0 1.5px rgba(255,255,255,.06); }
