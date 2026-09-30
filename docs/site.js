@@ -25,6 +25,18 @@
   };
   addEventListener("scroll", progress, { passive: true }); progress();
 
+  // The Android hero switch: tap to turn kosher mode on and off yourself.
+  document.querySelectorAll("button.toggle").forEach(t => {
+    const phone = t.closest(".phone");
+    t.addEventListener("click", () => {
+      const on = !phone.classList.contains("on");
+      phone.classList.add("manual");
+      phone.classList.toggle("on", on);
+      t.setAttribute("aria-pressed", on);
+      if (navigator.vibrate) navigator.vibrate(12);
+    });
+  });
+
   if (still) {
     document.querySelectorAll(".story").forEach(s => s.classList.add("static"));
     return;
