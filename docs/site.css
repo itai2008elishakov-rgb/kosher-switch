@@ -553,3 +553,36 @@
   .phone.manual.on .lbl-kosher { opacity: 1; }
   .platform .go { position: absolute; top: auto; bottom: 28px; right: 28px; font-size: 1.6rem; color: var(--gold); transition: transform .35s var(--ease); }
   .platform:hover .go { transform: translateX(6px); }
+
+  /* ---------- iPhone in the hero: titanium frame, Dynamic Island, no punch-hole ---------- */
+  .phone.ios { width: 290px; aspect-ratio: 1206 / 2622; border-radius: 52px; padding: 10px;
+    background: linear-gradient(145deg, #4a4f58, #1b1e24 40%, #2c3038 70%, #5b606a);
+    box-shadow: 0 40px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.14), inset 0 0 0 2px #0a0c10; }
+  .phone.ios .screen { border-radius: 43px; }
+  .phone.ios .screen::after { display: none; }
+  .phone.ios .island { position: absolute; z-index: 4; top: 3%; left: 50%; translate: -50% 0; width: 31%; height: 3.4%; border-radius: 99px; background: #000; }
+  .phone .toggle { z-index: 6; }
+  .tap-hint { position: absolute; left: 50%; bottom: -46px; translate: -50% 0; font-size: .8rem; color: var(--sub); white-space: nowrap; letter-spacing: .02em; animation: hint 2.4s ease-in-out infinite; }
+  .phone.manual .tap-hint { opacity: 0; transition: opacity .4s; animation: none; }
+  @keyframes hint { 50% { opacity: .45; } }
+
+  /* ---------- phones peeking out of the home cards ---------- */
+  .platform { padding-right: 190px; }
+  .platform .peek { position: absolute; right: -24px; bottom: -110px; width: 150px; padding: 6px; border-radius: 30px; rotate: -8deg; z-index: 0;
+    background: #11151d; box-shadow: 0 20px 50px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.12); transition: translate .6s var(--ease), rotate .6s var(--ease); }
+  .platform .peek img { display: block; width: 100%; border-radius: 24px; }
+  .platform .peek.ios { background: linear-gradient(145deg, #4a4f58, #1b1e24 40%, #2c3038 70%, #5b606a); border-radius: 32px; }
+  .platform .peek.ios img { border-radius: 26px; }
+  .platform .peek::after { content: ""; position: absolute; left: 50%; translate: -50% 0; background: #000; z-index: 2; }
+  .platform .peek.android::after { top: 12px; width: 8px; height: 8px; border-radius: 50%; }
+  .platform .peek.ios::after { top: 11px; width: 42px; height: 11px; border-radius: 99px; }
+  .platform:hover .peek { translate: -10px -40px; rotate: -3deg; }
+  @media (max-width: 640px) { .platform { padding-right: 34px; padding-bottom: 150px; } .platform .peek { width: 120px; right: 20px; bottom: -120px; } }
+
+  /* ---------- Kosher Browser demo with real pictures ---------- */
+  .pic { overflow: hidden; }
+  .pic.ok img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pic.cov { background: #0e2350 !important; animation: none; border: 1px solid rgba(224,182,74,.35); }
+  .pic.cov::after { content: none; }
+  .pic.cov svg { width: 78%; height: auto; }
+  .platform .go { top: 28px; bottom: auto; }
