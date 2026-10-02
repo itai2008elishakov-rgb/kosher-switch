@@ -856,3 +856,13 @@ html.still .rv { opacity: 1; transform: none; }
   .fleet .row figcaption { font-size: .7rem; margin-top: 10px; }
   .fleet .row figcaption span { font-size: .6rem; }
 }
+/* the film: plays full screen over the page */
+button.more { background: none; border: 0; font: inherit; font-size: 1.02rem; cursor: pointer; padding: 0; }
+.film-modal { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 60px 22px; background: rgba(2,6,16,.94);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); opacity: 0; visibility: hidden; transition: opacity .5s var(--ease), visibility 0s .5s; }
+.film-modal.on { opacity: 1; visibility: visible; transition: opacity .5s var(--ease), visibility 0s; }
+.film-modal video { width: min(1100px, 100%); aspect-ratio: 16 / 9; border-radius: 18px; background: #000; box-shadow: 0 40px 100px rgba(0,0,0,.6);
+  transform: scale(.94); transition: transform .6s var(--ease); }
+.film-modal.on video { transform: none; }
+.film-close { position: absolute; top: 18px; right: 22px; width: 40px; height: 40px; border-radius: 50%; border: 0; cursor: pointer; font-size: 1rem; color: var(--ink); background: rgba(255,255,255,.12); }
+[dir="rtl"] .film-close { right: auto; left: 22px; }

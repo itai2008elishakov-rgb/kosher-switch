@@ -235,6 +235,19 @@
     c.parentElement.querySelectorAll(".xc").forEach(o => o.classList.toggle("open", o === c && !c.classList.contains("open")));
   }));
 
+  // The film: opens full screen and plays; closing pauses it.
+  const film = document.querySelector(".film-modal");
+  if (film) {
+    const v = film.querySelector("video");
+    const close = () => { film.classList.remove("on"); v.pause(); document.body.style.overflow = ""; };
+    document.querySelectorAll(".film-open").forEach(b => b.addEventListener("click", () => {
+      film.classList.add("on"); document.body.style.overflow = "hidden"; v.currentTime = 0; v.play().catch(() => {});
+    }));
+    film.querySelector(".film-close").addEventListener("click", close);
+    film.addEventListener("click", e => { if (e.target === film) close(); });
+    addEventListener("keydown", e => { if (e.key === "Escape" && film.classList.contains("on")) close(); });
+  }
+
   // Sticky stories: the device shows the screen of the step in the middle of the view.
   document.querySelectorAll(".story").forEach(story => {
     const steps = [...story.querySelectorAll(".story-step")];
