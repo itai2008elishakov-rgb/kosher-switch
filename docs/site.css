@@ -939,3 +939,11 @@ html, body { overscroll-behavior-y: none; }
 /* Clip sideways overflow inside each top-level block instead of on the page. */
 body > header, body > section, body > main, body > footer, body > div:not(.sheet):not(.dim):not(.film-modal) { overflow-x: clip; }
 .progress { display: none !important; }
+
+/* ---------- the page scrolls inside #page; the menu bar sits outside and never moves ---------- */
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+#page { position: fixed; inset: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; outline: none; scroll-behavior: auto; }
+#page:focus { outline: none; }
+#page > header, #page > section, #page > main, #page > footer, #page > div { overflow-x: clip; }
+/* galleries only catch sideways scrolling, never up and down */
+.gallery { overscroll-behavior-x: contain !important; overscroll-behavior-y: auto !important; scroll-snap-type: x proximity; }

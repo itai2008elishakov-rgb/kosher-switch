@@ -7,6 +7,10 @@
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
   const nav = document.querySelector(".gnav");
+  // The page scrolls inside #page; the menu bar lives outside it, so it can never move while scrolling.
+  const page = document.getElementById("page") || document.scrollingElement;
+  const scroller = page === document.scrollingElement ? window : page;
+  const scrollTop = () => page.scrollTop;
   const base = new URL(".", document.currentScript.src).href;
 
   // Everything the search can find.
@@ -81,7 +85,7 @@
   const setMenu = open => {
     root.classList.toggle("menu-open", open);
     if (menuBtn) menuBtn.setAttribute("aria-expanded", open);
-    document.body.style.overflow = open ? "hidden" : "";
+    page.style.overflow = open ? "hidden" : "";
     if (!open && sheet) { sheet.classList.remove("sub"); sheet.querySelectorAll(".lvl2").forEach(l => l.classList.remove("on")); }
   };
   if (menuBtn) menuBtn.addEventListener("click", () => setMenu(!root.classList.contains("menu-open")));
@@ -166,8 +170,7 @@
 
   const frame = () => {
     const vh = innerHeight;
-    const max = root.scrollHeight - vh;
-    const sc = scrollY > 8;
+    const sc = scrollTop() > 8;
     if (nav && nav._sc !== sc) { nav._sc = sc; nav.classList.toggle("scrolled", sc); }
     if (still) return;
     for (const s of scenes) {
@@ -203,9 +206,10 @@
   scenes.forEach(s => { s._near = true; near.observe(s); });
   let ticking = false;
   const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { frame(); ticking = false; }); } };
-  addEventListener("scroll", onScroll, { passive: true });
+  scroller.addEventListener("scroll", onScroll, { passive: true });
   addEventListener("resize", onScroll);
   frame();
+  if (page !== document.scrollingElement && !location.hash) page.focus({ preventScroll: true });
 
   // Tappable open/kosher switches. Inside a scene, a tap takes over from scrolling.
   document.querySelectorAll(".switch-ui").forEach(t => {
@@ -243,9 +247,9 @@
   const film = document.querySelector(".film-modal");
   if (film) {
     const v = film.querySelector("video");
-    const close = () => { film.classList.remove("on"); v.pause(); document.body.style.overflow = ""; };
+    const close = () => { film.classList.remove("on"); v.pause(); page.style.overflow = ""; };
     document.querySelectorAll(".film-open").forEach(b => b.addEventListener("click", () => {
-      film.classList.add("on"); document.body.style.overflow = "hidden"; v.currentTime = 0; v.play().catch(() => {});
+      film.classList.add("on"); page.style.overflow = "hidden"; v.currentTime = 0; v.play().catch(() => {});
     }));
     film.querySelector(".film-close").addEventListener("click", close);
     film.addEventListener("click", e => { if (e.target === film) close(); });
