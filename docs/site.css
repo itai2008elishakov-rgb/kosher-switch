@@ -931,3 +931,7 @@ html { scroll-behavior: auto; }
 .dim { background: rgba(2,6,16,.7); }
 .purify .bit, .chip, .ripple, .pill .dot, .versus .pop, .versus .ok, .seal-top img, .shield, .scene .dev, .purify .sweep, .purify .halo2 { will-change: auto !important; }
 .purify .pin, .versus .pin, .fleet .pin, .scene .pin, .tale .pin { contain: none !important; }
+
+/* No rubber-band bounce at the top or bottom of the page: in Safari the bounce also drags the fixed menu bar along. */
+html, body { overscroll-behavior-y: none; }
+.sheet, .fly, .gallery { overscroll-behavior: contain; }
