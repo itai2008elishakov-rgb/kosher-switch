@@ -902,3 +902,23 @@ html { scroll-behavior: auto; }
 .cform .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .cstatus { margin: 0; min-height: 1.4em; font-weight: 600; }
 .cstatus.ok { color: #8ff0c4; } .cstatus.err { color: #ff9d9d; }
+
+/* ---------- official Apple icons and iOS-style notifications in the films ---------- */
+.purify img.app { display: block; object-fit: cover; background: none; }
+.purify .ping { display: flex; align-items: flex-start; gap: 9px; width: 270px; white-space: normal; padding: 10px 12px; border-radius: 20px; text-align: start;
+  background: linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,.1)); box-shadow: inset 0 0 0 .6px rgba(255,255,255,.4), inset 0 1px 0 rgba(255,255,255,.3), 0 14px 34px rgba(0,0,0,.4);
+  -webkit-backdrop-filter: blur(16px) saturate(170%); backdrop-filter: blur(16px) saturate(170%); }
+.purify .ping img { width: 34px; height: 34px; border-radius: 8px; flex: none; }
+.purify .ping span { position: relative; flex: 1; min-width: 0; font-size: .8rem; font-weight: 400; line-height: 1.3; color: rgba(255,255,255,.92); }
+.purify .ping b { display: block; color: #fff; font-weight: 600; font-size: .82rem; }
+.purify .ping i { position: absolute; inset-inline-end: 0; top: 0; font-style: normal; font-size: .72rem; color: rgba(255,255,255,.6); }
+@media (max-width: 640px) { .purify .ping { width: 190px; padding: 7px 9px; gap: 7px; border-radius: 15px; } .purify .ping img { width: 24px; height: 24px; border-radius: 6px; }
+  .purify .ping span { font-size: .66rem; } .purify .ping b { font-size: .68rem; } .purify .ping i { font-size: .6rem; } }
+/* filter pop-ups: iOS glass instead of flat boxes */
+.versus .pop { border-radius: 14px; background: linear-gradient(180deg, rgba(70,72,82,.88), rgba(44,46,54,.92)); box-shadow: inset 0 0 0 .6px rgba(255,255,255,.3), inset 0 1px 0 rgba(255,255,255,.18), 0 10px 24px rgba(0,0,0,.45); }
+.versus .ok { border-radius: 14px; background: linear-gradient(180deg, rgba(30,78,156,.85), rgba(11,42,91,.92)); }
+/* the schools film: real icons on the open screens */
+.grid-home i.ico-i { background: none; box-shadow: 0 4px 10px rgba(0,0,0,.3); overflow: hidden; }
+.grid-home i.ico-i img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.dev .scr .grid-home i.ico-i img { position: static !important; inset: auto !important; width: 100% !important; height: 100% !important; }
+@media (max-width: 640px) { .purify .bit:has(.ping) { display: none; } }
