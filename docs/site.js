@@ -6,19 +6,97 @@
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches || root.classList.contains("still");
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
-  // Global nav: hairline once scrolled, and the phone menu.
   const nav = document.querySelector(".gnav");
+  const base = new URL(".", document.currentScript.src).href;
+
+  // Everything the search can find.
+  const INDEX = [
+    ["Home", "", "kosher phone start overview"], ["Our advice: no browser", "#advice", "browser filter internet"], ["Questions", "#faq", "faq help"],
+    ["Contact us", "#contact", "email write support help outlook"],
+    ["Kosher Switch for Android", "android/", "samsung pixel xiaomi galaxy download apk"], ["Download for Android", "android/#download", "apk install free"],
+    ["Safe internet & the Kosher Browser", "android/#safe", "filter safesearch pictures youtube browser"], ["Android features", "android/#features", "siddur luach notes weather assistant keypad"],
+    ["Android tour", "android/#tour", "screens switch keypad drawer"], ["Set up Android with a QR code", "android/#setup", "setup install device owner adb reset qr computer"],
+    ["Which phones work", "android/#phones", "samsung pixel qin keypad tablet"],
+    ["Kosher Switch for iPhone", "iphone/", "apple screen time app store ios"], ["iPhone screens", "iphone/#screens", "siddur luach assistant"],
+    ["Kosher wallpaper for iPhone", "iphone/#wallpaper", "focus lock screen download"], ["iPhone privacy", "iphone/#privacy", "data screen time"],
+    ["Kosher Switch for Schools", "schools/", "school yeshiva students tablet teachers"], ["Compare with filters", "schools/#compare", "filter flip phone dns compare"],
+    ["Privacy Policy", "privacy/", "data personal information gdpr"], ["Terms of Use", "terms/", "legal conditions license"], ["Site Map", "sitemap/", "all pages"],
+  ].map(([t, h, k]) => {
+    const words = (t + " " + k).toLowerCase();
+    return { t, h: base + h, k: words + " " + words.replace(/\s+/g, "") }; // "set up" also matches "setup"
+  });
+  const QUICK = [0, 4, 11, 15, 5, 17].map(i => INDEX[i]);
+  const renderResults = (box, q) => {
+    q = q.trim().toLowerCase();
+    const hits = q ? INDEX.filter(e => q.split(/\s+/).every(w => e.k.includes(w))).slice(0, 7) : QUICK;
+    box.innerHTML = `<h5>${q ? "Results" : "Quick links"}</h5>` + (hits.length
+      ? hits.map((e, i) => `<a href="${e.h}"${i === 0 && q ? ' class="sel"' : ""}>${e.t}</a>`).join("")
+      : `<p class="none">Nothing found. Try “Android”, “setup” or “privacy”.</p>`);
+  };
+
+  // Flyout panels under the bar (hover on a computer, click/keyboard everywhere).
+  const dim = document.querySelector(".dim");
+  let openFly = null, flyTimer;
+  const showFly = id => {
+    clearTimeout(flyTimer);
+    document.querySelectorAll(".fly").forEach(f => f.classList.toggle("open", f.id === id));
+    if (dim) dim.classList.toggle("on", !!id);
+    openFly = id;
+    if (id === "fly-search") { const i = document.querySelector("#fly-search input"); renderResults(document.querySelector("#fly-search .results"), i.value); setTimeout(() => i.focus(), 80); }
+  };
+  document.querySelectorAll("[data-fly]").forEach(b => {
+    b.addEventListener("mouseenter", () => { if (b.dataset.fly !== "fly-search") { clearTimeout(flyTimer); flyTimer = setTimeout(() => showFly(b.dataset.fly), 140); } });
+    b.addEventListener("click", e => { if (b.tagName === "BUTTON") { e.preventDefault(); showFly(openFly === b.dataset.fly ? null : b.dataset.fly); } });
+  });
+  if (nav) nav.addEventListener("mouseleave", () => { if (openFly !== "fly-search") { clearTimeout(flyTimer); flyTimer = setTimeout(() => showFly(null), 220); } });
+  if (nav) nav.addEventListener("mouseenter", () => { if (openFly && openFly !== "fly-search") clearTimeout(flyTimer); });
+  document.querySelectorAll(".gnav .items > a:not([data-fly])").forEach(a => a.addEventListener("mouseenter", () => { if (openFly !== "fly-search") { clearTimeout(flyTimer); flyTimer = setTimeout(() => showFly(null), 140); } }));
+  if (dim) dim.addEventListener("click", () => showFly(null));
+  const searchKeys = (input, box) => {
+    input.addEventListener("input", () => renderResults(box, input.value));
+    input.addEventListener("keydown", e => {
+      const links = [...box.querySelectorAll("a")];
+      let i = links.findIndex(a => a.classList.contains("sel"));
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault(); i = (i + (e.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links.forEach((a, k) => a.classList.toggle("sel", k === i));
+      } else if (e.key === "Enter" && links.length) { e.preventDefault(); location.href = (links[i] || links[0]).href; }
+    });
+  };
+  const fs = document.querySelector("#fly-search");
+  if (fs) searchKeys(fs.querySelector("input"), fs.querySelector(".results"));
+
+  // Phone menu: full screen, with sub-menus and search.
   const menuBtn = document.querySelector(".menu-btn");
+  const sheet = document.querySelector(".sheet");
   const setMenu = open => {
     root.classList.toggle("menu-open", open);
     if (menuBtn) menuBtn.setAttribute("aria-expanded", open);
     document.body.style.overflow = open ? "hidden" : "";
+    if (!open && sheet) { sheet.classList.remove("sub"); sheet.querySelectorAll(".lvl2").forEach(l => l.classList.remove("on")); }
   };
-  if (menuBtn) {
-    menuBtn.addEventListener("click", () => setMenu(!root.classList.contains("menu-open")));
-    document.querySelectorAll(".sheet a").forEach(a => a.addEventListener("click", () => setMenu(false)));
-    addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
+  if (menuBtn) menuBtn.addEventListener("click", () => setMenu(!root.classList.contains("menu-open")));
+  if (sheet) {
+    sheet.querySelectorAll("[data-sub]").forEach(b => b.addEventListener("click", () => {
+      sheet.classList.add("sub"); sheet.querySelector("#" + b.dataset.sub).classList.add("on"); sheet.scrollTop = 0;
+    }));
+    sheet.querySelectorAll(".back").forEach(b => b.addEventListener("click", () => { sheet.classList.remove("sub"); sheet.querySelectorAll(".lvl2").forEach(l => l.classList.remove("on")); }));
+    sheet.addEventListener("click", e => { if (e.target.closest("a")) setMenu(false); });
+    const mi = sheet.querySelector(".msearch input"), mr = sheet.querySelector(".results");
+    if (mi && mr) { searchKeys(mi, mr); mi.addEventListener("input", () => mr.style.display = mi.value ? "" : "none"); mr.style.display = "none"; }
   }
+  addEventListener("keydown", e => { if (e.key === "Escape") { setMenu(false); showFly(null); } });
+
+  // Footer columns fold open on phones.
+  document.querySelectorAll(".foot .dir h4").forEach(h => h.addEventListener("click", () => h.parentElement.classList.toggle("open")));
+
+  // A soft light follows the cursor over tiles.
+  if (!still && matchMedia("(pointer: fine)").matches) addEventListener("pointermove", e => {
+    const t = e.target.closest && e.target.closest(".tile");
+    if (!t) return;
+    const r = t.getBoundingClientRect();
+    t.style.setProperty("--mx", e.clientX - r.left + "px"); t.style.setProperty("--my", e.clientY - r.top + "px");
+  }, { passive: true });
 
   // Scroll progress line.
   const bar = document.createElement("div");
@@ -59,8 +137,17 @@
   });
 
   // Pinned scenes: --p goes 0 → 1 while the scene scrolls past; past halfway it turns kosher.
-  const scenes = [...document.querySelectorAll(".scene")];
-  if (still) scenes.forEach(s => { s.style.setProperty("--p", 1); s.classList.add("is-on"); s.querySelectorAll(".dev").forEach(d => d.classList.add("on")); });
+  const scenes = [...document.querySelectorAll(".scene, .purify, .versus, .fleet")];
+  const stepOf = (s, p) => {
+    if (s.classList.contains("purify")) s.dataset.step = p < 0.3 ? 0 : p < 0.62 ? 1 : 2;
+    if (s.classList.contains("fleet")) {
+      const devs = [...s.querySelectorAll(".dev")];
+      let n = 0;
+      devs.forEach((d, i) => { const on = p > 0.12 + i * (0.62 / devs.length); d.classList.toggle("on", on); n += on; });
+      const c = s.querySelector(".count"); if (c) c.textContent = n + "/" + devs.length;
+    }
+  };
+  if (still) scenes.forEach(s => { s.style.setProperty("--p", 1); s.classList.add("is-on"); s.querySelectorAll(".dev").forEach(d => d.classList.add("on")); stepOf(s, 1); });
 
   const frame = () => {
     const vh = innerHeight;
@@ -73,7 +160,8 @@
       if (r.bottom < -vh || r.top > vh * 2) continue;
       const p = clamp(-r.top / (r.height - vh));
       s.style.setProperty("--p", p.toFixed(4));
-      if (s.dataset.manual) continue;
+      stepOf(s, p);
+      if (!s.classList.contains("scene") || s.dataset.manual) continue;
       const on = p > 0.42;
       if (on !== s.classList.contains("is-on")) {
         s.classList.toggle("is-on", on);

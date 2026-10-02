@@ -16,18 +16,24 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="../img/seal.png">
 <link rel="apple-touch-icon" href="../img/icon.png">
-<link rel="stylesheet" href="../site.css?v=2">
+<link rel="stylesheet" href="../site.css?v=3">
 </head>
 <body>
 <nav class="gnav" aria-label="Main">
-  <div class="wide">
-    <a class="brand" href="../"><img src="../img/seal.png" alt="">Kosher Switch</a>
-    <div class="links"><a href="../">Home</a><a href="../android/">Android</a><a href="../iphone/">iPhone</a><a href="../schools/" class="on">Schools</a><a href="../#contact" >Contact</a></div>
-    <span class="nav-cta"></span>
-    <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+  <div class="gnav-in">
+    <a class="logo" href="../" aria-label="Kosher Switch home"><img src="../img/seal.png" alt=""></a>
+    <div class="items"><a href="../android/" data-fly="fly-android">Android</a><a href="../iphone/" data-fly="fly-iphone">iPhone</a><a href="../schools/" data-fly="fly-schools" class="on">Schools</a><a href="../#faq" data-fly="fly-support">Support</a></div>
+    <div class="tools"><button class="icon-btn search-btn" type="button" data-fly="fly-search" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.8 15.8 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span></button></div>
   </div>
+  <div class="fly" id="fly-android"><div class="cols"><div class="big"><h5>Explore Android</h5><a href="../android/">Overview</a><a href="../android/#safe">Safe internet</a><a href="../android/#features">Features</a><a href="../android/#tour">Tour</a><a href="../android/#download">Download</a></div><div class="small"><h5>Get started</h5><a href="../android/#download">Download the app</a><a href="../android/#setup">Set up with a QR code</a><a href="../android/#setup">Set up with a computer</a><a href="../android/#phones">Which phones work</a></div><div class="small"><h5>More</h5><a href="../#advice">Our advice: no browser</a><a href="../#faq">Questions</a></div></div></div><div class="fly" id="fly-iphone"><div class="cols"><div class="big"><h5>Explore iPhone</h5><a href="../iphone/">Overview</a><a href="../iphone/#story">See it in action</a><a href="../iphone/#screens">Screens</a><a href="../iphone/#wallpaper">Kosher wallpaper</a></div><div class="small"><h5>Get started</h5><a href="../iphone/#how">How it works</a><a href="../iphone/#get">Get it (in App Review)</a></div><div class="small"><h5>More</h5><a href="../iphone/#privacy">iPhone privacy</a><a href="../#faq">Questions</a></div></div></div><div class="fly" id="fly-schools"><div class="cols"><div class="big"><h5>Kosher Switch for Schools</h5><a href="../schools/">Overview</a><a href="../schools/#why">Why schools</a><a href="../schools/#compare">Compare</a><a href="../schools/#how">How it works</a></div><div class="small"><h5>For schools</h5><a href="mailto:kosherswitch@outlook.com?subject=Kosher%20Switch%20for%20our%20school">Talk to us</a><a href="../schools/#edition">What's coming</a><a href="../schools/#faq">Questions for staff</a></div></div></div><div class="fly" id="fly-support"><div class="cols"><div class="big"><h5>Support</h5><a href="../#faq">Questions</a><a href="../#contact">Contact us</a></div><div class="small"><h5>Legal</h5><a href="../privacy/">Privacy Policy</a><a href="../terms/">Terms of Use</a><a href="../sitemap/">Site Map</a></div><div class="small"><h5>Elsewhere</h5><a href="mailto:kosherswitch@outlook.com">Email us</a><a href="https://github.com/itai2008elishakov-rgb/kosher-switch">GitHub</a></div></div></div>
+  <div class="fly" id="fly-search"><div class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.8 15.8 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="search" placeholder="Search Kosher Switch" aria-label="Search Kosher Switch" autocomplete="off"></div><div class="results"></div></div>
 </nav>
-<div class="sheet" aria-label="Menu"><a href="../">Home<small>The idea</small></a><a href="../android/">Android<small>Free download</small></a><a href="../iphone/">iPhone<small>In App Review</small></a><a href="../schools/">Schools<small>Coming soon</small></a><a href="../#contact">Contact<small>kosherswitch@outlook.com</small></a></div>
+<div class="dim"></div>
+<div class="sheet" aria-label="Menu">
+  <div class="msearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.8 15.8 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="search" placeholder="Search Kosher Switch" aria-label="Search Kosher Switch" autocomplete="off"></div><div class="results"></div>
+  <div class="lvl1"><a href="../">Home</a><button type="button" data-sub="m-android">Android</button><button type="button" data-sub="m-iphone">iPhone</button><button type="button" data-sub="m-schools">Schools</button><button type="button" data-sub="m-support">Support</button></div>
+  <div class="lvl2" id="m-android"><button class="back" type="button">‹ Back</button><div><h5>Explore Android</h5><a href="../android/">Overview</a><a href="../android/#safe">Safe internet</a><a href="../android/#features">Features</a><a href="../android/#tour">Tour</a><a href="../android/#download">Download</a></div><div class="small" style="margin-top:22px"><h5>Get started</h5><a href="../android/#download">Download the app</a><a href="../android/#setup">Set up with a QR code</a><a href="../android/#setup">Set up with a computer</a><a href="../android/#phones">Which phones work</a></div><div class="small" style="margin-top:22px"><h5>More</h5><a href="../#advice">Our advice: no browser</a><a href="../#faq">Questions</a></div></div><div class="lvl2" id="m-iphone"><button class="back" type="button">‹ Back</button><div><h5>Explore iPhone</h5><a href="../iphone/">Overview</a><a href="../iphone/#story">See it in action</a><a href="../iphone/#screens">Screens</a><a href="../iphone/#wallpaper">Kosher wallpaper</a></div><div class="small" style="margin-top:22px"><h5>Get started</h5><a href="../iphone/#how">How it works</a><a href="../iphone/#get">Get it (in App Review)</a></div><div class="small" style="margin-top:22px"><h5>More</h5><a href="../iphone/#privacy">iPhone privacy</a><a href="../#faq">Questions</a></div></div><div class="lvl2" id="m-schools"><button class="back" type="button">‹ Back</button><div><h5>Kosher Switch for Schools</h5><a href="../schools/">Overview</a><a href="../schools/#why">Why schools</a><a href="../schools/#compare">Compare</a><a href="../schools/#how">How it works</a></div><div class="small" style="margin-top:22px"><h5>For schools</h5><a href="mailto:kosherswitch@outlook.com?subject=Kosher%20Switch%20for%20our%20school">Talk to us</a><a href="../schools/#edition">What's coming</a><a href="../schools/#faq">Questions for staff</a></div></div><div class="lvl2" id="m-support"><button class="back" type="button">‹ Back</button><div><h5>Support</h5><a href="../#faq">Questions</a><a href="../#contact">Contact us</a></div><div class="small" style="margin-top:22px"><h5>Legal</h5><a href="../privacy/">Privacy Policy</a><a href="../terms/">Terms of Use</a><a href="../sitemap/">Site Map</a></div><div class="small" style="margin-top:22px"><h5>Elsewhere</h5><a href="mailto:kosherswitch@outlook.com">Email us</a><a href="https://github.com/itai2008elishakov-rgb/kosher-switch">GitHub</a></div></div>
+</div>
 
 <div class="subnav"><div class="wide">
   <span class="name">Kosher Switch for Schools</span>
@@ -45,15 +51,25 @@
       <a class="more" href="#compare">See why it wins</a>
     </div>
   </div>
-  <div class="stage rv scale" style="--i:2;margin-top:70px;gap:clamp(14px,4vw,44px);align-items:flex-end">
-    <div class="glow"></div>
-    <div class="dev android" style="--w:clamp(96px,16vw,180px)"><div class="scr"><img src="../img/home.jpg" alt="The kosher home screen on an Android phone"></div></div>
-    <div class="dev tablet" style="--w:clamp(200px,40vw,460px)"><div class="scr" style="display:grid;place-content:center;justify-items:center;gap:10px;background:radial-gradient(circle at 85% 10%,rgba(224,182,74,.4),transparent 45%),radial-gradient(circle at 10% 90%,rgba(63,211,154,.2),transparent 50%),linear-gradient(160deg,#0b2a5b,#1e4e9c)">
-      <span style="font-size:clamp(1.8rem,6vw,3.6rem);font-weight:200;line-height:1">8:15</span><img src="../img/seal.png" alt="" style="position:static;width:clamp(30px,5vw,50px);height:auto"><span style="font-size:clamp(.55rem,1.2vw,.8rem);padding:4px 12px;border-radius:99px;background:rgba(255,255,255,.12)">This device belongs to Your School</span>
-    </div></div>
-    <div class="dev iphone" style="--w:clamp(94px,15.5vw,175px)"><div class="island"></div><div class="scr"><img src="../img/hq/ios-home.jpg" alt="The kosher Home Screen on iPhone"></div></div>
-  </div>
 </header>
+
+<section class="fleet" aria-label="A short film: every device turns kosher">
+  <div class="pin">
+    <div class="head"><div class="count">0/4</div><h2>devices kosher.</h2><p class="intro" style="margin:12px auto 0">Phones, tablets, keypad phones and iPhones. Scroll, and watch a class turn kosher.</p></div>
+    <div class="row">
+      <div class="dev android" style="--w:clamp(80px,13vw,160px)"><div class="scr"><img src="../img/open.jpg" alt=""><img class="alt" src="../img/home.jpg" alt=""></div></div>
+      <div class="dev tablet" style="--w:clamp(170px,30vw,380px)"><div class="scr">
+        <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,1fr);gap:8%;padding:12% 10%;background:linear-gradient(160deg,#3a2f6b,#b0446b)">
+          <i style="border-radius:22%;background:#4f8dfb"></i><i style="border-radius:22%;background:#ff5a5a"></i><i style="border-radius:22%;background:#f9a03f"></i><i style="border-radius:22%;background:#2ee39a"></i><i style="border-radius:22%;background:#7b6cff"></i>
+          <i style="border-radius:22%;background:#3ec5ff"></i><i style="border-radius:22%;background:#d62976"></i><i style="border-radius:22%;background:#ffd166"></i><i style="border-radius:22%;background:#4a35d6"></i><i style="border-radius:22%;background:#0f9d58"></i></div>
+        <div class="alt" style="position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:8px;background:radial-gradient(circle at 85% 10%,rgba(224,182,74,.4),transparent 45%),linear-gradient(160deg,#0b2a5b,#1e4e9c)">
+          <span style="font-size:clamp(1.4rem,4vw,2.8rem);font-weight:200;line-height:1">8:15</span><img src="../img/seal.png" alt="" style="position:static;width:clamp(24px,4vw,40px);height:auto"><span style="font-size:clamp(.5rem,1vw,.72rem);padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.12)">This device belongs to Your School</span></div>
+      </div></div>
+      <div class="dev keypad" style="--w:clamp(70px,10vw,120px)"><div class="scr"><img src="../img/qin-weather.jpg" alt="" style="filter:grayscale(1)"><img class="alt" src="../img/qin-weather.jpg" alt=""></div><div class="keys" aria-hidden="true"><span class="navk"><em></em><em></em></span><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i></div></div>
+      <div class="dev iphone" style="--w:clamp(78px,12.5vw,150px)"><div class="island"></div><div class="scr"><img src="../img/hq/ios-control.jpg" alt=""><img class="alt" src="../img/hq/ios-home.jpg" alt=""></div></div>
+    </div>
+  </div>
+</section>
 
 <section>
   <div class="wrap">
@@ -172,17 +188,15 @@
 </section>
 
 <footer class="foot">
-  <div class="wrap">
-    <div class="cols">
-      <div><a class="brand" href="../"><img src="../img/seal.png" alt="">Kosher Switch</a><p style="margin:0;max-width:30ch">A kosher phone, without a second phone. Made with care, in Hebrew and English.</p></div>
-      <div><h4>Get it</h4><a href="../android/">Android</a><a href="../iphone/">iPhone</a><a href="../schools/">Schools</a></div>
-      <div><h4>Help</h4><a href="../#faq">Questions</a><a href="../android/#setup">Android setup</a><a href="../iphone/#privacy">Privacy</a></div>
-      <div><h4>Contact</h4><a href="mailto:kosherswitch@outlook.com">kosherswitch@outlook.com</a><a href="https://github.com/itai2008elishakov-rgb/kosher-switch">GitHub</a></div>
-    </div>
-    <div class="legal">Which apps are allowed is up to each school and its rabbonim.<br>Kosher Switch is not a kashrut certification. Parents remain responsible for how a phone is used.</div>
+  <div class="in">
+    <div class="notes"><p>Which apps are allowed is up to each school and its rabbonim.<br></p><p>Kosher Switch is a tool, not a kashrut certification. Parents remain responsible for how a phone is used. Screens shown are from real devices; some device frames are illustrations.</p></div>
+    <div class="crumbs"><a href="../"><img src="../img/seal.png" alt="Kosher Switch"></a><span>›</span><span style="color:var(--ink)">Schools</span></div>
+    <div class="dir"><div><h4>Explore</h4><div class="lst"><a href="../">Home</a><a href="../#advice">Our advice</a><a href="../#who">Who it's for</a><a href="../#faq">Questions</a></div></div><div><h4>Android</h4><div class="lst"><a href="../android/">Overview</a><a href="../android/#download">Download</a><a href="../android/#safe">Safe internet</a><a href="../android/#features">Features</a><a href="../android/#setup">Setup</a></div></div><div><h4>iPhone</h4><div class="lst"><a href="../iphone/">Overview</a><a href="../iphone/#screens">Screens</a><a href="../iphone/#wallpaper">Wallpaper</a><a href="../iphone/#privacy">Privacy on iPhone</a></div></div><div><h4>Schools</h4><div class="lst"><a href="../schools/">Overview</a><a href="../schools/#why">Why schools</a><a href="../schools/#compare">Compare</a><a href="mailto:kosherswitch@outlook.com">Talk to us</a></div></div><div><h4>Support</h4><div class="lst"><a href="../#contact">Contact us</a><a href="../privacy/">Privacy Policy</a><a href="../terms/">Terms of Use</a><a href="../sitemap/">Site Map</a><a href="https://github.com/itai2008elishakov-rgb/kosher-switch">GitHub</a></div></div></div>
+    <div class="reach">More ways to reach us: email <a href="mailto:kosherswitch@outlook.com">kosherswitch@outlook.com</a> or open an issue on <a href="https://github.com/itai2008elishakov-rgb/kosher-switch/issues">GitHub</a>.</div>
+    <div class="legal"><span>Copyright © 2026 Itai Elishakov. All rights reserved.</span><nav><a href="../privacy/">Privacy Policy</a><a href="../terms/">Terms of Use</a><a href="../sitemap/">Site Map</a></nav><span>English · עברית</span></div>
   </div>
 </footer>
 
-<script src="../site.js?v=2"></script>
+<script src="../site.js?v=3"></script>
 </body>
 </html>
