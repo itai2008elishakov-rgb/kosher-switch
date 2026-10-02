@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://itai2008elishakov-rgb.github.io/kosher-switch/img/icon.png">
 <link rel="icon" type="image/png" href="../img/seal.png">
 <link rel="apple-touch-icon" href="../img/icon.png">
-<link rel="stylesheet" href="../site.css?v=4">
+<link rel="stylesheet" href="../site.css?v=5">
 </head>
 <body>
 <nav class="gnav" aria-label="תפריט">
@@ -59,7 +59,7 @@
       <div class="c"><h2>זה <span class="gold-text">טלפון כשר.</span></h2><p>רק מה שבחרתם. רק הקוד פותח אותו שוב.</p></div>
     </div>
     <div class="stage">
-      <div class="halo" style="position:absolute;inset:-35%;border-radius:50%;z-index:-1;background:radial-gradient(closest-side,rgba(224,182,74,calc(.1 + var(--p) * .35)),rgba(30,78,156,.15) 55%,transparent 72%)"></div>
+      <div class="halo2"></div>
       <div class="dev iphone"><div class="island"></div><span class="btns"></span><div class="scr">
         <img src="../img/hq/ios-control.jpg" alt="אייפון במצב פתוח">
         <img class="alt" src="../img/hq/ios-home.jpg" alt="אותו אייפון כטלפון כשר">
@@ -92,7 +92,7 @@
           <div class="pop" style="--at:.32;top:39%"><b>⚠️ החיבור התנתק</b>האפליקציה לא מגיעה לאינטרנט.</div>
           <div class="pop y" style="--at:.44;top:54%"><b>🔑 בקשת VPN</b>הסינון רוצה להוסיף VPN.</div>
           <div class="pop" style="--at:.56;top:69%"><b>⛔ נחסם</b>התמונה הוסתרה על ידי הסינון.</div>
-          <div class="spin"></div>
+          <div class="shade"></div><div class="spin"></div>
         </div></div>
         <figcaption>סינון רגיל<span>נלחם בטלפון כל היום</span></figcaption>
         <div class="meter"><i></i></div><div class="tag-bad">חלונות קופצים והאטות</div>
@@ -232,7 +232,16 @@
     <span class="eyebrow rv">צרו קשר</span>
     <h2 class="title rv" style="--i:1">שאלות? כתבו לנו.</h2>
     <p class="intro rv" style="--i:2;margin-inline:auto">משפחות, בתי ספר, ארגונים וכל מי שסקרן. אנחנו קוראים כל הודעה ועונים בעברית או באנגלית.</p>
-    <a class="mail rv" style="--i:3" href="mailto:kosherswitch@outlook.com?subject=Kosher%20Switch">✉️ kosherswitch@outlook.com</a>
+    <form class="cform rv" style="--i:3" data-ok="תודה! ההודעה בדרך. נענה במייל." data-err="משהו לא עבד. נסו שוב, או כתבו לנו ישירות ל-" data-sending="שולח…" novalidate>
+      <div class="row2"><label><span>השם שלכם</span><input name="name" autocomplete="name" required></label>
+      <label><span>המייל שלכם</span><input name="email" type="email" autocomplete="email" required dir="ltr"></label></div>
+      <label><span>בנושא</span><select name="topic"><option>טלפון למשפחה</option><option>בית ספר</option><option>ארגון</option><option>משהו אחר</option></select></label>
+      <label><span>ההודעה שלכם</span><textarea name="message" rows="5" required></textarea></label>
+      <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn gold" type="submit">שליחה</button>
+      <p class="cstatus" role="status" aria-live="polite"></p>
+    </form>
+    <p class="muted" style="margin-top:22px;font-size:.95rem">או כתבו לנו ל- <a href="mailto:kosherswitch@outlook.com" style="color:var(--gold-2)">kosherswitch@outlook.com</a></p>
   </div>
 </section>
 
@@ -257,6 +266,6 @@
   </div>
 </footer>
 
-<script src="../site.js?v=4"></script>
+<script src="../site.js?v=5"></script>
 </body>
 </html>

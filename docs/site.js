@@ -172,14 +172,18 @@
     const vh = innerHeight;
     const max = root.scrollHeight - vh;
     bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
-    if (nav) nav.classList.toggle("scrolled", scrollY > 8);
+    const sc = scrollY > 8;
+    if (nav && nav._sc !== sc) { nav._sc = sc; nav.classList.toggle("scrolled", sc); }
     if (still) return;
     for (const s of scenes) {
       const r = s.getBoundingClientRect();
       if (r.bottom < -vh || r.top > vh * 2) continue;
       // The film finishes at 80% of its scroll, then holds the last frame for a moment.
       const p = clamp(-r.top / (r.height - vh) / 0.8);
-      s.style.setProperty("--p", p.toFixed(4));
+      const pv = p.toFixed(3);
+      if (s._p === pv) continue;
+      s._p = pv;
+      s.style.setProperty("--p", pv);
       stepOf(s, p);
       if (!s.classList.contains("scene") || s.dataset.manual) continue;
       const on = p > 0.42;
@@ -194,6 +198,8 @@
       if (r.bottom < 0 || r.top > vh) continue;
       const p = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.4));
       const n = Math.round(p * spans.length);
+      if (el._n === n) continue;
+      el._n = n;
       spans.forEach((w, i) => w.classList.toggle("lit", i < n));
     }
   };
@@ -247,6 +253,36 @@
     film.addEventListener("click", e => { if (e.target === film) close(); });
     addEventListener("keydown", e => { if (e.key === "Escape" && film.classList.contains("on")) close(); });
   }
+
+  // Contact form: sent to our mailbox through FormSubmit, without leaving the page.
+  document.querySelectorAll(".cform").forEach(form => {
+    const status = form.querySelector(".cstatus"), btn = form.querySelector("button");
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      const f = Object.fromEntries(new FormData(form));
+      if (f._honey) return;
+      let bad = false;
+      form.querySelectorAll("[required]").forEach(el => {
+        const wrong = !el.value.trim() || (el.type === "email" && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(el.value));
+        el.classList.toggle("bad", wrong); bad = bad || wrong;
+      });
+      if (bad) return;
+      btn.disabled = true; status.className = "cstatus"; status.textContent = form.dataset.sending;
+      try {
+        const r = await fetch("https://formsubmit.co/ajax/kosherswitch@outlook.com", {
+          method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ name: f.name, email: f.email, topic: f.topic, message: f.message,
+            _subject: "Kosher Switch website: " + f.topic, _template: "table", _replyto: f.email, _captcha: "false" })
+        });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok || j.success === "false" || j.success === false) throw new Error(j.message || r.status);
+        status.className = "cstatus ok"; status.textContent = form.dataset.ok; form.reset();
+      } catch (err) {
+        status.className = "cstatus err"; status.innerHTML = form.dataset.err + ' <a href="mailto:kosherswitch@outlook.com" style="color:inherit">kosherswitch@outlook.com</a>';
+      }
+      btn.disabled = false;
+    });
+  });
 
   // Sticky stories: the device shows the screen of the step in the middle of the view.
   document.querySelectorAll(".story").forEach(story => {
