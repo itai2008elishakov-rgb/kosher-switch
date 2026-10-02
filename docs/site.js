@@ -176,8 +176,8 @@
     if (nav && nav._sc !== sc) { nav._sc = sc; nav.classList.toggle("scrolled", sc); }
     if (still) return;
     for (const s of scenes) {
+      if (!s._near) continue;
       const r = s.getBoundingClientRect();
-      if (r.bottom < -vh || r.top > vh * 2) continue;
       // The film finishes at 80% of its scroll, then holds the last frame for a moment.
       const p = clamp(-r.top / (r.height - vh) / 0.8);
       const pv = p.toFixed(3);
@@ -203,6 +203,9 @@
       spans.forEach((w, i) => w.classList.toggle("lit", i < n));
     }
   };
+  // Only films near the screen do any work while scrolling.
+  const near = new IntersectionObserver(es => es.forEach(e => { e.target._near = e.isIntersecting; }), { rootMargin: "100% 0px 100% 0px" });
+  scenes.forEach(s => { s._near = true; near.observe(s); });
   let ticking = false;
   const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { frame(); ticking = false; }); } };
   addEventListener("scroll", onScroll, { passive: true });
