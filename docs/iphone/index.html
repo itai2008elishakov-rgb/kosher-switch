@@ -17,88 +17,83 @@
 <link rel="icon" type="image/png" href="../img/seal.png">
 <link rel="apple-touch-icon" href="../img/icon.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Kosher Switch for iPhone", "applicationCategory": "UtilitiesApplication", "operatingSystem": "iOS 26+", "url": "https://itai2008elishakov-rgb.github.io/kosher-switch/iphone/", "image": "https://itai2008elishakov-rgb.github.io/kosher-switch/img/icon.png", "inLanguage": ["en", "he"], "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="../site.css">
+<link rel="stylesheet" href="../site.css?v=2">
 </head>
 <body>
-<nav id="nav">
-  <div class="wrap">
+<nav class="gnav" aria-label="Main">
+  <div class="wide">
     <a class="brand" href="../"><img src="../img/seal.png" alt="">Kosher Switch</a>
-    <div class="links"><a href="../">Home</a><a href="../android/">Android</a><a href="../iphone/" class="nav-on">iPhone</a><a href="../schools/">Schools</a><a href="../#faq">FAQ</a></div>
-    <a class="btn gold small" href="#get">Get it</a>
+    <div class="links"><a href="../">Home</a><a href="../android/">Android</a><a href="../iphone/" class="on">iPhone</a><a href="../schools/">Schools</a><a href="../#contact" >Contact</a></div>
+    <span class="nav-cta"></span>
+    <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
   </div>
 </nav>
+<div class="sheet" aria-label="Menu"><a href="../">Home<small>The idea</small></a><a href="../android/">Android<small>Free download</small></a><a href="../iphone/">iPhone<small>In App Review</small></a><a href="../schools/">Schools<small>Coming soon</small></a><a href="../#contact">Contact<small>kosherswitch@outlook.com</small></a></div>
 
-<header class="hero" id="top">
-  <div class="wrap">
+<div class="subnav"><div class="wide">
+  <span class="name">Kosher Switch for iPhone</span>
+  <div class="right"><a href="#story">Overview</a><a href="#screens">Screens</a><a href="#wallpaper">Wallpaper</a><a href="#privacy">Privacy</a><a class="btn gold sm" href="#get">Get it</a></div>
+</div></div>
+
+<header class="page-top">
+  <div class="wrap split">
     <div>
-      <span class="eyebrow reveal">✦ Free · iPhone · iOS 26 or newer</span>
-      <h1 class="reveal d1">A kosher iPhone.<br><span class="shine">No second phone.</span></h1>
-      <p class="he-sub reveal d1" lang="he" dir="rtl">אייפון כשר בלחיצה אחת</p>
-      <p class="lead reveal d2">Kosher Switch uses Apple's own Screen Time. No computer and no reset: allow it once, choose your apps, and one tap makes your iPhone kosher. Leaving takes a code, and <b style="color:var(--ink)">someone you trust keeps it</b>.</p>
-      <div class="cta reveal d3">
+      <span class="pill rv"><span class="dot"></span>Approved for Screen Time · In App Review</span>
+      <h1 class="display rv" style="--i:1;margin-top:22px;font-size:clamp(2.8rem,7vw,5.4rem)">A kosher iPhone.<br><span class="gold-text">No second phone.</span></h1>
+      <p class="he-line rv" style="--i:2" lang="he" dir="rtl">אייפון כשר בלחיצה אחת</p>
+      <p class="intro rv" style="--i:2;margin-top:18px">Kosher Switch uses Apple's own Screen Time. No computer and no reset: allow it once, choose your apps, and one tap makes your iPhone kosher. Leaving takes a code, and <b>someone you trust keeps it</b>.</p>
+      <div class="ctas rv" style="--i:3">
         <a class="btn gold" href="#get">Get it <small>In App Review</small></a>
-        <a class="btn ghost" href="#story">See it in action</a>
+        <a class="more" href="#story">See it in action</a>
       </div>
-      <div class="plat reveal d3"><span><i>●</i> iOS 26+</span><span><i>●</i> Built on Apple Screen Time</span><span><i>●</i> Family Sharing</span></div>
     </div>
-    <div class="stage reveal d2">
-      <div class="ring"></div><div class="ring"></div>
-      <div class="phone ios">
-        <div class="island"></div>
-        <div class="screen">
-          <img src="../img/ios-control.jpg" alt="Kosher Switch on iPhone, open mode">
-          <img class="kosher" src="../img/ios-home.jpg" alt="The kosher home on iPhone with the Hebrew date">
-        </div>
-        <button class="toggle" type="button" aria-pressed="false" aria-label="Switch between open and kosher mode"><span class="lbl-open">Open</span><span class="switch" aria-hidden="true"></span><span class="lbl-kosher he">כשר</span></button>
-        <span class="tap-hint">Tap the switch</span>
-      </div>
+    <div class="stage switch-host rv scale" style="--i:2;padding-bottom:70px">
+      <div class="glow"></div>
+      <div class="dev iphone" style="--w:min(290px,66vw)" data-tilt="6"><div class="island"></div><span class="btns"></span><div class="scr">
+        <img src="../img/hq/ios-control.jpg" alt="Kosher Switch on iPhone, open mode">
+        <img class="alt" src="../img/hq/ios-home.jpg" alt="The kosher home on iPhone with the Hebrew date">
+      </div></div>
+      <button class="switch-ui" type="button" aria-pressed="false" aria-label="Switch between open and kosher mode" style="position:absolute;bottom:0;left:50%;translate:-50% 0"><span class="lo">Open</span><span class="track" aria-hidden="true"></span><span class="lk he">כשר</span></button>
     </div>
   </div>
 </header>
 
 <section id="get">
   <div class="wrap">
-    <div class="get reveal">
-      <div class="get-icon apple"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.613 0 2.886.06 4.374 2.19-.13.09-2.383 1.37-2.383 4.19 0 3.26 2.854 4.42 2.955 4.45z"/></svg></div>
-      <div class="get-copy">
-        <div class="kicker">Get it</div>
-        <h2>Kosher Switch for iPhone</h2>
+    <div class="tile gold get rv">
+      <div>
+        <span class="eyebrow">Get it</span>
+        <h2 class="title-sm">Kosher Switch for iPhone</h2>
         <p>Apple has approved Kosher Switch's Screen Time permission, and the app is now in App Review. It will be free on the App Store for iPhones with iOS 26 or newer.</p>
-        <div class="cta"><span class="status-pill"><span class="dot"></span>In App Review</span><a class="btn ghost" href="#story">See it in action</a></div>
       </div>
+      <div class="ctas" style="margin:0"><span class="pill"><span class="dot"></span>In App Review</span></div>
     </div>
+  </div>
+</section>
+
+<section style="padding-top:110px">
+  <div class="wrap">
+    <p class="words center" style="text-align:center" data-words data-gold="kosher|Screen|Time">No computer. No reset. Just Apple's own Screen Time, a golden switch, and a kosher iPhone.</p>
   </div>
 </section>
 
 <section id="story">
   <div class="wrap">
-    <div class="head reveal">
-      <div class="kicker">See it in action</div>
-      <h2>Your iPhone, kosher in one tap</h2>
-      <p>Real screens from Kosher Switch on an iPhone. Scroll through.</p>
-    </div>
     <div class="story">
       <div class="story-stick">
-        <div class="ip story-phone" data-tilt="6">
-          <div class="island"></div><div class="scr">
-            <img src="../img/ios-control.jpg" alt="Main screen">
-            <img src="../img/ios-home.jpg" alt="Kosher home">
-            <img src="../img/ios-apps.jpg" alt="Apps">
-            <img src="../img/ios-siddur.jpg" alt="Siddur">
-            <img src="../img/ios-luach.jpg" alt="Luach and zmanim">
-            <img src="../img/ios-assistant.jpg" alt="Assistant">
-          </div>
-        </div>
-        <div class="story-dots"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="dev iphone"><div class="island"></div><span class="btns"></span><div class="scr">
+          <img src="../img/hq/ios-control.jpg" alt="Main screen"><img src="../img/hq/ios-home.jpg" alt="Kosher home"><img src="../img/hq/ios-apps.jpg" alt="Apps">
+          <img src="../img/hq/ios-siddur.jpg" alt="Siddur"><img src="../img/hq/ios-luach.jpg" alt="Luach and zmanim"><img src="../img/hq/ios-assistant.jpg" alt="Assistant">
+        </div></div>
+        <div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </div>
       <div class="story-steps">
-        <div class="story-step"><span class="n">1</span><h3>One golden switch</h3><p>Choose the apps you keep, the apps that disappear, and how websites work. Then one tap turns on kosher mode. Only your code turns it off.</p><div class="ip only"><div class="island"></div><div class="scr"><img src="../img/ios-control.jpg" alt="" loading="lazy"></div></div></div>
-        <div class="story-step"><span class="n">2</span><h3>A calm kosher home</h3><p>The clock, the Hebrew date and what's coming up: <span class="he">חול המועד</span>, Shabbos, the next chag. The siddur, luach and your apps are one tap away.</p><div class="ip only"><div class="island"></div><div class="scr"><img src="../img/ios-home.jpg" alt="" loading="lazy"></div></div></div>
-        <div class="story-step"><span class="n">3</span><h3>Only the apps you chose</h3><p>Phone, Messages, Camera, Maps, whatever you decided. Everything else is hidden from the Home Screen or shows the kosher screen.</p><div class="ip only"><div class="island"></div><div class="scr"><img src="../img/ios-apps.jpg" alt="" loading="lazy"></div></div></div>
-        <div class="story-step"><span class="n">4</span><h3>A full siddur, in your nusach</h3><p>Ashkenaz, Sefard or Edot HaMizrach. It opens on the tefillah for right now, with every day, Shabbos and the moadim.</p><div class="ip only"><div class="island"></div><div class="scr"><img src="../img/ios-siddur.jpg" alt="" loading="lazy"></div></div></div>
-        <div class="story-step"><span class="n">5</span><h3>Luach &amp; zmanim for where you are</h3><p>Today's zmanim from alos to tzeis, a monthly luach and the moadim, calculated on the phone for your location.</p><div class="ip only"><div class="island"></div><div class="scr"><img src="../img/ios-luach.jpg" alt="" loading="lazy"></div></div></div>
-        <div class="story-step"><span class="n">6</span><h3>An assistant that stays clean</h3><p>"Wake me up at 7", "call Mom", "a note with a recipe". It works on the iPhone and nothing is sent anywhere. Off by default; turn it on if it helps.</p><div class="ip only"><div class="island"></div><div class="scr"><img src="../img/ios-assistant.jpg" alt="" loading="lazy"></div></div></div>
+        <div class="story-step"><div class="n">The switch</div><h3>One golden switch.</h3><p>Choose the apps you keep, the apps that disappear, and how websites work. Then one tap turns on kosher mode. Only your code turns it off.</p><div class="dev iphone only"><div class="island"></div><div class="scr"><img src="../img/hq/ios-control.jpg" alt="" loading="lazy"></div></div></div>
+        <div class="story-step"><div class="n">Kosher home</div><h3>A calm kosher home.</h3><p>The clock, the Hebrew date and what's coming up: <span class="he">חול המועד</span>, Shabbos, the next chag. The siddur, luach and your apps are one tap away.</p><div class="dev iphone only"><div class="island"></div><div class="scr"><img src="../img/hq/ios-home.jpg" alt="" loading="lazy"></div></div></div>
+        <div class="story-step"><div class="n">Your apps</div><h3>Only the apps you chose.</h3><p>Phone, Messages, Camera, Maps, whatever you decided. Everything else is hidden from the Home Screen or shows the kosher screen.</p><div class="dev iphone only"><div class="island"></div><div class="scr"><img src="../img/hq/ios-apps.jpg" alt="" loading="lazy"></div></div></div>
+        <div class="story-step"><div class="n">Siddur</div><h3>A full siddur, in your nusach.</h3><p>Ashkenaz, Sefard or Edot HaMizrach. It opens on the tefillah for right now, with every day, Shabbos and the moadim.</p><div class="dev iphone only"><div class="island"></div><div class="scr"><img src="../img/hq/ios-siddur.jpg" alt="" loading="lazy"></div></div></div>
+        <div class="story-step"><div class="n">Luach</div><h3>Zmanim for where you are.</h3><p>Today's zmanim from alos to tzeis, a monthly luach and the moadim, calculated on the phone for your location.</p><div class="dev iphone only"><div class="island"></div><div class="scr"><img src="../img/hq/ios-luach.jpg" alt="" loading="lazy"></div></div></div>
+        <div class="story-step"><div class="n">Assistant</div><h3>An assistant that stays clean.</h3><p>"Wake me up at 7", "call Mom", "a note with a recipe". It works on the iPhone and nothing is sent anywhere. Off by default; turn it on if it helps.</p><div class="dev iphone only"><div class="island"></div><div class="scr"><img src="../img/hq/ios-assistant.jpg" alt="" loading="lazy"></div></div></div>
       </div>
     </div>
   </div>
@@ -106,63 +101,52 @@
 
 <section id="iphone">
   <div class="wrap">
-    <div class="row">
-      <div class="copy reveal">
-        <span class="status-pill" style="margin-bottom:14px"><span class="dot"></span>Approved by Apple for Screen Time · now in App Review</span>
-        <div class="tag">Kosher Switch for iPhone</div>
-        <h3>A kosher iPhone, built on Apple's Screen Time</h3>
-        <p>No computer and no reset. Kosher Switch uses Apple's own Screen Time controls, so blocked apps disappear from the Home Screen and websites are blocked everywhere, even inside apps.</p>
-        <div class="advice-note" style="margin:0 0 18px"><span class="i">🌐</span><p><b>Our advice: no browser.</b> Websites start fully blocked, Safari included. We recommend keeping it that way; a filter is there if you really need one. The choice is yours.</p></div>
-        <ul>
-          <li>A kosher Home Screen like a minimalist phone: a big clock, the Hebrew date and your apps as a calm list</li>
-          <li>The <span class="he">כשר</span> button in Control Center, and a Kosher Focus with its own wallpaper</li>
-          <li>Up to 50 apps you choose disappear from the Home Screen; every other app shows the kosher screen</li>
-          <li>Websites: all blocked by default (our advice), or a kosher filter that blocks adult sites everywhere</li>
-          <li>Can't be deleted in kosher mode; no installing apps, accounts and passcode locked</li>
-          <li>With Family Sharing, only the parent's Apple Account can remove it</li>
-          <li>Siddur, luach &amp; zmanim, notes with drawing, and the assistant, inside the app</li>
-          <li>Apple's Weather, Photos, Camera and Maps stay available if you allow them</li>
-        </ul>
-      </div>
-      <div class="phones reveal d1" style="justify-content:center">
-        <div class="ip" data-tilt="10" data-speed="0.06"><div class="island"></div><div class="scr"><img src="../img/ios-home.jpg" alt="The kosher home screen on iPhone: clock, Hebrew date, siddur, luach, apps and assistant" loading="lazy"></div></div>
-      </div>
+    <div class="sec-head">
+      <span class="eyebrow rv">Built on Screen Time</span>
+      <h2 class="title rv" style="--i:1">Everything locked<br>the Apple way.</h2>
+      <p class="intro rv" style="--i:2">Kosher Switch uses Apple's own Screen Time controls, so blocked apps disappear from the Home Screen and websites are blocked everywhere, even inside apps.</p>
+    </div>
+    <div class="bento" data-stagger>
+      <div class="tile gold s4"><div class="icon">🏠</div><h3>A kosher Home Screen</h3><p>Like a minimalist phone: a big clock, the Hebrew date and your apps as a calm list, made of Kosher Switch widgets.</p></div>
+      <div class="tile"><div class="big">50</div><h3>apps can disappear</h3><p>The ones you choose vanish from the Home Screen. Every other app shows the kosher screen.</p></div>
+      <div class="tile"><div class="icon">🌐</div><h3>No browser, our advice</h3><p>Websites start fully blocked, Safari included. A kosher filter is there if you really need one.</p></div>
+      <div class="tile"><div class="icon"><span class="he" style="font-size:.8em;color:var(--gold-2)">כשר</span></div><h3>In Control Center</h3><p>The <span class="he">כשר</span> button, and a Kosher Focus with its own wallpaper.</p></div>
+      <div class="tile"><div class="icon">🔒</div><h3>Locked tight</h3><p>Can't be deleted in kosher mode. No installing apps; accounts and passcode locked.</p></div>
+      <div class="tile blue s3"><div class="icon">👨‍👩‍👧</div><h3>Family Sharing</h3><p>On a child's iPhone, only the parent's Apple Account can remove Kosher Switch.</p></div>
+      <div class="tile s3"><div class="icon">📖</div><h3>All inside the app</h3><p>Siddur, luach and zmanim, notes with drawing, and the assistant. Apple's Weather, Photos, Camera and Maps stay available if you allow them.</p></div>
     </div>
   </div>
 </section>
 
 <section id="screens">
   <div class="wrap">
-    <div class="head reveal">
-      <div class="kicker">Screens</div>
-      <h2>Made to feel calm</h2>
-      <p>Swipe through the real app.</p>
+    <div class="sec-head" style="margin-bottom:10px">
+      <span class="eyebrow rv">Screens</span>
+      <h2 class="title rv" style="--i:1">Made to feel calm.</h2>
     </div>
+    <div class="gal-nav" data-gallery="gal"><button type="button" aria-label="Previous">‹</button><button type="button" aria-label="Next">›</button></div>
   </div>
-  <div class="gallery reveal">
-    <figure><div class="ip" data-tilt="8"><div class="island"></div><div class="scr"><img src="../img/ios-control.jpg" alt="" loading="lazy"></div></div><figcaption>The switch<span>Your iPhone, open or kosher</span></figcaption></figure>
-    <figure><div class="ip" data-tilt="8"><div class="island"></div><div class="scr"><img src="../img/ios-home.jpg" alt="" loading="lazy"></div></div><figcaption>Kosher home<span>Clock, date and what's next</span></figcaption></figure>
-    <figure><div class="ip" data-tilt="8"><div class="island"></div><div class="scr"><img src="../img/ios-apps.jpg" alt="" loading="lazy"></div></div><figcaption>Your apps<span>Only the ones you chose</span></figcaption></figure>
-    <figure><div class="ip" data-tilt="8"><div class="island"></div><div class="scr"><img src="../img/ios-siddur.jpg" alt="" loading="lazy"></div></div><figcaption>Siddur<span>Three nusachim</span></figcaption></figure>
-    <figure><div class="ip" data-tilt="8"><div class="island"></div><div class="scr"><img src="../img/ios-luach.jpg" alt="" loading="lazy"></div></div><figcaption>Luach &amp; zmanim<span>For where you are</span></figcaption></figure>
-    <figure><div class="ip" data-tilt="8"><div class="island"></div><div class="scr"><img src="../img/ios-assistant.jpg" alt="" loading="lazy"></div></div><figcaption>Assistant<span>Private and clean</span></figcaption></figure>
-    <figure><div class="ip" data-tilt="8"><div class="island"></div><div class="scr"><img src="../img/kosher-wallpaper-preview.jpg" alt="" loading="lazy"></div></div><figcaption>Kosher wallpaper<span>For the Kosher Focus</span></figcaption></figure>
+  <div class="gallery" id="gal">
+    <figure><div class="dev iphone"><div class="island"></div><div class="scr"><img src="../img/hq/ios-control.jpg" alt="" loading="lazy"></div></div><figcaption>The switch<span>Your iPhone, open or kosher</span></figcaption></figure>
+    <figure><div class="dev iphone"><div class="island"></div><div class="scr"><img src="../img/hq/ios-home.jpg" alt="" loading="lazy"></div></div><figcaption>Kosher home<span>Clock, date and what's next</span></figcaption></figure>
+    <figure><div class="dev iphone"><div class="island"></div><div class="scr"><img src="../img/hq/ios-apps.jpg" alt="" loading="lazy"></div></div><figcaption>Your apps<span>Only the ones you chose</span></figcaption></figure>
+    <figure><div class="dev iphone"><div class="island"></div><div class="scr"><img src="../img/hq/ios-siddur.jpg" alt="" loading="lazy"></div></div><figcaption>Siddur<span>Three nusachim</span></figcaption></figure>
+    <figure><div class="dev iphone"><div class="island"></div><div class="scr"><img src="../img/hq/ios-luach.jpg" alt="" loading="lazy"></div></div><figcaption>Luach &amp; zmanim<span>For where you are</span></figcaption></figure>
+    <figure><div class="dev iphone"><div class="island"></div><div class="scr"><img src="../img/hq/ios-assistant.jpg" alt="" loading="lazy"></div></div><figcaption>Assistant<span>Private and clean</span></figcaption></figure>
+    <figure><div class="dev iphone"><div class="island"></div><div class="scr"><img src="../img/kosher-wallpaper-preview.jpg" alt="" loading="lazy"></div></div><figcaption>Kosher wallpaper<span>For the Kosher Focus</span></figcaption></figure>
   </div>
 </section>
 
 <section id="wallpaper">
   <div class="wrap">
-    <div class="wp reveal">
-      <div class="wp-phone"><img src="../img/kosher-wallpaper-preview.jpg" alt="The Kosher Switch wallpaper: a deep-blue background with the gold Kosher Switch seal" loading="lazy"></div>
-      <div class="wp-copy">
-        <div class="kicker">Kosher wallpaper</div>
-        <h2>Give the Kosher Focus its own look</h2>
-        <p>iPhone doesn't let apps change the wallpaper, so we made one for you: deep blue with the gold Kosher Switch seal, placed low so the clock stays clear. We suggest using it for the Kosher Focus, so everyone can see at a glance that the phone is kosher.</p>
-        <ol>
-          <li>Download it on your iPhone and tap Save to Photos (or save it from the app: Kosher Home Screen → Save the wallpaper).</li>
-          <li>Settings → Focus → Kosher → Customize Screens → choose it for the Lock Screen.</li>
-        </ol>
-        <a class="btn gold" href="../img/kosher-wallpaper.png" download="Kosher-Switch-wallpaper.png">⬇︎ Download the wallpaper</a>
+    <div class="tile blue wp rv">
+      <div class="dev iphone" style="--w:min(240px,60vw)"><div class="island"></div><div class="scr"><img src="../img/kosher-wallpaper-preview.jpg" alt="The Kosher Switch wallpaper: a deep-blue background with the gold seal" loading="lazy"></div></div>
+      <div>
+        <span class="eyebrow">Kosher wallpaper</span>
+        <h2 class="title-sm">Give the Kosher Focus its own look.</h2>
+        <p>iPhone doesn't let apps change the wallpaper, so we made one for you: deep blue with the gold Kosher Switch seal, placed low so the clock stays clear. Everyone can see at a glance that the phone is kosher.</p>
+        <ol><li>Download it on your iPhone and tap Save to Photos (or in the app: Kosher Home Screen → Save the wallpaper).</li><li>Settings → Focus → Kosher → Customize Screens → choose it for the Lock Screen.</li></ol>
+        <a class="btn gold" href="../img/kosher-wallpaper.png" download="Kosher-Switch-wallpaper.png">⬇ Download the wallpaper</a>
       </div>
     </div>
   </div>
@@ -170,77 +154,60 @@
 
 <section id="how">
   <div class="wrap">
-    <div class="head reveal">
-      <div class="kicker">How it works</div>
-      <h2>Four steps, all in the app</h2>
+    <div class="sec-head center">
+      <span class="eyebrow rv">How it works</span>
+      <h2 class="title rv" style="--i:1">Four steps, all in the app.</h2>
     </div>
-    <div class="steps">
-      <div class="card step reveal"><h3>Allow Screen Time</h3><p>Once, with Face ID. For a child's iPhone in Family Sharing, the parent approves with their own Apple Account.</p></div>
-      <div class="card step reveal d1"><h3>Keep &amp; hide</h3><p>Choose the apps you keep, and up to 50 apps that disappear from the Home Screen. Everything else shows the kosher screen.</p></div>
-      <div class="card step reveal d2"><h3>Choose a code</h3><p>Let the person you trust type it. Only that code turns kosher mode off.</p></div>
-      <div class="card step reveal"><h3>Tap <span class="he">כשר</span></h3><p>In the app or in Control Center. A Kosher Focus can switch the wallpaper and Home Screen with it.</p></div>
+    <div class="steps" data-stagger>
+      <div class="tile"><h3>Allow Screen Time</h3><p>Once, with Face ID. For a child's iPhone in Family Sharing, the parent approves with their own Apple Account.</p></div>
+      <div class="tile"><h3>Keep &amp; hide</h3><p>Choose the apps you keep, and up to 50 apps that disappear from the Home Screen. Everything else shows the kosher screen.</p></div>
+      <div class="tile"><h3>Choose a code</h3><p>Let the person you trust type it. Only that code turns kosher mode off.</p></div>
+      <div class="tile"><h3>Tap <span class="he">כשר</span></h3><p>In the app or in Control Center. A Kosher Focus can switch the wallpaper and Home Screen with it.</p></div>
     </div>
   </div>
 </section>
 
 <section id="privacy">
-  <div class="wrap privacy">
-    <div class="head reveal">
-      <div class="kicker">Privacy &amp; support</div>
-      <h2>Nothing leaves your phone</h2>
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="eyebrow rv">Privacy &amp; support</span>
+      <h2 class="title rv" style="--i:1">Nothing leaves your phone.</h2>
     </div>
-    <div class="card reveal">
-      <p>Kosher Switch for iPhone collects no data. There are no accounts, no analytics and no ads.</p>
+    <div class="tile privacy rv" style="max-width:820px;margin:0 auto">
+      <p style="color:var(--ink)">Kosher Switch for iPhone collects no data. There are no accounts, no analytics and no ads.</p>
       <ul>
         <li><b>Screen Time:</b> the apps you choose are stored by Apple as private tokens; Kosher Switch can't even see their names.</li>
         <li><b>Location</b> is used only on the phone, to calculate zmanim.</li>
         <li><b>Contacts</b> are read only when you ask the assistant to call or message someone.</li>
         <li><b>The assistant</b> uses Apple's on-device model; your questions never leave the phone.</li>
       </ul>
-      <p>Questions or problems? Open an issue on <a href="https://github.com/itai2008elishakov-rgb/kosher-switch/issues" style="color:var(--gold)">GitHub</a>.</p>
+      <p>Questions or problems? Email <a href="mailto:kosherswitch@outlook.com" style="color:var(--gold-2)">kosherswitch@outlook.com</a> or open an issue on <a href="https://github.com/itai2008elishakov-rgb/kosher-switch/issues" style="color:var(--gold-2)">GitHub</a>.</p>
       <p style="font-size:.9rem">Kosher Switch is not a kashrut certification. Parents remain responsible for how a phone is used.</p>
     </div>
   </div>
 </section>
 
-<div class="final">
+<section class="final">
   <div class="wrap">
-    <img class="seal" src="../img/seal.png" alt="The Kosher Switch seal">
-    <h2 class="reveal">Ready when you are.</h2>
-    <p class="lead reveal d1" style="margin:0 auto 26px">Apple has approved Kosher Switch's Screen Time permission, and the app is now in App Review. It will be free on the App Store.</p>
-    <div class="cta reveal d2" style="justify-content:center"><a class="btn gold" href="#get">Get it</a><a class="btn ghost" href="#screens">See the screens</a></div>
+    <img class="seal rv scale" src="../img/seal.png" alt="The Kosher Switch seal">
+    <h2 class="title rv">Ready when you are.</h2>
+    <p class="intro rv" style="--i:1;margin-inline:auto">Apple has approved Kosher Switch's Screen Time permission, and the app is now in App Review. It will be free on the App Store.</p>
+    <div class="ctas rv" style="--i:2;justify-content:center"><a class="btn gold" href="#get">Get it</a><a class="btn glass" href="#screens">See the screens</a></div>
   </div>
-</div>
+</section>
 
-<footer>
+<footer class="foot">
   <div class="wrap">
-    Prayer texts from <a href="https://www.sefaria.org">Sefaria</a> (including the Metsudah Siddur, CC-BY). Zmanim by KosherJava and KosherSwift (LGPL).
-    On-device AI: Apple Intelligence.<br>
-    Kosher Switch is not a kashrut certification. Parents remain responsible for how a phone is used.
-      <br>Questions, schools and organizations: <a href="mailto:kosherswitch@outlook.com">kosherswitch@outlook.com</a>
+    <div class="cols">
+      <div><a class="brand" href="../"><img src="../img/seal.png" alt="">Kosher Switch</a><p style="margin:0;max-width:30ch">A kosher phone, without a second phone. Made with care, in Hebrew and English.</p></div>
+      <div><h4>Get it</h4><a href="../android/">Android</a><a href="../iphone/">iPhone</a><a href="../schools/">Schools</a></div>
+      <div><h4>Help</h4><a href="../#faq">Questions</a><a href="../android/#setup">Android setup</a><a href="../iphone/#privacy">Privacy</a></div>
+      <div><h4>Contact</h4><a href="mailto:kosherswitch@outlook.com">kosherswitch@outlook.com</a><a href="https://github.com/itai2008elishakov-rgb/kosher-switch">GitHub</a></div>
+    </div>
+    <div class="legal">Prayer texts from <a href="https://www.sefaria.org">Sefaria</a> (including the Metsudah Siddur, CC-BY). Zmanim by KosherJava and KosherSwift (LGPL). On-device AI: Apple Intelligence.<br>Kosher Switch is not a kashrut certification. Parents remain responsible for how a phone is used.</div>
   </div>
 </footer>
 
-<script>
-  const nav = document.getElementById("nav");
-  const onScroll = () => nav.classList.toggle("scrolled", scrollY > 20);
-  addEventListener("scroll", onScroll, { passive: true }); onScroll();
-  const io = new IntersectionObserver(entries => entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-  }), { threshold: 0.15 });
-  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
-</script>
-<script>
-  const pad = n => String(n).padStart(2, "0");
-  const tick = () => {
-    const d = new Date(), t = pad(d.getHours()) + ":" + pad(d.getMinutes());
-    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-    set("itm", t); set("ist", d.getHours() + ":" + pad(d.getMinutes()));
-    set("igd", d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }));
-    try { set("ihd", d.toLocaleDateString("he-IL-u-ca-hebrew", { day: "numeric", month: "long", year: "numeric" })); } catch (e) {}
-  };
-  tick(); setInterval(tick, 15000);
-</script>
-<script src="../site.js"></script>
+<script src="../site.js?v=2"></script>
 </body>
 </html>

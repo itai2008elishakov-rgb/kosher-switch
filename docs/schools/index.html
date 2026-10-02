@@ -16,175 +16,88 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="../img/seal.png">
 <link rel="apple-touch-icon" href="../img/icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="../site.css">
-<style>
-  /* ---------- schools: same night-blue site, its own gold-and-emerald accent ---------- */
-  :root { --em: #3fd39a; }
-  .tagline { display: inline-flex; align-items: center; gap: 10px; padding: 7px 16px; border-radius: 999px; font-size: .9rem; font-weight: 700;
-    background: rgba(63,211,154,.10); border: 1px solid rgba(63,211,154,.4); color: #bff3dc; }
-  .tagline i { width: 8px; height: 8px; border-radius: 50%; background: var(--em); font-style: normal; }
-
-  .s-hero { text-align: center; padding: 150px 0 40px; }
-  .s-hero h1 { font-size: clamp(2.8rem, 8vw, 5.6rem); max-width: 13ch; margin: 22px auto 16px; }
-  .s-hero .lead { margin: 0 auto 30px; max-width: 58ch; }
-
-  /* three devices, no heavy effects */
-  .lineup { display: flex; justify-content: center; align-items: flex-end; gap: clamp(14px, 4vw, 44px); margin: 56px auto 0; }
-  .lineup figure { margin: 0; text-align: center; }
-  .lineup figcaption { margin-top: 14px; font-weight: 700; font-size: .92rem; }
-  .dv { position: relative; background: #0a0d14; box-shadow: 0 30px 60px rgba(0,0,0,.5), inset 0 0 0 2px #262c38; }
-  .dv .scr { position: relative; overflow: hidden; height: 100%; background: #000; }
-  .dv .scr img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-  .dv.pa { width: clamp(96px, 17vw, 180px); aspect-ratio: 9/20; border-radius: 28px; padding: 7px; }
-  .dv.pa .scr { border-radius: 22px; }
-  .dv.pa .scr::before { content: ""; position: absolute; z-index: 2; top: 7px; left: 50%; translate: -50% 0; width: 8px; height: 8px; border-radius: 50%; background: #05070b; }
-  .dv.ip { width: clamp(94px, 16.5vw, 176px); aspect-ratio: 1206/2622; border-radius: 30px; padding: 6px; background: linear-gradient(145deg, #4a4f58, #1b1e24 40%, #2c3038 70%, #5b606a); }
-  .dv.ip .scr { border-radius: 25px; }
-  .dv.ip .scr::before { content: ""; position: absolute; z-index: 2; top: 2.4%; left: 50%; translate: -50% 0; width: 30%; height: 3.4%; border-radius: 99px; background: #000; }
-  .dv.tab { width: clamp(190px, 38vw, 430px); aspect-ratio: 4/3; border-radius: 24px; padding: 11px; }
-  .dv.tab .scr { border-radius: 13px; }
-  .lock { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px; text-align: center;
-    background: radial-gradient(circle at 85% 10%, rgba(224,182,74,.4), transparent 45%), radial-gradient(circle at 10% 90%, rgba(63,211,154,.22), transparent 50%), linear-gradient(160deg, #0b2a5b, #1e4e9c); }
-  .lock .t { font-size: clamp(1.8rem, 6vw, 3.4rem); font-weight: 200; line-height: 1; }
-  .lock img { width: clamp(30px, 5vw, 46px); }
-  .lock .own { font-size: clamp(.55rem, 1.2vw, .78rem); padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); }
-
-  /* big statements */
-  .zeros { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .zero { padding: 26px 22px; border-radius: 24px; background: rgba(255,255,255,.04); border: 1px solid var(--edge); }
-  .zero b { display: block; font-size: clamp(2.6rem, 5vw, 3.6rem); line-height: 1; letter-spacing: -.03em; color: var(--gold-2); }
-  .zero span { display: block; margin-top: 8px; font-weight: 700; }
-  .zero small { display: block; color: var(--sub); font-size: .9rem; margin-top: 4px; }
-  @media (max-width: 860px) { .zeros { grid-template-columns: 1fr 1fr; } }
-
-  /* the statement band */
-  .band { text-align: center; padding: 70px 30px; border-radius: 34px;
-    background: linear-gradient(140deg, rgba(224,182,74,.16), rgba(11,42,91,.6) 55%, rgba(63,211,154,.10)); border: 1px solid rgba(224,182,74,.4); }
-  .band h2 { font-size: clamp(2.2rem, 5.4vw, 3.8rem); line-height: 1.05; margin: 10px auto 16px; max-width: 18ch; }
-  .band h2 em { font-style: normal; color: var(--gold-2); }
-  .band p { color: var(--sub); font-size: 1.15rem; max-width: 640px; margin: 0 auto; }
-
-  /* reasons */
-  .reasons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  @media (max-width: 900px) { .reasons { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 560px) { .reasons { grid-template-columns: 1fr; } }
-  .reason { padding: 26px; border-radius: 24px; background: rgba(255,255,255,.04); border: 1px solid var(--edge); transition: border-color .3s, transform .3s var(--ease); }
-  .reason:hover { border-color: rgba(224,182,74,.5); transform: translateY(-4px); }
-  .reason .n { color: var(--gold); font-weight: 800; font-size: .85rem; letter-spacing: .1em; }
-  .reason h3 { margin: 6px 0 8px; font-size: 1.25rem; }
-  .reason p { margin: 0; color: var(--sub); }
-
-  /* comparison */
-  .vs-wrap { overflow-x: auto; border-radius: 28px; border: 1px solid var(--edge); background: rgba(255,255,255,.03); }
-  .vs { width: 100%; min-width: 640px; border-collapse: collapse; }
-  .vs th, .vs td { padding: 16px 18px; text-align: center; border-bottom: 1px solid var(--edge); font-size: .98rem; }
-  .vs tr:last-child td { border-bottom: 0; }
-  .vs th { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--sub); font-weight: 700; vertical-align: bottom; }
-  .vs td:first-child, .vs th:first-child { text-align: left; color: var(--ink); font-weight: 600; }
-  .vs .us { background: linear-gradient(180deg, rgba(224,182,74,.18), rgba(224,182,74,.08)); }
-  .vs th.us { color: var(--gold-2); font-size: .9rem; }
-  .vs th.us img { width: 30px; margin: 0 auto 6px; }
-  .yes { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font-weight: 800; color: #071022; background: var(--em); }
-  .us .yes { background: linear-gradient(180deg, var(--gold-2), var(--gold)); }
-  .no { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font-weight: 800; color: #ff8f8f; background: rgba(230,80,80,.14); border: 1px solid rgba(230,80,80,.35); }
-  .part { color: var(--sub); font-size: .85rem; }
-  .vs-note { color: var(--sub); font-size: .85rem; text-align: center; margin-top: 14px; }
-
-  /* school edition */
-  .edition { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 760px) { .edition { grid-template-columns: 1fr; } }
-  .ed { display: flex; gap: 16px; align-items: flex-start; padding: 22px; border-radius: 22px; background: rgba(255,255,255,.04); border: 1px solid var(--edge); }
-  .ed .ic { flex: none; width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 22px; background: rgba(224,182,74,.14); }
-  .ed h3 { margin: 0 0 4px; font-size: 1.08rem; }
-  .ed p { margin: 0; color: var(--sub); font-size: .95rem; }
-  .t-now, .t-soon { display: inline-block; margin-left: 8px; vertical-align: middle; font-size: .66rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; }
-  .t-now { color: #071022; background: var(--em); }
-  .t-soon { color: #cfe0ff; background: rgba(91,143,230,.2); border: 1px solid rgba(91,143,230,.45); }
-
-  /* final call */
-  .s-final { text-align: center; padding: 70px 30px; border-radius: 34px; border: 1px solid rgba(224,182,74,.45);
-    background: radial-gradient(700px 300px at 50% 0%, rgba(224,182,74,.22), transparent 70%), rgba(11,42,91,.45); }
-  .s-final img { width: 64px; margin: 0 auto 14px; }
-  .s-final h2 { font-size: clamp(2.2rem, 5vw, 3.4rem); }
-  .s-final p { color: var(--sub); max-width: 600px; margin: 0 auto 26px; font-size: 1.1rem; }
-  .soon-btn { cursor: default; }
-</style>
+<link rel="stylesheet" href="../site.css?v=2">
 </head>
 <body>
-<nav id="nav">
-  <div class="wrap">
+<nav class="gnav" aria-label="Main">
+  <div class="wide">
     <a class="brand" href="../"><img src="../img/seal.png" alt="">Kosher Switch</a>
-    <div class="links"><a href="../">Home</a><a href="../android/">Android</a><a href="../iphone/">iPhone</a><a href="./" class="nav-on">Schools</a><a href="#faq">FAQ</a></div>
-    <a class="btn gold small" href="#join">Talk to us</a>
+    <div class="links"><a href="../">Home</a><a href="../android/">Android</a><a href="../iphone/">iPhone</a><a href="../schools/" class="on">Schools</a><a href="../#contact" >Contact</a></div>
+    <span class="nav-cta"></span>
+    <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
   </div>
 </nav>
+<div class="sheet" aria-label="Menu"><a href="../">Home<small>The idea</small></a><a href="../android/">Android<small>Free download</small></a><a href="../iphone/">iPhone<small>In App Review</small></a><a href="../schools/">Schools<small>Coming soon</small></a><a href="../#contact">Contact<small>kosherswitch@outlook.com</small></a></div>
 
-<header class="s-hero">
+<div class="subnav"><div class="wide">
+  <span class="name">Kosher Switch for Schools</span>
+  <div class="right"><a href="#why">Why</a><a href="#compare">Compare</a><a href="#how">How it works</a><a href="#faq">FAQ</a><a class="btn gold sm" href="mailto:kosherswitch@outlook.com?subject=Kosher%20Switch%20for%20our%20school">Talk to us</a></div>
+</div></div>
+
+<header class="page-top center">
   <div class="wrap">
-    <span class="tagline reveal"><i></i>Kosher Switch for Schools · Coming soon</span>
-    <h1 class="reveal d1">Every student.<br>Every device.<br><span class="shine">Kosher.</span></h1>
-    <p class="he-sub reveal d1" lang="he" dir="rtl">מכשיר כשר לכל תלמיד · מהטלפון ועד הטאבלט</p>
-    <p class="lead reveal d2">Filters try to catch what's bad. Kosher Switch only lets in what's good. The phones and tablets your students already own become kosher devices, the school decides what's allowed, and the code stays at home with the parents.</p>
-    <div class="cta reveal d3" style="justify-content:center">
-      <a class="btn gold" href="#compare">See why it wins</a>
-      <a class="btn ghost" href="#how">How it works</a>
+    <span class="pill em rv"><span class="dot"></span>Kosher Switch for Schools · Coming soon</span>
+    <h1 class="display rv" style="--i:1;margin-top:26px">Every student.<br>Every device.<br><span class="gold-text">Kosher.</span></h1>
+    <p class="he-line rv" style="--i:2" lang="he" dir="rtl">מכשיר כשר לכל תלמיד · מהטלפון ועד הטאבלט</p>
+    <p class="intro rv" style="--i:2;margin-top:18px">Filters try to catch what's bad. Kosher Switch only lets in what's good. The phones and tablets your students already own become kosher devices, the school decides what's allowed, and <b>the code stays at home with the parents</b>.</p>
+    <div class="ctas rv" style="--i:3">
+      <a class="btn gold" href="mailto:kosherswitch@outlook.com?subject=Kosher%20Switch%20for%20our%20school">Talk to us</a>
+      <a class="more" href="#compare">See why it wins</a>
     </div>
-    <div class="lineup reveal d2">
-      <figure><div class="dv pa"><div class="scr"><img src="../img/home.jpg" alt="The kosher home screen on an Android phone"></div></div><figcaption>Android phones</figcaption></figure>
-      <figure><div class="dv tab"><div class="scr"><div class="lock"><div class="t">8:15</div><img src="../img/seal.png" alt=""><div class="own">This device belongs to Your School</div></div></div></div><figcaption>Android tablets</figcaption></figure>
-      <figure><div class="dv ip"><div class="scr"><img src="../img/ios-home.jpg" alt="The kosher Home Screen on iPhone"></div></div><figcaption>iPhone</figcaption></figure>
-    </div>
+  </div>
+  <div class="stage rv scale" style="--i:2;margin-top:70px;gap:clamp(14px,4vw,44px);align-items:flex-end">
+    <div class="glow"></div>
+    <div class="dev android" style="--w:clamp(96px,16vw,180px)"><div class="scr"><img src="../img/home.jpg" alt="The kosher home screen on an Android phone"></div></div>
+    <div class="dev tablet" style="--w:clamp(200px,40vw,460px)"><div class="scr" style="display:grid;place-content:center;justify-items:center;gap:10px;background:radial-gradient(circle at 85% 10%,rgba(224,182,74,.4),transparent 45%),radial-gradient(circle at 10% 90%,rgba(63,211,154,.2),transparent 50%),linear-gradient(160deg,#0b2a5b,#1e4e9c)">
+      <span style="font-size:clamp(1.8rem,6vw,3.6rem);font-weight:200;line-height:1">8:15</span><img src="../img/seal.png" alt="" style="position:static;width:clamp(30px,5vw,50px);height:auto"><span style="font-size:clamp(.55rem,1.2vw,.8rem);padding:4px 12px;border-radius:99px;background:rgba(255,255,255,.12)">This device belongs to Your School</span>
+    </div></div>
+    <div class="dev iphone" style="--w:clamp(94px,15.5vw,175px)"><div class="island"></div><div class="scr"><img src="../img/hq/ios-home.jpg" alt="The kosher Home Screen on iPhone"></div></div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <div class="zeros">
-      <div class="zero reveal"><b>0</b><span>Browsers</span><small>No open internet. Not even a "filtered" one.</small></div>
-      <div class="zero reveal d1"><b>0</b><span>App stores</span><small>Nothing new gets installed without the code.</small></div>
-      <div class="zero reveal d2"><b>0</b><span>Ways around it</span><small>No settings, no restart trick. Only the code.</small></div>
-      <div class="zero reveal d3"><b>1</b><span>Code, kept at home</span><small>The parents hold it. The student never does.</small></div>
+    <div class="stats" data-stagger>
+      <div class="stat"><b>0</b><span>Browsers</span><small>No open internet. Not even a “filtered” one.</small></div>
+      <div class="stat"><b>0</b><span>App stores</span><small>Nothing new gets installed without the code.</small></div>
+      <div class="stat"><b>0</b><span>Ways around it</span><small>No settings, no restart trick. Only the code.</small></div>
+      <div class="stat"><b>1</b><span>Code, kept at home</span><small>The parents hold it. The student never does.</small></div>
     </div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <div class="band reveal">
-      <div class="kicker" style="color:var(--gold-2)">Our promise</div>
-      <h2>Nothing on the device <em>you don't know about.</em></h2>
-      <p>Not a list of blocked websites to keep up with. Only the apps your school approved exist on the device. Everything else is gone.</p>
-    </div>
+    <p class="words" data-words data-gold="know|about">Nothing on the device you don't know about. Not a list of blocked websites to keep up with. Only the apps your school approved exist on the device. Everything else is gone.</p>
   </div>
 </section>
 
 <section id="why">
   <div class="wrap">
-    <div class="head reveal">
-      <div class="kicker">Why schools choose it</div>
-      <h2>A phone policy that finally works.</h2>
-      <p>Today a phone policy is a form parents sign. With Kosher Switch, it's the device itself.</p>
+    <div class="sec-head">
+      <span class="eyebrow rv">Why schools choose it</span>
+      <h2 class="title rv" style="--i:1">A phone policy<br>that finally works.</h2>
+      <p class="intro rv" style="--i:2">Today a phone policy is a form parents sign. With Kosher Switch, it's the device itself.</p>
     </div>
-    <div class="reasons">
-      <div class="reason reveal"><div class="n">01</div><h3>The school decides</h3><p>Calls, messages, maps, a siddur: the school chooses the apps. Every student gets the same rules.</p></div>
-      <div class="reason reveal d1"><div class="n">02</div><h3>No new device to buy</h3><p>No second phone, no special tablet. The device the student already has becomes the kosher one.</p></div>
-      <div class="reason reveal d2"><div class="n">03</div><h3>Seen in one second</h3><p>The kosher home screen and the seal make a kosher device easy to recognize for any staff member.</p></div>
-      <div class="reason reveal"><div class="n">04</div><h3>Can't be talked around</h3><p>Another browser, a VPN, a settings trick: none of them work. The lock is on the whole device.</p></div>
-      <div class="reason reveal d1"><div class="n">05</div><h3>Made for a Jewish school</h3><p>A siddur and tehillim, a luach and zmanim are built in, in Hebrew and English.</p></div>
-      <div class="reason reveal d2"><div class="n">06</div><h3>Private by design</h3><p>No account, no tracking. Nothing about the student is sent anywhere.</p></div>
+    <div class="bento" data-stagger>
+      <div class="tile gold s4"><div class="icon">📋</div><h3>The school decides</h3><p>Calls, messages, maps, a siddur: the school chooses the apps. Every student gets the same rules, and nothing else.</p></div>
+      <div class="tile"><div class="icon">💸</div><h3>No new device to buy</h3><p>The device the student already has becomes the kosher one.</p></div>
+      <div class="tile"><div class="icon">👀</div><h3>Seen in one second</h3><p>The kosher home screen and the seal make a kosher device easy to recognize.</p></div>
+      <div class="tile"><div class="icon">🔒</div><h3>Can't be talked around</h3><p>Another browser, a VPN, a settings trick: none of them work.</p></div>
+      <div class="tile"><div class="icon">📖</div><h3>Made for a Jewish school</h3><p>A siddur, tehillim, a luach and zmanim, in Hebrew and English.</p></div>
+      <div class="tile blue s6"><div class="icon">🛡️</div><h3>Private by design</h3><p>No account and no tracking. Nothing about the student is sent anywhere: Kosher Switch only decides what's on the device.</p></div>
     </div>
   </div>
 </section>
 
 <section id="compare">
   <div class="wrap">
-    <div class="head reveal">
-      <div class="kicker">Compare</div>
-      <h2>The others leave a door open.</h2>
-      <p>Every other option makes the school give something up. Kosher Switch doesn't.</p>
+    <div class="sec-head center">
+      <span class="eyebrow rv">Compare</span>
+      <h2 class="title rv" style="--i:1">The others leave<br>a door open.</h2>
+      <p class="intro rv" style="--i:2">Every other option makes the school give something up. Kosher Switch doesn't.</p>
     </div>
-    <div class="vs-wrap reveal">
+    <div class="vs-wrap rv">
       <table class="vs">
         <tr><th></th><th class="us"><img src="../img/seal.png" alt="">Kosher Switch</th><th>Filter apps</th><th>Kosher flip phones</th><th>Wi-Fi &amp; DNS filters</th></tr>
         <tr><td>Works on the student's own device</td><td class="us"><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td></tr>
@@ -197,81 +110,79 @@
         <tr><td>No second device to buy</td><td class="us"><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td></tr>
       </table>
     </div>
-    <p class="vs-note">Based on how each type of product usually works. Individual products may differ.</p>
+    <p class="fine">Based on how each type of product usually works. Individual products may differ.</p>
   </div>
 </section>
 
 <section id="how">
   <div class="wrap">
-    <div class="head reveal">
-      <div class="kicker">How it works</div>
-      <h2>Ready before the first bell.</h2>
+    <div class="sec-head center">
+      <span class="eyebrow rv">How it works</span>
+      <h2 class="title rv" style="--i:1">Ready before the first bell.</h2>
     </div>
-    <div class="steps">
-      <div class="card step reveal"><h3>The school chooses</h3><p>Pick the apps students may use, and share the list with parents.</p></div>
-      <div class="card step reveal d1"><h3>Parents install</h3><p>Kosher Switch goes on the student's phone or tablet, in a few minutes.</p></div>
-      <div class="card step reveal d2"><h3>Parents set the code</h3><p>They pick the school's apps and a code the student never sees.</p></div>
-      <div class="card step reveal d3"><h3>One tap: kosher</h3><p>The device turns kosher and stays that way, even after a restart.</p></div>
+    <div class="steps" data-stagger>
+      <div class="tile"><h3>The school chooses</h3><p>Pick the apps students may use, and share the list with parents.</p></div>
+      <div class="tile"><h3>Parents install</h3><p>Kosher Switch goes on the student's phone or tablet, in a few minutes.</p></div>
+      <div class="tile"><h3>Parents set the code</h3><p>They pick the school's apps and a code the student never sees.</p></div>
+      <div class="tile"><h3>One tap: kosher</h3><p>The device turns kosher and stays that way, even after a restart.</p></div>
     </div>
   </div>
 </section>
 
 <section id="edition">
   <div class="wrap">
-    <div class="head reveal">
-      <div class="kicker">The school edition</div>
-      <h2>What's here, and what's coming.</h2>
+    <div class="sec-head">
+      <span class="eyebrow rv">The school edition</span>
+      <h2 class="title rv" style="--i:1">What's here,<br>and what's coming.</h2>
     </div>
-    <div class="edition">
-      <div class="ed reveal"><div class="ic">🔑</div><div><h3>Parents hold the key<span class="t-now">Today</span></h3><p>Only the code opens the device. The student never knows it.</p></div></div>
-      <div class="ed reveal d1"><div class="ic">📖</div><div><h3>Siddur, luach and zmanim<span class="t-now">Today</span></h3><p>Built into every Kosher Switch device, in Hebrew and English.</p></div></div>
-      <div class="ed reveal"><div class="ic">🏷️</div><div><h3>Your school's name on the lock screen<span class="t-soon">Coming</span></h3><p>"This device belongs to" your school, on every student's device.</p></div></div>
-      <div class="ed reveal d1"><div class="ic">▦</div><div><h3>One school QR code<span class="t-soon">Coming</span></h3><p>Scan once, and the device gets the school's app list automatically.</p></div></div>
-      <div class="ed reveal"><div class="ic">🗓️</div><div><h3>Setup day at your school<span class="t-soon">Coming</span></h3><p>Students' devices set up together with parents and staff, in one afternoon.</p></div></div>
-      <div class="ed reveal d1"><div class="ic">👩‍🏫</div><div><h3>Staff devices<span class="t-soon">Coming</span></h3><p>Teachers set the example with the same kosher setup.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<section id="join">
-  <div class="wrap">
-    <div class="s-final reveal">
-      <img src="../img/seal.png" alt="">
-      <div class="kicker" style="color:var(--gold-2)">Coming soon</div>
-      <h2>Your school could be first.</h2>
-      <p>Kosher Switch for Schools is in the works. The first schools get special terms and a setup made together with their staff and parents. Write to us at kosherswitch@outlook.com.</p>
-      <div class="cta" style="justify-content:center">
-        <a class="btn gold" href="mailto:kosherswitch@outlook.com?subject=Kosher%20Switch%20for%20our%20school">Talk to us</a>
-        <a class="btn ghost" href="../">See Kosher Switch today</a>
-      </div>
+    <div class="bento" data-stagger>
+      <div class="tile s3"><span class="status new" style="margin:0 0 14px">Today</span><h3>🔑 Parents hold the key</h3><p>Only the code opens the device. The student never knows it.</p></div>
+      <div class="tile s3"><span class="status new" style="margin:0 0 14px">Today</span><h3>📖 Siddur, luach and zmanim</h3><p>Built into every Kosher Switch device, in Hebrew and English.</p></div>
+      <div class="tile"><span class="status soon" style="margin:0 0 14px">Coming</span><h3>🏷️ Your school's name</h3><p>"This device belongs to" your school, on every lock screen.</p></div>
+      <div class="tile"><span class="status soon" style="margin:0 0 14px">Coming</span><h3>▦ One school QR code</h3><p>Scan once, and the device gets the school's app list.</p></div>
+      <div class="tile"><span class="status soon" style="margin:0 0 14px">Coming</span><h3>🗓️ Setup day</h3><p>Devices set up together with parents and staff, in one afternoon.</p></div>
     </div>
   </div>
 </section>
 
 <section id="faq">
   <div class="wrap">
-    <div class="head reveal">
-      <div class="kicker">Questions</div>
-      <h2>For school staff</h2>
+    <div class="sec-head center">
+      <span class="eyebrow rv">Questions</span>
+      <h2 class="title rv" style="--i:1">For school staff.</h2>
     </div>
-    <div class="faq">
-      <details class="reveal"><summary>Which devices does it work on?</summary><p>Android phones and tablets with Android 10 or newer (Samsung, Pixel, Xiaomi and more) and iPhone. iPad is coming later.</p></details>
-      <details class="reveal"><summary>Do families need to buy a new device?</summary><p>No. Kosher Switch turns the phone or tablet the student already has into a kosher device.</p></details>
-      <details class="reveal"><summary>Who holds the code?</summary><p>The parents. The student never knows it, so only a parent can open the device again.</p></details>
-      <details class="reveal"><summary>Does the school see students' messages or photos?</summary><p>No. Kosher Switch sends nothing about the student anywhere. It only decides what's on the device.</p></details>
-      <details class="reveal"><summary>Is it a kashrut certification?</summary><p>No. Kosher Switch is a tool. Which apps are allowed is up to the school and its rabbonim.</p></details>
-      <details class="reveal" lang="he" dir="rtl"><summary>מה זה Kosher Switch לבתי ספר?</summary><p>Kosher Switch הופך את הטלפון או הטאבלט שכבר יש לתלמיד למכשיר כשר. בית הספר קובע אילו אפליקציות מותרות, ההורים מחזיקים את הקוד, ואין על המכשיר שום דבר שבית הספר לא יודע עליו. כולל סידור, תהילים ולוח עם זמני היום.</p></details>
+    <div class="faq rv">
+      <details><summary>Which devices does it work on?</summary><div class="ans"><p>Android phones and tablets with Android 10 or newer (Samsung, Pixel, Xiaomi and more) and iPhone. iPad is coming later.</p></div></details>
+      <details><summary>Do families need to buy a new device?</summary><div class="ans"><p>No. Kosher Switch turns the phone or tablet the student already has into a kosher device.</p></div></details>
+      <details><summary>Who holds the code?</summary><div class="ans"><p>The parents. The student never knows it, so only a parent can open the device again.</p></div></details>
+      <details><summary>Does the school see students' messages or photos?</summary><div class="ans"><p>No. Kosher Switch sends nothing about the student anywhere. It only decides what's on the device.</p></div></details>
+      <details><summary>Is it a kashrut certification?</summary><div class="ans"><p>No. Kosher Switch is a tool. Which apps are allowed is up to the school and its rabbonim.</p></div></details>
+      <details lang="he" dir="rtl"><summary>מה זה Kosher Switch לבתי ספר?</summary><div class="ans"><p>Kosher Switch הופך את הטלפון או הטאבלט שכבר יש לתלמיד למכשיר כשר. בית הספר קובע אילו אפליקציות מותרות, ההורים מחזיקים את הקוד, ואין על המכשיר שום דבר שבית הספר לא יודע עליו. כולל סידור, תהילים ולוח עם זמני היום.</p></div></details>
     </div>
   </div>
 </section>
 
-<footer>
+<section class="final" id="join">
   <div class="wrap">
-    Kosher Switch is not a kashrut certification. Which apps are allowed is up to each school and its rabbonim.<br>
-    <a href="../">Home</a> · <a href="../android/">Android</a> · <a href="../iphone/">iPhone</a>
-      <br>Questions, schools and organizations: <a href="mailto:kosherswitch@outlook.com">kosherswitch@outlook.com</a>
+    <img class="seal rv scale" src="../img/seal.png" alt="The Kosher Switch seal">
+    <h2 class="title rv">Your school could be first.</h2>
+    <p class="intro rv" style="--i:1;margin-inline:auto">Kosher Switch for Schools is in the works. The first schools get special terms and a setup made together with their staff and parents.</p>
+    <a class="mail rv" style="--i:2" href="mailto:kosherswitch@outlook.com?subject=Kosher%20Switch%20for%20our%20school">✉️ kosherswitch@outlook.com</a>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div><a class="brand" href="../"><img src="../img/seal.png" alt="">Kosher Switch</a><p style="margin:0;max-width:30ch">A kosher phone, without a second phone. Made with care, in Hebrew and English.</p></div>
+      <div><h4>Get it</h4><a href="../android/">Android</a><a href="../iphone/">iPhone</a><a href="../schools/">Schools</a></div>
+      <div><h4>Help</h4><a href="../#faq">Questions</a><a href="../android/#setup">Android setup</a><a href="../iphone/#privacy">Privacy</a></div>
+      <div><h4>Contact</h4><a href="mailto:kosherswitch@outlook.com">kosherswitch@outlook.com</a><a href="https://github.com/itai2008elishakov-rgb/kosher-switch">GitHub</a></div>
+    </div>
+    <div class="legal">Which apps are allowed is up to each school and its rabbonim.<br>Kosher Switch is not a kashrut certification. Parents remain responsible for how a phone is used.</div>
   </div>
 </footer>
-<script src="../site.js"></script>
+
+<script src="../site.js?v=2"></script>
 </body>
 </html>
