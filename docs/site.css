@@ -12,7 +12,7 @@
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-html, body { overflow-x: clip; }
+/* sideways overflow is clipped per section below, never on html/body (Safari then lags fixed bars) */
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font: 17px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Noto Sans Hebrew", sans-serif;
@@ -935,3 +935,7 @@ html { scroll-behavior: auto; }
 /* No rubber-band bounce at the top or bottom of the page: in Safari the bounce also drags the fixed menu bar along. */
 html, body { overscroll-behavior-y: none; }
 .sheet, .fly, .gallery { overscroll-behavior: contain; }
+
+/* Clip sideways overflow inside each top-level block instead of on the page. */
+body > header, body > section, body > main, body > footer, body > div:not(.sheet):not(.dim):not(.film-modal) { overflow-x: clip; }
+.progress { display: none !important; }

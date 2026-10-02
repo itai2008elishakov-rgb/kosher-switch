@@ -107,10 +107,6 @@
     t.style.setProperty("--mx", e.clientX - r.left + "px"); t.style.setProperty("--my", e.clientY - r.top + "px");
   }, { passive: true });
 
-  // Scroll progress line.
-  const bar = document.createElement("div");
-  bar.className = "progress";
-  document.body.appendChild(bar);
 
   // Reveal on scroll; children of [data-stagger] come in one after another.
   document.querySelectorAll("[data-stagger]").forEach(g => [...g.children].forEach((c, i) => {
@@ -171,7 +167,6 @@
   const frame = () => {
     const vh = innerHeight;
     const max = root.scrollHeight - vh;
-    bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
     const sc = scrollY > 8;
     if (nav && nav._sc !== sc) { nav._sc = sc; nav.classList.toggle("scrolled", sc); }
     if (still) return;
