@@ -947,3 +947,14 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 #page > header, #page > section, #page > main, #page > footer, #page > div { overflow-x: clip; }
 /* galleries only catch sideways scrolling, never up and down */
 .gallery { overscroll-behavior-x: contain !important; overscroll-behavior-y: auto !important; scroll-snap-type: x proximity; }
+
+/* Store buttons: the official App Store badge, and a matching Android download button */
+.stores { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.stores a { display: inline-flex; align-items: center; height: 44px; text-decoration: none; transition: transform .2s; }
+.stores a:hover { transform: translateY(-2px); }
+.stores img { height: 44px; width: auto; display: block; }
+.stores .apk { gap: 9px; padding: 0 16px 0 12px; border-radius: 9px; background: #000; color: #fff; border: 1px solid #a6a6a6; font: 600 15px/1.05 -apple-system, BlinkMacSystemFont, sans-serif; }
+.stores .apk svg { width: 26px; height: 26px; }
+.stores .apk small { display: block; font-size: 10px; font-weight: 500; opacity: .85; }
+.foot .stores { padding: 14px 0 16px; }
+.foot .stores b { color: var(--ink); font-size: .9rem; margin-inline-end: 6px; }
