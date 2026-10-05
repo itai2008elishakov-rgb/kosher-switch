@@ -135,21 +135,54 @@ class ReaderActivity : BaseActivity() {
             val item = items[i]
             val view = recycled as? TextView ?: if (item.heading) headingView() else paragraphView()
             if (item.heading) {
-                view.textSize = size * 0.72f
-                view.text = item.text
+                // The part's name in gold, centred; its group (e.g. "עמידה") small above it.
+                val parts = item.text.split(" · ")
+                val sb = android.text.SpannableStringBuilder()
+                if (parts.size > 1) {
+                    sb.append(parts.dropLast(1).joinToString(" · "))
+                    sb.setSpan(android.text.style.RelativeSizeSpan(0.62f), 0, sb.length, 0)
+                    sb.setSpan(android.text.style.ForegroundColorSpan(Theme.SUB), 0, sb.length, 0)
+                    sb.append("\n")
+                }
+                val start = sb.length
+                sb.append(parts.last())
+                sb.setSpan(android.text.style.ForegroundColorSpan(if (Theme.dark) Theme.GOLD else Theme.GOLD_DARK), start, sb.length, 0)
+                view.textSize = size * 0.85f
+                view.text = sb
             } else {
-                view.textSize = size
-                view.text = Html.fromHtml(item.text, Html.FROM_HTML_MODE_LEGACY)
+                val instruction = Texts.isInstruction(item.text)
+                view.textSize = if (instruction) size * 0.66f else size
+                view.setLineSpacing(0f, if (instruction) 1.2f else 1.5f)
+                view.setPadding(0, Theme.dp(view.context, if (instruction) 12 else 7), 0, Theme.dp(view.context, 7))
+                view.typeface = if (instruction) Theme.REGULAR else android.graphics.Typeface.SERIF
+                view.text = styled(item.text, instruction)
             }
             return view
         }
     }
 
+    /** Prayer text in the reading colour; <small> instructions smaller and gold-toned, like a printed siddur. */
+    private fun styled(html: String, instruction: Boolean): CharSequence {
+        val rubric = if (Theme.dark) 0xFFE9CF8A.toInt() else Theme.GOLD_DARK
+        val sp = android.text.SpannableStringBuilder(Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY))
+        if (instruction) {
+            sp.setSpan(android.text.style.ForegroundColorSpan(rubric), 0, sp.length, 0)
+        } else {
+            sp.getSpans(0, sp.length, android.text.style.RelativeSizeSpan::class.java).forEach { r ->
+                val a = sp.getSpanStart(r); val b = sp.getSpanEnd(r)
+                sp.removeSpan(r)
+                sp.setSpan(android.text.style.RelativeSizeSpan(0.68f), a, b, 0)
+                sp.setSpan(android.text.style.ForegroundColorSpan(rubric), a, b, 0)
+            }
+        }
+        return sp
+    }
+
     private fun headingView() = TextView(this).apply {
-        setTextColor(Theme.GOLD_DARK)
-        typeface = Theme.MEDIUM
+        typeface = android.graphics.Typeface.create(android.graphics.Typeface.SERIF, android.graphics.Typeface.BOLD)
+        gravity = Gravity.CENTER
         textDirection = View.TEXT_DIRECTION_RTL
-        setPadding(0, Theme.dp(context, 22), 0, Theme.dp(context, 4))
+        setPadding(0, Theme.dp(context, 30), 0, Theme.dp(context, 10))
     }
 
     private fun paragraphView() = TextView(this).apply {

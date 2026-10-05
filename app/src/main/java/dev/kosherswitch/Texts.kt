@@ -57,6 +57,15 @@ object Texts {
         .replace('־', ' ')
         .replace(Regex("[֑-ׇ]"), "")
 
+    /** A paragraph that is only an instruction ("בעשי״ת:", "החזן אומר…"): marked small, or short text with no vowels. */
+    fun isInstruction(html: String): Boolean {
+        val t = html.trim()
+        if (t.startsWith("<small>") && t.endsWith("</small>") && !t.substring(7).contains("<small>")) return true
+        val p = plain(t).trim()
+        val vowels = t.any { it.code in 0x05B0..0x05C7 }
+        return !vowels && p.isNotEmpty() && p.length < 220
+    }
+
     private fun readJson(ctx: Context, asset: String) =
         JSONObject(ctx.assets.open(asset).bufferedReader().use { it.readText() })
 
