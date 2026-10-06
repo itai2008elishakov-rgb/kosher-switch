@@ -31,6 +31,7 @@ class SetupActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        if (!ModeManager.isClosed(this)) License.refresh(this)
         super.onResume()
         if (ModeManager.isClosed(this)) {
             finish()
@@ -57,6 +58,7 @@ class SetupActivity : BaseActivity() {
             addView(codeCard())
             addView(appsCard())
             addView(turnOnCard())
+            if (License.live) addView(planCard())
             addView(adviceCard())
             addView(assistantCard())
             addView(weatherCard())
@@ -344,6 +346,15 @@ class SetupActivity : BaseActivity() {
             override fun beforeTextChanged(s: CharSequence, a: Int, b: Int, c: Int) = Unit
             override fun onTextChanged(s: CharSequence, a: Int, b: Int, c: Int) = Unit
         })
+    }
+
+    /** The plan (Polar licence key): status and a way to enter or change the key. */
+    private fun planCard(): LinearLayout {
+        val he = Lang.isHebrew(this)
+        return Theme.card(this,
+            Theme.text(this, (if (he) "מסלול: " else "Plan: ") + License.status(this), 16f, Theme.INK, Theme.MEDIUM),
+            Theme.button(this, if (he) "המסלול שלכם" else "Your plan", outline = true) { startActivity(LicenseActivity.intent(this)) },
+        )
     }
 
     private fun turnOnCard(): LinearLayout {

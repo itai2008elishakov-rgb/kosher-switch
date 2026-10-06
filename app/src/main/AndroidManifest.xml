@@ -47,6 +47,9 @@
             </intent-filter>
         </activity>
 
+        <!-- Paid plan: enter the licence key -->
+        <activity android:name=".LicenseActivity" android:exported="false" />
+
         <!-- Step-by-step guide, shown on first launch -->
         <activity
             android:name=".GuideActivity"

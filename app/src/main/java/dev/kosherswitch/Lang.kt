@@ -14,6 +14,9 @@ object Lang {
 
     fun set(ctx: Context, lang: String) = prefs(ctx).edit().putString(KEY, lang).commit()
 
+    /** True when the app shows in Hebrew (chosen, or the phone's own language). */
+    fun isHebrew(ctx: Context): Boolean = Lang.wrap(ctx).resources.configuration.locales[0].language.let { it == "iw" || it == "he" }
+
     fun wrap(base: Context): Context {
         val lang = get(base)
         if (lang.isEmpty()) return base

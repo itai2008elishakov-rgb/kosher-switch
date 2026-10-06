@@ -25,6 +25,11 @@ class SwitchActivity : BaseActivity() {
         window.navigationBarColor = android.graphics.Color.TRANSPARENT
         window.setDecorFitsSystemWindows(false)
         val toClosed = intent.getBooleanExtra(EXTRA_TO_CLOSED, true)
+        // Turning kosher mode on needs a plan (turning it off never does).
+        if (toClosed && !ModeManager.isClosed(this) && !License.allowed(this)) {
+            startActivity(LicenseActivity.intent(this, thenTurnOn = true).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            finish(); return
+        }
 
         val emblem = EmblemView(this)
         val column = LinearLayout(this).apply {
