@@ -15,8 +15,8 @@ import java.time.Instant
  */
 object License {
     /** The Polar organisation. Until it's set, plans aren't live yet and kosher mode stays free. */
-    const val ORG_ID = ""
-    const val BUY_URL = "https://itai2008elishakov-rgb.github.io/kosher-switch/#pricing"
+    const val ORG_ID = "96b5e90d-ba3c-45e1-a4d9-0fa2e9d668fb"
+    const val BUY_URL = "https://buy.polar.sh/polar_cl_nYT24MJVBXUxsX2gerDccVx2HGGKL7ML4zlUd2cIGaM"
     private const val API = "https://api.polar.sh/v1/customer-portal/license-keys"
     /** Without internet, a plan that was valid stays valid this long. */
     private const val GRACE_DAYS = 35L

@@ -64,8 +64,8 @@ class LicenseActivity : BaseActivity() {
             setPadding(p, Theme.dp(context, 4), p, Theme.dp(context, 40))
             addView(Theme.card(context,
                 Theme.text(context, if (he) "מצב כשר צריך מסלול" else "Kosher mode needs a plan", 20f, Theme.HEADLINE, Theme.MEDIUM),
-                Theme.text(context, if (he) "אישי: טלפון אחד. משפחתי: עד 6 טלפונים. יציאה ממצב כשר תמיד בחינם."
-                    else "Personal: one phone. Family: up to 6 phones. Leaving kosher mode is always free.", 14f, Theme.SUB).apply {
+                Theme.text(context, if (he) "אישי: טלפון אחד, שבועיים חינם ואז €8.99 לחודש. יציאה ממצב כשר תמיד בחינם."
+                    else "Personal: one phone, 14 days free, then €8.99 a month. Leaving kosher mode is always free.", 14f, Theme.SUB).apply {
                     setPadding(0, Theme.dp(context, 6), 0, Theme.dp(context, 10))
                 },
                 status,
@@ -77,7 +77,7 @@ class LicenseActivity : BaseActivity() {
             ))
             addView(Theme.card(context,
                 Theme.text(context, if (he) "אין לכם עדיין מסלול?" else "No plan yet?", 17f, Theme.INK, Theme.MEDIUM),
-                Theme.button(context, if (he) "לרכישת מסלול" else "Buy a plan", outline = true) {
+                Theme.button(context, if (he) "שבועיים חינם" else "Start 14 days free", outline = true) {
                     runCatching { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(License.BUY_URL))) }
                 },
             ))
