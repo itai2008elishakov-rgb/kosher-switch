@@ -74,21 +74,39 @@ object License {
         })
     }.start()
 
-    /** Checks the plan again (while the phone is open). A cancelled or expired plan stops kosher mode from turning on. */
+    /** Checks the plan again in the background (while the phone is open). */
     fun refresh(ctx: Context) {
-        if (!live) return
+        if (!live || key(ctx) == null) return
+        Thread { validate(ctx) }.start()
+    }
+
+    /**
+     * Checks the plan with Polar right now (up to a few seconds) before kosher mode turns on, so a key that was
+     * moved to another phone, cancelled or revoked stops working here at once. Offline, what we know still counts.
+     */
+    fun allowedNow(ctx: Context): Boolean {
+        if (!live) return true
+        if (key(ctx) == null) return false
+        val t = Thread { validate(ctx) }
+        t.start(); t.join(3500)
+        return allowed(ctx)
+    }
+
+    /** Asks Polar whether this phone's activation of the key is still valid. */
+    private fun validate(ctx: Context) {
         val p = prefs(ctx)
         val key = p.getString(K_KEY, null) ?: return
-        Thread {
-            val body = JSONObject().put("key", key).put("organization_id", ORG_ID)
-            p.getString(K_ACTIVATION, null)?.let { body.put("activation_id", it) }
-            val (code, json) = post("$API/validate", body)
-            when (code) {
-                200 -> save(ctx, key, p.getString(K_ACTIVATION, null), json)
-                404 -> p.edit().putLong(K_OK_AT, 0).apply()
-                else -> Unit // offline or a hiccup: keep what we know
-            }
-        }.start()
+        val activation = p.getString(K_ACTIVATION, null)
+        val body = JSONObject().put("key", key).put("organization_id", ORG_ID)
+        if (activation != null) body.put("activation_id", activation)
+        val (code, json) = post("$API/validate", body)
+        when {
+            // No activation for this phone (moved to another phone, or never activated here): not valid.
+            activation == null -> p.edit().putLong(K_OK_AT, 0).apply()
+            code == 200 && json?.optString("status") == "granted" -> save(ctx, key, activation, json)
+            code == 200 || code == 403 || code == 404 -> p.edit().putLong(K_OK_AT, 0).apply()
+            else -> Unit // offline or a hiccup: keep what we know
+        }
     }
 
     private fun save(ctx: Context, key: String, activation: String?, licence: JSONObject?) {

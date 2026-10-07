@@ -26,7 +26,7 @@ class SwitchActivity : BaseActivity() {
         window.setDecorFitsSystemWindows(false)
         val toClosed = intent.getBooleanExtra(EXTRA_TO_CLOSED, true)
         // Turning kosher mode on needs a plan (turning it off never does).
-        if (toClosed && !ModeManager.isClosed(this) && !License.allowed(this)) {
+        if (toClosed && !ModeManager.isClosed(this) && !License.allowedNow(this)) {
             startActivity(LicenseActivity.intent(this, thenTurnOn = true).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             finish(); return
         }

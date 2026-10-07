@@ -12,8 +12,8 @@ android {
         applicationId = "dev.kosherswitch"
         minSdk = 29
         targetSdk = 34
-        versionCode = 18
-        versionName = "1.5"
+        versionCode = 19
+        versionName = "1.5.1"
         // Only the phone's own chip type; keeps the app small.
         ndk { abiFilters += "arm64-v8a" }
     }
