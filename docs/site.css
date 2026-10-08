@@ -580,7 +580,7 @@ code { display: block; background: rgba(0,0,0,.4); border-radius: 12px; padding:
 
 /* ---------- film: a typical filter vs Kosher Switch ---------- */
 .versus { height: 300vh; padding: 0; }
-.versus .pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 3vh; padding-top: var(--nav); }
+.versus .pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; justify-content: safe center; align-items: center; gap: 3vh; padding-top: var(--nav); }
 .versus .head { text-align: center; padding: 0 22px; }
 .versus .head h2 { font-size: clamp(1.9rem, 4.6vw, 3.6rem); line-height: 1.04; letter-spacing: -.035em; margin: 0; }
 .versus .head p { color: var(--sub); margin: 10px auto 0; max-width: 560px; }
@@ -599,11 +599,6 @@ code { display: block; background: rgba(0,0,0,.4); border-radius: 12px; padding:
 .versus .spin { position: absolute; z-index: 5; left: 50%; top: 50%; width: calc(var(--w) * .16); aspect-ratio: 1; margin: calc(var(--w) * -.08); border-radius: 50%;
   border: 3px solid rgba(255,255,255,.2); border-top-color: #fff; animation: spin .9s linear infinite; opacity: clamp(0, (var(--p) - .7) * 8, 1); }
 .versus .good .scr::before { content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none; box-shadow: inset 0 0 0 2px rgba(224,182,74,calc(var(--p) * .8)); border-radius: inherit; }
-.versus .meter { width: 100%; max-width: 230px; height: 6px; margin: 12px auto 0; border-radius: 6px; background: rgba(255,255,255,.08); overflow: hidden; }
-.versus .meter i { display: block; height: 100%; border-radius: 6px; transform-origin: left; }
-.versus .bad .meter i { background: #ff6b6b; transform: scaleX(calc(.25 + var(--p) * .75)); }
-.versus .good .meter i { background: var(--em); transform: scaleX(.12); }
-.versus .tag-bad, .versus .tag-good { font-size: .72rem; color: var(--dim); margin-top: 6px; }
 @media (max-width: 640px) { .versus .dev { --w: min(170px, 28vh, 42vw); } .versus .pop { font-size: 9px; padding: 6px 7px; } }
 
 /* ---------- film: every device turns kosher, one after another ---------- */
@@ -681,7 +676,6 @@ html.still .rv { opacity: 1; transform: none; }
 .versus .ok b { display: block; color: var(--gold-2); }
 .versus .good .dev { transform: translateY(calc(var(--p) * -8px)); }
 .versus .glowring { position: absolute; inset: -12%; z-index: -1; border-radius: 30%; background: radial-gradient(closest-side, rgba(224,182,74,calc(var(--p) * .45)), transparent 70%); }
-.versus .good .meter i { background: var(--em); transform: scaleX(calc(.05 + var(--p) * .02)); }
 .versus .good figcaption::before { content: "✓"; display: inline-grid; place-items: center; width: 20px; height: 20px; margin-inline-end: 6px; border-radius: 50%; font-size: .7rem; color: #0b2148;
   background: linear-gradient(180deg, var(--gold-2), var(--gold)); opacity: clamp(0, (var(--p) - .6) * 6, 1); vertical-align: 1px; }
 
