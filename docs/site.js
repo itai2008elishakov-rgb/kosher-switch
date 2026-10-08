@@ -25,6 +25,7 @@
     ["Kosher wallpaper for iPhone", "iphone/#wallpaper", "focus lock screen download"], ["iPhone privacy", "iphone/#privacy", "data screen time"],
     ["Kosher Switch for Schools", "schools/", "school yeshiva students tablet teachers"], ["Compare with filters", "schools/#compare", "filter flip phone dns compare"],
     ["Privacy Policy", "privacy/", "data personal information gdpr"], ["Terms of Use", "terms/", "legal conditions license"], ["Site Map", "sitemap/", "all pages"],
+    ["Kosher filter for Android and iPhone", "kosher-filter/", "kosher filter samsung iphone block websites bypass kosher phone"],
   ].map(([t, h, k]) => {
     const words = (t + " " + k).toLowerCase();
     return { t, h: base + h, k: words + " " + words.replace(/\s+/g, "") }; // "set up" also matches "setup"
@@ -32,9 +33,9 @@
   if (root.lang === "he") {
     const HE = ["בית", "העצה שלנו: בלי דפדפן", "שאלות", "צרו קשר", "Kosher Switch לאנדרואיד", "הורדה לאנדרואיד", "אינטרנט בטוח והדפדפן הכשר", "תכונות באנדרואיד",
       "סיור באנדרואיד", "התקנה עם קוד QR", "אילו טלפונים מתאימים", "Kosher Switch לאייפון", "מסכים באייפון", "רקע כשר לאייפון", "פרטיות באייפון",
-      "Kosher Switch לבתי ספר", "השוואה לסינונים", "מדיניות פרטיות", "תנאי שימוש", "מפת האתר"];
+      "Kosher Switch לבתי ספר", "השוואה לסינונים", "מדיניות פרטיות", "תנאי שימוש", "מפת האתר", "סינון כשר לאנדרואיד ולאייפון"];
     const HEK = ["ראשי", "דפדפן סינון", "עזרה", "מייל תמיכה", "סמסונג שיאומי פיקסל", "התקנה חינם", "סינון תמונות", "סידור לוח פתקים מזג אוויר עוזר", "מסכים", "התקנה הגדרה מחשב", "סמסונג קין",
-      "אפל אייפון", "סידור לוח", "רקע פוקוס", "נתונים", "בית ספר ישיבה תלמידים טאבלט", "השוואה סינון", "פרטיות מידע", "תנאים", "דפים"];
+      "אפל אייפון", "סידור לוח", "רקע פוקוס", "נתונים", "בית ספר ישיבה תלמידים טאבלט", "השוואה סינון", "פרטיות מידע", "תנאים", "דפים", "סינון כשר פילטר סמסונג אייפון חסימת אתרים טלפון כשר"];
     INDEX.forEach((e, i) => { e.t = HE[i]; e.h = e.h.replace(base, base + "he/"); e.k += " " + HE[i] + " " + HEK[i]; });
   }
   const QUICK = [0, 4, 11, 15, 5, 17].map(i => INDEX[i]);
