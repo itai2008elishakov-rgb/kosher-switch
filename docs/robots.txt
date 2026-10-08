@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kosher-switch.com/sitemap.xml
