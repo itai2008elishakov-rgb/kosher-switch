@@ -502,7 +502,7 @@ code { display: block; background: rgba(0,0,0,.4); border-radius: 12px; padding:
 .foot .crumbs img { width: 16px; height: 16px; }
 .foot .crumbs a { color: var(--sub); text-decoration: none; }
 .foot .crumbs span { color: var(--dim); }
-.foot .dir { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; padding: 22px 0 26px; }
+.foot .dir { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; padding: 22px 0 26px; }
 .foot h4 { margin: 0 0 9px; font-size: .75rem; font-weight: 600; color: var(--ink); }
 .foot .dir a { display: block; margin: 0 0 7px; color: var(--sub); text-decoration: none; transition: color .2s; }
 .foot .dir a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
